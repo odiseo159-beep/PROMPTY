@@ -1,0 +1,14 @@
+Create an agent team to design and build the "Prompt Sandbox" backend for the Promptly MVP (Next.js 15). 
+
+Team:
+- Prompt Engineer Agent (Opus 4.6): Design the system prompt / evaluation rubric that will use the Anthropic Claude API to evaluate a user's prompt based on: Specificity (25%), Context (20%), Output Format (15%), Role/Persona (15%), Constraints (10%), and Applied Technique (15%). Write this evaluation logic into a dedicated file representing the AI instructions.
+- Backend Builder (Sonnet 4.5): Create the Next.js API route (e.g., `app/api/sandbox/route.ts`) that receives the user's prompt. It should make TWO parallel calls to the Claude API: one to generate the actual conversational response, and another one passing the prompt to the Prompt Engineer's evaluation rubric to calculate the "Prompt Score" (1-100) and generate improvement suggestions.
+- Testing Agent (Haiku): Write a test script or basic testing approach to feed 3 different prompts (one terrible, one average, one excellent) to the API route to ensure the scoring logic and double-API-call architecture works correctly.
+
+Requirements:
+- The backend should use the `@anthropic-ai/sdk`.
+- Save all the resulting code securely in the `apps/web/` directory. 
+- You do NOT need to build the frontend UI yet, only the backend API route and AI evaluation logic.
+
+Expected output: 
+The Next.js API route for the sandbox, the evaluation rubric logic file, and a basic test script. Wait until all agents finish to complete.

@@ -1,0 +1,22 @@
+Create an agent team to set up the Supabase database schema and RLS (Row Level Security) policies for the Promptly MVP based on the following requirements:
+
+Team:
+- Research Agent (Opus 4.6): Design the complete SQL schema and tight RLS policies for every table based on the schema below.
+- Setup Agent (Sonnet 4.5): Create the actual SQL migration files in a `supabase/migrations` folder and write a `lib/supabase.ts` or `utils/supabase/client.ts` client setup for a Next.js 15 app. This agent is BLOCKED by the Research Agent.
+
+Schema context from MVP:
+users: id, email, name, avatar_url, xp_total, level, current_streak, max_streak, league, profession, ai_experience_level
+worlds: id, title, description, icon, order, is_premium
+units: id, world_id, title, description, order
+lessons: id, unit_id, title, type, content_json, difficulty
+progress: id, user_id, lesson_id, status, prompt_score, attempts, xp_earned, completed_at
+prompts_saved: id, user_id, title, prompt_text, category, score, created_at
+daily_challenges: id, date, scenario, best_prompt_id, participants_count
+challenge_entries: id, challenge_id, user_id, prompt_text, score, votes, created_at
+xp_events: id, user_id, source, amount, multiplier, created_at
+streaks: id, user_id, date, completed, freeze_used
+badges: id, name, description, icon, criteria_type, criteria_value
+leagues: id, week_start, tier, user_ids[], results_json
+
+Expected output: 
+All SQL migration files for tables and RLS locally saved in the apps/web directory structure.

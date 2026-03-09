@@ -1,0 +1,15 @@
+Create an agent team to design and build the Frontend foundation and core UI components for "Promptly" (Next.js 15).
+
+Team:
+- UI Designer (Sonnet 4.5): Design the global layout (`app/layout.tsx`), the main landing page (`app/page.tsx`), and a placeholder for the Prompt Sandbox route (`app/sandbox/page.tsx`). You must use TailwindCSS for styling and create a visually appealing, gamified UI (like Duolingo). Implement a modern color palette and typography.
+- Component Builder (Sonnet 4.5): Create at least three reusable UI components in a `components/` folder: 1) A `Button` component with variants (primary, secondary, outline, ghost). 2) A `ProgressBar` component to show XP or Lesson progress. 3) A `ScoreCard` component to show the prompt evaluation result (score out of 100, badges, etc.).
+- State Architect (Opus 4.6): Set up the Next.js `Context` or a lightweight `Zustand` store (e.g., in `store/useProgressStore.ts`) to manage the user's local gamification state (current XP, streak days, current level). 
+
+Requirements:
+- All code must use Next.js App Router conventions and be placed in `apps/web/`.
+- Use React Server Components where it makes sense, and `"use client"` where interactivity or state is required.
+- Do NOT worry about wiring up Supabase Auth or database fetching yet; just build the UI shell, the components, and the local state management.
+- Focus heavily on "rich aesthetics" — vibrant colors, modern typography, and a premium "gamified learning" feel.
+
+Expected output: 
+The Next.js layout, landing page, placeholder sandbox page, the reusable components, and the gamification state management file. Wait until all agents finish to complete.

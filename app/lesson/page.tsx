@@ -228,7 +228,7 @@ function InlineFeedback({ isCorrect, theoryExplanation }: { isCorrect: boolean; 
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="text-xs text-gray-300 leading-relaxed overflow-hidden"
+              className="text-sm text-gray-300 leading-relaxed overflow-hidden"
             >
               {theoryExplanation}
             </motion.p>
@@ -369,6 +369,7 @@ function AudioComponent({
               isIconOnly
               onPress={handlePlay}
               isDisabled={isPlaying}
+              aria-label={isPlaying ? "Reproduciendo audio" : "Reproducir audio"}
               className={`shrink-0 rounded-full transition-colors ${
                 isPlaying
                   ? "bg-cyan-500/30 border-2 border-cyan-400/60 text-cyan-300"
@@ -449,7 +450,7 @@ function AudioComponent({
                     key={opt.id}
                     disabled={checked}
                     onClick={() => !checked && setSelectedId(opt.id)}
-                    className={`flex items-center gap-3 w-full px-4 py-3 rounded-2xl border text-left font-semibold text-sm transition-all duration-150 ${
+                    className={`flex items-center gap-3 w-full px-4 py-3 rounded-2xl border text-left font-semibold text-sm transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0a0a0f] ${
                       isRight ? "border-[#58cc02] bg-[#58cc02]/15 text-[#58cc02]"
                       : isWrong ? "border-red-400 bg-red-500/15 text-red-400"
                       : isSelected ? "border-violet-400 bg-violet-500/20 text-white"
@@ -601,7 +602,7 @@ function StoryComponent({
                     key={opt.id}
                     disabled={checked}
                     onClick={() => !checked && setSelectedId(opt.id)}
-                    className={`flex items-center gap-3 w-full px-4 py-3 rounded-2xl border text-left font-semibold text-sm transition-all duration-150 ${
+                    className={`flex items-center gap-3 w-full px-4 py-3 rounded-2xl border text-left font-semibold text-sm transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0a0a0f] ${
                       isRight ? "border-[#58cc02] bg-[#58cc02]/15 text-[#58cc02]"
                       : isWrong ? "border-red-400 bg-red-500/15 text-red-400"
                       : isSelected ? "border-violet-400 bg-violet-500/20 text-white"
@@ -957,6 +958,7 @@ export default function LessonPage() {
 
       {/* Main content */}
       <main className="flex-1 overflow-y-auto overscroll-contain">
+        <h1 className="sr-only">Motor de Lecciones — Promptly</h1>
         {isFinished ? (
           <FinishedScreen onRestart={handleRestart} onExit={() => router.push("/lessons")} />
         ) : (

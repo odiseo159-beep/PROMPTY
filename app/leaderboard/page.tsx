@@ -45,9 +45,9 @@ const TOP3_STYLES = [
 ];
 
 const trendIcon = (trend: string) => {
-  if (trend === "up") return <span className="text-emerald-400 text-xs font-bold">▲</span>;
-  if (trend === "down") return <span className="text-rose-400 text-xs font-bold">▼</span>;
-  return <span className="text-gray-600 text-xs font-bold">—</span>;
+  if (trend === "up") return <span className="text-emerald-400 text-xs font-bold" aria-label="Subiendo">▲</span>;
+  if (trend === "down") return <span className="text-rose-400 text-xs font-bold" aria-label="Bajando">▼</span>;
+  return <span className="text-gray-500 text-xs font-bold" aria-label="Sin cambio">—</span>;
 };
 
 export default function LeaderboardPage() {
@@ -273,7 +273,7 @@ export default function LeaderboardPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.9 }}
-          className="text-center text-xs text-gray-600 mt-6"
+          className="text-center text-xs text-gray-400 mt-6"
         >
           Clasificaciones actualizadas cada 24h · Gana XP completando lecciones y el Sandbox
         </motion.p>

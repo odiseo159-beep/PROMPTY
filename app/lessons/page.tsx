@@ -152,7 +152,7 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
       <h3 className={`font-bold text-base leading-snug mb-1 ${locked ? "text-gray-600" : "text-white"}`}>
         {lesson.title}
       </h3>
-      <p className={`text-sm leading-relaxed ${locked ? "text-gray-700" : "text-gray-400"}`}>
+      <p className={`text-base leading-relaxed ${locked ? "text-gray-600" : "text-gray-400"}`}>
         {lesson.desc}
       </p>
 
@@ -287,7 +287,7 @@ export default function LessonsPage() {
                     {mod.emoji}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-display font-extrabold text-white text-base leading-tight">{mod.title}</p>
+                    <h2 className="font-display font-extrabold text-white text-base leading-tight">{mod.title}</h2>
                     <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">{mod.description}</p>
                     {!allLocked && (
                       <div className="flex items-center gap-2 mt-1.5">
@@ -310,7 +310,7 @@ export default function LessonsPage() {
                     {mod.emoji}
                   </div>
                   <div>
-                    <p className="font-display font-extrabold text-white text-base leading-tight">{mod.title}</p>
+                    <h2 className="font-display font-extrabold text-white text-base leading-tight">{mod.title}</h2>
                     <p className="text-xs text-gray-500 mt-0.5">{mod.description}</p>
                     {!allLocked && (
                       <div className="flex items-center gap-2 mt-1.5">

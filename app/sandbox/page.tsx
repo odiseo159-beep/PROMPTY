@@ -174,7 +174,7 @@ function IdlePanel({ onInsert }: { onInsert: (text: string) => void }) {
           🧪
         </motion.div>
         <p className="text-sm font-semibold text-gray-500 mt-1">El output aparecerá aquí</p>
-        <p className="text-xs text-gray-700">Escribe un prompt a la izquierda y pulsa Evaluar</p>
+        <p className="text-xs text-gray-500">Escribe un prompt a la izquierda y pulsa Evaluar</p>
       </div>
 
       {/* Tabs: Templates + Tips */}
@@ -204,9 +204,9 @@ function IdlePanel({ onInsert }: { onInsert: (text: string) => void }) {
                   <span className="text-xs font-bold text-gray-400 group-hover:text-white transition-colors">
                     {t.label}
                   </span>
-                  <span className="ml-auto text-[10px] text-gray-700 group-hover:text-gray-500">Insertar →</span>
+                  <span className="ml-auto text-[10px] text-gray-500 group-hover:text-gray-300">Insertar →</span>
                 </div>
-                <p className="text-xs text-gray-700 leading-relaxed line-clamp-2 pl-5">{t.text}</p>
+                <p className="text-xs text-gray-500 leading-relaxed line-clamp-2 pl-5">{t.text}</p>
               </button>
             ))}
           </div>
@@ -291,7 +291,7 @@ function ResultPanel({
 
       {/* Response text with typing cursor */}
       <div className="px-5 py-4">
-        <p className="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap font-mono">
+        <p className="text-base text-gray-300 leading-relaxed whitespace-pre-wrap font-mono">
           {displayed}
           {!isDone && (
             <motion.span
@@ -330,7 +330,7 @@ function ResultPanel({
 
           {/* Circular SVG gauge */}
           <div className="relative w-[76px] h-[76px]">
-            <svg viewBox="0 0 76 76" className="w-full h-full -rotate-90">
+            <svg viewBox="0 0 76 76" className="w-full h-full -rotate-90" aria-hidden="true">
               <circle cx="38" cy="38" r="30"
                 fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="7" />
               <motion.circle
@@ -396,7 +396,7 @@ function ResultPanel({
                 </Chip>
               ))
             ) : (
-              <span className="text-xs text-gray-700">Ninguna detectada aún</span>
+              <span className="text-xs text-gray-500">Ninguna detectada aún</span>
             )}
           </div>
         </div>
@@ -568,7 +568,7 @@ export default function SandboxPage() {
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-mono text-gray-600">editor.prompt</span>
                     <span className="w-1.5 h-1.5 rounded-full bg-amber-400/60" />
-                    <span className="text-[10px] text-amber-500/70 font-semibold">sin guardar</span>
+                    <span className="text-[10px] text-amber-500/80 font-semibold">sin guardar</span>
                   </div>
                   {/* Character counter */}
                   <div className="flex items-center gap-2">
@@ -618,7 +618,7 @@ export default function SandboxPage() {
 
                 {/* Template chips */}
                 <div className="px-4 pb-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-700 mb-2">
+                  <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-500 mb-2">
                     Insertar plantilla:
                   </p>
                   <div className="flex flex-wrap gap-1.5">
@@ -626,9 +626,12 @@ export default function SandboxPage() {
                       <Chip
                         key={t.label}
                         size="sm"
+                        role="button"
+                        tabIndex={0}
                         onClick={() => setPrompt(t.text)}
+                        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setPrompt(t.text); } }}
                         classNames={{
-                          base: "bg-white/[0.04] border border-white/8 hover:bg-violet-500/15 hover:border-violet-500/30 cursor-pointer transition-all duration-150 h-6",
+                          base: "bg-white/[0.04] border border-white/8 hover:bg-violet-500/15 hover:border-violet-500/30 cursor-pointer transition-all duration-150 h-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400",
                           content: "text-gray-500 hover:text-violet-300 text-xs font-medium transition-colors",
                         }}
                         startContent={<span className="text-xs leading-none">{t.icon}</span>}
@@ -650,7 +653,7 @@ export default function SandboxPage() {
                     {(prompt || result) && (
                       <button
                         onClick={() => { setPrompt(""); reset(); }}
-                        className="text-[11px] text-gray-700 hover:text-gray-400 transition-colors"
+                        className="text-[11px] text-gray-500 hover:text-gray-400 transition-colors min-h-[44px] flex items-center px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 rounded-md"
                       >
                         Limpiar
                       </button>

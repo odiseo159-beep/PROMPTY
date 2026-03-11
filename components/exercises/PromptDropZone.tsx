@@ -146,6 +146,7 @@ function BankPill({
         transition-all duration-150
         disabled:cursor-default
         min-h-[52px]
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0d0d1a]
         ${isSelected
           ? `${c.border} ${c.bg} ${c.text} ${c.glow} ring-2 ${c.ring} ring-offset-1 ring-offset-[#0d0d1a]`
           : "border-white/10 bg-white/5 text-gray-300 hover:border-white/25 hover:bg-white/10"
@@ -210,10 +211,10 @@ function ZonePill({
         {!isChecked && (
           <button
             onClick={(e) => { e.stopPropagation(); onRemove(); }}
-            className="ml-1 w-5 h-5 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center text-gray-400 hover:text-white transition-colors text-xs"
+            className="ml-1 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full hover:bg-white/15 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
             aria-label={`Quitar ${piece.label}`}
           >
-            ✕
+            <span className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-gray-400 hover:text-white text-xs pointer-events-none">✕</span>
           </button>
         )}
 
@@ -258,6 +259,15 @@ function DropZone({
   return (
     <motion.div
       onClick={isActive && !isChecked ? onTap : undefined}
+      role={isActive && !isChecked ? "button" : undefined}
+      tabIndex={isActive && !isChecked ? 0 : undefined}
+      aria-label="Zona de ensamblaje — toca para colocar la pieza seleccionada"
+      onKeyDown={(e) => {
+        if ((e.key === "Enter" || e.key === " ") && isActive && !isChecked) {
+          e.preventDefault();
+          onTap();
+        }
+      }}
       animate={
         isActive
           ? { borderColor: ["rgba(52,211,153,0.3)", "rgba(52,211,153,0.8)", "rgba(52,211,153,0.3)"] }
@@ -433,7 +443,7 @@ export function PromptDropZone({
           {zone.length > 0 && !isChecked && (
             <button
               onClick={handleReset}
-              className="text-xs text-gray-600 hover:text-gray-400 underline underline-offset-2 transition-colors"
+              className="text-xs text-gray-500 hover:text-gray-400 underline underline-offset-2 transition-colors py-2 px-2 min-h-[44px] inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 rounded-md"
             >
               Reiniciar
             </button>

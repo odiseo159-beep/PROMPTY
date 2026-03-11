@@ -711,10 +711,10 @@ export default function HomePage() {
             <span>⚡</span>
             <span>Promptly</span>
           </div>
-          <nav className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-center">
-            <Link href="/lessons"     className="hover:text-gray-400 transition-colors">Lecciones</Link>
-            <Link href="/sandbox"     className="hover:text-gray-400 transition-colors">Sandbox</Link>
-            <Link href="/leaderboard" className="hover:text-gray-400 transition-colors">Clasificación</Link>
+          <nav className="flex flex-wrap justify-center gap-x-2 gap-y-1 text-center">
+            <Link href="/lessons"     className="py-2 px-1 hover:text-gray-400 transition-colors inline-flex items-center min-h-[44px]">Lecciones</Link>
+            <Link href="/sandbox"     className="py-2 px-1 hover:text-gray-400 transition-colors inline-flex items-center min-h-[44px]">Sandbox</Link>
+            <Link href="/leaderboard" className="py-2 px-1 hover:text-gray-400 transition-colors inline-flex items-center min-h-[44px]">Clasificación</Link>
           </nav>
           <p className="text-center sm:text-right shrink-0">
             © {new Date().getFullYear()} Promptly. Todos los derechos reservados.

@@ -82,6 +82,7 @@ function OptionCard({
         rounded-2xl border-2 text-left
         transition-all duration-200 cursor-pointer
         disabled:cursor-default
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0a0a0f]
         ${borderColor} ${bgColor} ${textColor}
         ${isDimmed && !isSelected ? "opacity-40" : "opacity-100"}
       `}

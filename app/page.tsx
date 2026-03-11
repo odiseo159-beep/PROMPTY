@@ -294,7 +294,7 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.34, type: "spring", stiffness: 240, damping: 20 }}
-              className="mt-8 flex flex-col w-full sm:flex-row gap-3 max-w-xs sm:max-w-none"
+              className="mt-8 flex flex-col items-stretch w-full sm:flex-row sm:items-center gap-3 max-w-xs mx-auto sm:mx-0 sm:max-w-none"
             >
               <Button
                 as={Link}

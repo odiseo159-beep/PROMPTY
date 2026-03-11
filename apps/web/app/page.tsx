@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 
 const steps = [
   { emoji: "📖", label: "Aprende", desc: "Lecciones breves sobre los fundamentos del prompting." },
@@ -17,7 +17,7 @@ const leaderboard = [
   { avatar: "🦁", name: "llmlion", xp: 2100, rank: 5, color: "from-yellow-400 to-amber-500" },
 ];
 
-const fadeUp = {
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 32 },
   show: (i: number) => ({
     opacity: 1,
@@ -26,7 +26,7 @@ const fadeUp = {
   }),
 };
 
-const popIn = {
+const popIn: Variants = {
   hidden: { opacity: 0, scale: 0.7 },
   show: (i: number) => ({
     opacity: 1,
@@ -206,12 +206,11 @@ export default function HomePage() {
               custom={i}
               className="flex items-center gap-3 rounded-2xl border border-white/8 bg-white/[0.04] px-4 py-3"
             >
-              <span className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-extrabold text-sm ${
-                i === 0 ? "bg-amber-400 text-black" :
-                i === 1 ? "bg-gray-300 text-black" :
-                i === 2 ? "bg-amber-700 text-white" :
-                "bg-white/10 text-gray-400"
-              }`}>
+              <span className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-extrabold text-sm ${i === 0 ? "bg-amber-400 text-black" :
+                  i === 1 ? "bg-gray-300 text-black" :
+                    i === 2 ? "bg-amber-700 text-white" :
+                      "bg-white/10 text-gray-400"
+                }`}>
                 {player.rank}
               </span>
 

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Link from "next/link";
 import { Navigation } from "@/components/Navigation";
+import { Providers } from "./providers";
+
 export const metadata: Metadata = {
   title: "Promptly – Master the Art of Prompting",
   description:
-    "Promptly is the gamified platform to learn, practice, and master AI prompt engineering. Earn XP, unlock badges, and get real AI feedback on every prompt you write.",
+    "Promptly es la plataforma gamificada para aprender, practicar y dominar la ingeniería de prompts. Gana XP, desbloquea insignias y obtén retroalimentación real de IA en cada prompt.",
 };
 
 export default function RootLayout({
@@ -14,12 +15,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className="bg-[#0d0d1a] text-white font-sans antialiased min-h-screen flex flex-col overflow-x-hidden">
-        <Navigation />
-
-        {/* Page content */}
-        <main className="flex-1">{children}</main>
+    <html lang="es" className="dark scroll-smooth">
+      <body className="bg-background text-foreground antialiased min-h-screen flex flex-col overflow-x-hidden">
+        <Providers>
+          <Navigation />
+          <main className="flex-1">{children}</main>
+        </Providers>
       </body>
     </html>
   );

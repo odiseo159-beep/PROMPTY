@@ -4,6 +4,10 @@ import { EVALUATION_SYSTEM_PROMPT, EvaluationResult } from '@/lib/prompt-evaluat
 
 const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
+  defaultHeaders: {
+    'anthropic-version': '2023-06-01',
+    'anthropic-beta': 'max-tokens-3-5-sonnet-2024-07-15'
+  }
 });
 
 // CORS headers for local development
@@ -43,16 +47,15 @@ export async function POST(request: NextRequest) {
       // Call 1 — Conversational response with extended thinking via streaming
       client.messages
         .stream({
-          model: 'claude-opus-4-6',
-          max_tokens: 16000,
-          thinking: { type: 'adaptive' },
+          model: 'claude-sonnet-4-5-20250929',
+          max_tokens: 4096,
           messages: [{ role: 'user', content: prompt }],
         })
         .finalMessage(),
 
       // Call 2 — Deterministic JSON evaluation (no thinking, no streaming)
       client.messages.create({
-        model: 'claude-opus-4-6',
+        model: 'claude-sonnet-4-5-20250929',
         max_tokens: 2048,
         system: EVALUATION_SYSTEM_PROMPT,
         messages: [{ role: 'user', content: prompt }],
@@ -73,7 +76,12 @@ export async function POST(request: NextRequest) {
 
     let evaluation: EvaluationResult;
     try {
-      evaluation = JSON.parse(evaluationRaw) as EvaluationResult;
+      // Strip markdown code block wrappers if Claude returns them
+      const cleanedJSONPattern = /```(?:json)?\n([\s\S]*?)```/;
+      const match = evaluationRaw.match(cleanedJSONPattern);
+      const jsonString = match ? match[1] : evaluationRaw;
+
+      evaluation = JSON.parse(jsonString.trim()) as EvaluationResult;
     } catch {
       return NextResponse.json(
         { error: 'Evaluation response was not valid JSON.', raw: evaluationRaw },

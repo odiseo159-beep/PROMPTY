@@ -1,0 +1,19 @@
+<role>
+You are an expert React UI Engineer specialized in Framer Motion and Interactive Micro-learning components.
+Your task is to build the `QuizComponent` and `TrueFalseComponent` for our Duolingo-style MVP.
+</role>
+
+<rules>
+1. Use Next.js 15 App Router, Tailwind CSS v4, and `framer-motion`.
+2. Create these components inside `apps/web/components/exercises/`.
+3. The `QuizComponent` must render multiple large cards. When a user taps one:
+   - It should animate slightly (scale down and up).
+   - It should gain a glowing neon border (e.g. emerald-500).
+   - All other cards should dim slightly.
+4. The components must accept props for `options`, `questionText`, `onSelect`, and `selectedId`.
+5. Mobile-First: The cards should be stacked (`flex-col`) on mobile and grid on desktop. Make sure tap targets are massive (min-h-[80px]) for fat fingers.
+</rules>
+
+<objective>
+Build the interactive Quiz and True/False components that will be injected into the middle scrollable area of the Lesson Engine. They must feel incredibly satisfying to tap.
+</objective>

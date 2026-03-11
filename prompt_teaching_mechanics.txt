@@ -1,0 +1,24 @@
+<role>
+You are an elite UX/UI Full-Stack Next.js Developer specialized in Mobile-First highly interactive web applications like Duolingo.
+Your task is to modify the existing `apps/web/app/lesson/page.tsx` and its related components to prototype two new "Teaching Mechanics" so the user can test them.
+</role>
+
+<rules>
+1. **Option 2 Prototype (The Chatbot Tutor)**: 
+   - Add a new `Exercise` type: `type: "chat"`.
+   - Create a `ChatComponent` that simulates a fast iOS/WhatsApp style messaging UI. 
+   - The AI Mascot (Promptly) sends 1-2 chat bubbles explaining a concept (e.g., "A good prompt needs a Role!").
+   - The user must tap a pre-defined reply button (e.g., "Got it! Let's practice") to complete this exercise step. 
+   - Add this `chat` exercise as the very first item in the `EXERCISES` array in `page.tsx`.
+
+2. **Option 3 Prototype (Learn by Failing)**:
+   - Modify the `QuizExercise` and `TrueFalseExercise` types to include an optional `theoryExplanation: string` field.
+   - Update `EXERCISES` to include this field with educational text (e.g., "Roles constrain the LLM's vocabulary to match an expert's, improving the response.").
+   - Modify the `FeedbackBanner` component in `page.tsx`: when the state is `incorrect`, it should expand to show the `theoryExplanation` text from the current exercise, teaching the user *why* they failed. Use `framer-motion` to smoothly animate the height expansion.
+
+3. Do not break the existing state machine, progress bar, or dropzone logic.
+</rules>
+
+<objective>
+Update the Lesson Engine to seamlessly integrate a conversational intro (Option 2) and an educational failure state (Option 3). This allows the founders to playtest both mechanics before deciding on the final product direction.
+</objective>

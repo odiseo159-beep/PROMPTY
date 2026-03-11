@@ -1,172 +1,301 @@
+"use client";
+
 import Link from "next/link";
+import { motion } from "framer-motion";
 
-const features = [
-  {
-    icon: "🎯",
-    title: "Learn by Doing",
-    description:
-      "Forget passive reading. Every lesson drops you straight into the editor where you craft, iterate, and ship real prompts against live AI models.",
-    accent: "from-violet-500/20 to-violet-500/5",
-    border: "border-violet-500/20",
-    iconBg: "bg-violet-500/15 text-violet-300",
-  },
-  {
-    icon: "🏆",
-    title: "Earn XP & Badges",
-    description:
-      "Level up your Promptly rank with every challenge you complete. Unlock rare badges, climb the global leaderboard, and flex your prompt mastery.",
-    accent: "from-amber-500/20 to-amber-500/5",
-    border: "border-amber-500/20",
-    iconBg: "bg-amber-500/15 text-amber-300",
-  },
-  {
-    icon: "🤖",
-    title: "Real AI Feedback",
-    description:
-      "Our rubric-powered evaluation engine scores your prompts on clarity, specificity, and output quality — giving you precise, actionable feedback instantly.",
-    accent: "from-emerald-500/20 to-emerald-500/5",
-    border: "border-emerald-500/20",
-    iconBg: "bg-emerald-500/15 text-emerald-300",
-  },
+const steps = [
+  { emoji: "📖", label: "Aprende", desc: "Lecciones breves sobre los fundamentos del prompting." },
+  { emoji: "🎮", label: "Practica", desc: "Completa retos reales puntuados por IA en tiempo real." },
+  { emoji: "🏆", label: "Domina", desc: "Sube en la clasificación y desbloquea insignias exclusivas." },
 ];
 
-const stats = [
-  { value: "10,000+", label: "Learners Enrolled" },
-  { value: "500+", label: "Prompt Challenges" },
-  { value: "50+", label: "Structured Lessons" },
+const leaderboard = [
+  { avatar: "🦊", name: "promptfox", xp: 4820, rank: 1, color: "from-amber-400 to-orange-500" },
+  { avatar: "🐺", name: "neuralwolf", xp: 3910, rank: 2, color: "from-violet-400 to-purple-500" },
+  { avatar: "🐉", name: "dragondev", xp: 3210, rank: 3, color: "from-emerald-400 to-teal-500" },
+  { avatar: "🦋", name: "bytebee", xp: 2750, rank: 4, color: "from-pink-400 to-rose-500" },
+  { avatar: "🦁", name: "llmlion", xp: 2100, rank: 5, color: "from-yellow-400 to-amber-500" },
 ];
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 32 },
+  show: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.12, type: "spring", stiffness: 260, damping: 20 },
+  }),
+};
+
+const popIn = {
+  hidden: { opacity: 0, scale: 0.7 },
+  show: (i: number) => ({
+    opacity: 1,
+    scale: 1,
+    transition: { delay: i * 0.1, type: "spring", stiffness: 320, damping: 18 },
+  }),
+};
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col">
-      {/* Hero */}
-      <section className="relative isolate overflow-hidden px-6 pt-24 pb-32 text-center">
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute left-1/2 top-0 -translate-x-1/2 h-[600px] w-[900px] rounded-full bg-violet-600/20 blur-[120px]" />
-          <div className="absolute left-1/4 top-1/2 h-[300px] w-[400px] -translate-y-1/2 rounded-full bg-fuchsia-600/10 blur-[100px]" />
-          <div className="absolute right-1/4 top-1/2 h-[300px] w-[400px] -translate-y-1/2 rounded-full bg-purple-600/10 blur-[100px]" />
+    <div className="flex flex-col items-center w-full overflow-x-hidden">
+      {/* ── HERO ── */}
+      <section className="relative w-full min-h-[90svh] flex flex-col items-center justify-center px-5 pt-20 pb-16 text-center overflow-hidden">
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+          <div className="absolute left-1/2 top-[-10%] -translate-x-1/2 w-[520px] h-[520px] rounded-full bg-violet-600/30 blur-[130px]" />
+          <div className="absolute left-[10%] bottom-[5%] w-[260px] h-[260px] rounded-full bg-fuchsia-600/20 blur-[100px]" />
+          <div className="absolute right-[5%] top-[30%] w-[200px] h-[200px] rounded-full bg-cyan-500/15 blur-[80px]" />
         </div>
 
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-1.5 text-sm font-medium text-violet-300">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_2px] shadow-emerald-400/60" />
-          Now in Early Access — Join Free
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 280, damping: 22 }}
+          className="mb-6 inline-flex items-center gap-2 rounded-full border border-violet-400/30 bg-violet-500/15 px-4 py-1.5 text-sm font-semibold text-violet-300"
+        >
+          <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_2px] shadow-emerald-400/60" />
+          Acceso Anticipado — Únete Gratis
+        </motion.div>
 
-        <h1 className="mx-auto max-w-4xl text-5xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl leading-[1.1]">
-          Master the Art of{" "}
-          <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-purple-400 bg-clip-text text-transparent">
-            AI Prompting
-          </span>
-        </h1>
+        <motion.h1
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.1, type: "spring", stiffness: 220, damping: 18 }}
+          className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] text-white max-w-3xl"
+        >
+          Sube de Nivel en{" "}
+          <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
+            IA Prompting
+          </span>{" "}
+          ⚡
+        </motion.h1>
 
-        <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-400 leading-relaxed sm:text-xl">
-          Promptly turns prompt engineering into a game. Complete bite-sized
-          challenges, get scored by real AI, earn XP, and go from curious
-          beginner to prompt pro — one lesson at a time.
-        </p>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.22, type: "spring", stiffness: 200, damping: 20 }}
+          className="mt-5 text-lg sm:text-xl text-gray-400 max-w-xl leading-relaxed"
+        >
+          Promptly es el <span className="text-white font-semibold">Duolingo de la IA</span>.
+          Completa retos diarios, obtén puntuaciones de IA real, gana XP y domina la clasificación.
+        </motion.p>
 
-        <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.34, type: "spring", stiffness: 240, damping: 20 }}
+          className="mt-8 flex flex-col w-full max-w-xs gap-3 sm:max-w-sm"
+        >
           <Link
-            href="/lessons"
-            className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 px-8 py-4 text-base font-bold text-white shadow-xl shadow-violet-600/30 transition-all duration-200 hover:from-violet-500 hover:to-purple-500 hover:shadow-violet-500/40 hover:-translate-y-0.5 active:translate-y-0"
+            href="/lesson"
+            className="flex items-center justify-center gap-2 w-full min-h-[60px] rounded-2xl bg-violet-500 text-white font-extrabold text-lg
+              shadow-[0_6px_0_#4c1d95] hover:shadow-[0_3px_0_#4c1d95] hover:translate-y-[3px]
+              active:shadow-[0_1px_0_#4c1d95] active:translate-y-[5px]
+              transition-all duration-100 select-none"
           >
-            Start Learning Free
-            <span aria-hidden="true">→</span>
+            🚀 Empieza Gratis
           </Link>
           <Link
             href="/sandbox"
-            className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-8 py-4 text-base font-semibold text-gray-300 backdrop-blur-sm transition-all duration-200 hover:border-white/20 hover:bg-white/10 hover:text-white"
+            className="flex items-center justify-center gap-2 w-full min-h-[60px] rounded-2xl border-2 border-white/15 bg-white/5 text-gray-300 font-bold text-base
+              hover:border-white/30 hover:bg-white/10 hover:text-white
+              transition-all duration-150 select-none"
           >
-            Try the Sandbox
+            🧪 Probar el Sandbox
           </Link>
-        </div>
+        </motion.div>
 
-        <p className="mt-6 text-sm text-gray-500">
-          No credit card required · Free forever tier available
-        </p>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="mt-4 text-xs text-gray-600"
+        >
+          Sin tarjeta · Plan gratuito para siempre
+        </motion.p>
       </section>
 
-      {/* Stats row */}
-      <section className="border-y border-white/5 bg-white/[0.02] px-6 py-12">
-        <dl className="mx-auto grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-3 text-center">
-          {stats.map((stat) => (
-            <div key={stat.label} className="flex flex-col gap-1">
-              <dt className="text-4xl font-extrabold bg-gradient-to-br from-amber-300 to-amber-500 bg-clip-text text-transparent">
-                {stat.value}
-              </dt>
-              <dd className="text-sm font-medium text-gray-500 uppercase tracking-widest">
-                {stat.label}
-              </dd>
-            </div>
+      {/* ── CÓMO FUNCIONA ── */}
+      <section className="w-full px-5 py-16 max-w-2xl mx-auto">
+        <motion.h2
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          custom={0}
+          className="text-3xl sm:text-4xl font-extrabold text-center text-white mb-10"
+        >
+          Cómo Funciona
+        </motion.h2>
+
+        <div className="flex flex-col gap-4">
+          {steps.map((step, i) => (
+            <motion.div
+              key={step.label}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true }}
+              custom={i + 1}
+              className="flex items-start gap-4 rounded-2xl border border-white/8 bg-white/[0.04] p-5"
+            >
+              <div className="shrink-0 w-14 h-14 rounded-xl bg-white/[0.07] flex items-center justify-center text-3xl shadow-inner">
+                {step.emoji}
+              </div>
+              <div>
+                <p className="font-extrabold text-white text-lg leading-tight">{step.label}</p>
+                <p className="mt-1 text-sm text-gray-400 leading-relaxed">{step.desc}</p>
+              </div>
+              <span className="ml-auto shrink-0 self-center text-xs font-bold text-gray-600 border border-white/10 rounded-full w-6 h-6 flex items-center justify-center">
+                {i + 1}
+              </span>
+            </motion.div>
           ))}
-        </dl>
-      </section>
-
-      {/* Features */}
-      <section className="px-6 py-24">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-14 text-center">
-            <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-              Everything you need to level up
-            </h2>
-            <p className="mt-4 text-gray-400 max-w-xl mx-auto">
-              Built for hands-on learners who want to actually get better at
-              working with AI — not just read about it.
-            </p>
-          </div>
-
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {features.map((feature) => (
-              <article
-                key={feature.title}
-                className={`relative overflow-hidden rounded-2xl border ${feature.border} bg-gradient-to-b ${feature.accent} p-8 transition-transform duration-200 hover:-translate-y-1`}
-              >
-                <div className={`mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl text-2xl ${feature.iconBg}`}>
-                  {feature.icon}
-                </div>
-                <h3 className="mb-3 text-lg font-bold text-white">
-                  {feature.title}
-                </h3>
-                <p className="text-sm leading-relaxed text-gray-400">
-                  {feature.description}
-                </p>
-              </article>
-            ))}
-          </div>
         </div>
+
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          custom={4}
+          className="mt-8 flex justify-center"
+        >
+          <Link
+            href="/lesson"
+            className="flex items-center justify-center gap-2 min-h-[60px] px-8 rounded-2xl bg-fuchsia-500 text-white font-extrabold text-base
+              shadow-[0_6px_0_#86198f] hover:shadow-[0_3px_0_#86198f] hover:translate-y-[3px]
+              active:shadow-[0_1px_0_#86198f] active:translate-y-[5px]
+              transition-all duration-100 select-none"
+          >
+            ¡Vamos! →
+          </Link>
+        </motion.div>
       </section>
 
-      {/* CTA Banner */}
-      <section className="px-6 py-20">
-        <div className="mx-auto max-w-3xl rounded-3xl border border-violet-500/20 bg-gradient-to-br from-violet-900/40 via-purple-900/30 to-fuchsia-900/20 p-12 text-center shadow-2xl shadow-violet-900/20">
-          <div className="mb-4 text-4xl">⚡</div>
-          <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-            Ready to become a prompt engineer?
+      {/* ── CLASIFICACIÓN ── */}
+      <section className="w-full px-5 py-16 max-w-md mx-auto">
+        <motion.h2
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          custom={0}
+          className="text-3xl sm:text-4xl font-extrabold text-center text-white mb-2"
+        >
+          🏆 Mejores Prompers
+        </motion.h2>
+        <motion.p
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          custom={0.5}
+          className="text-center text-gray-500 text-sm mb-8"
+        >
+          ¿Aparecerá tu nombre aquí?
+        </motion.p>
+
+        <div className="flex flex-col gap-3">
+          {leaderboard.map((player, i) => (
+            <motion.div
+              key={player.name}
+              variants={popIn}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true }}
+              custom={i}
+              className="flex items-center gap-3 rounded-2xl border border-white/8 bg-white/[0.04] px-4 py-3"
+            >
+              <span className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-extrabold text-sm ${
+                i === 0 ? "bg-amber-400 text-black" :
+                i === 1 ? "bg-gray-300 text-black" :
+                i === 2 ? "bg-amber-700 text-white" :
+                "bg-white/10 text-gray-400"
+              }`}>
+                {player.rank}
+              </span>
+
+              <div className={`shrink-0 w-10 h-10 rounded-full bg-gradient-to-br ${player.color} flex items-center justify-center text-xl shadow-lg`}>
+                {player.avatar}
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-white truncate">{player.name}</p>
+                <div className="mt-1 h-1.5 rounded-full bg-white/10 overflow-hidden w-full">
+                  <div
+                    className={`h-full rounded-full bg-gradient-to-r ${player.color}`}
+                    style={{ width: `${Math.round((player.xp / 5000) * 100)}%` }}
+                  />
+                </div>
+              </div>
+
+              <span className="shrink-0 text-sm font-extrabold text-amber-400">
+                {player.xp.toLocaleString()} XP
+              </span>
+            </motion.div>
+          ))}
+        </div>
+
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          custom={6}
+          className="mt-3 flex items-center gap-3 rounded-2xl border-2 border-dashed border-violet-500/40 bg-violet-500/10 px-4 py-3"
+        >
+          <span className="shrink-0 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center font-extrabold text-sm text-gray-500">?</span>
+          <div className="shrink-0 w-10 h-10 rounded-full border-2 border-dashed border-violet-400/40 flex items-center justify-center text-xl">👤</div>
+          <div className="flex-1">
+            <p className="font-bold text-violet-400">Tú</p>
+            <p className="text-xs text-gray-500">¡Empieza a jugar para subir!</p>
+          </div>
+          <span className="shrink-0 text-sm font-extrabold text-gray-600">0 XP</span>
+        </motion.div>
+      </section>
+
+      {/* ── CTA FINAL ── */}
+      <section className="w-full px-5 pb-20 pt-4 max-w-md mx-auto">
+        <motion.div
+          variants={popIn}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          custom={0}
+          className="rounded-3xl border border-violet-500/20 bg-gradient-to-br from-violet-900/50 via-purple-900/40 to-fuchsia-900/30 p-8 text-center"
+        >
+          <p className="text-5xl mb-4">⚡</p>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+            ¿Listo para ser un<br />prompt engineer?
           </h2>
-          <p className="mt-4 text-gray-400">
-            Join thousands of learners already building sharper AI skills with Promptly.
+          <p className="mt-3 text-gray-400 text-sm leading-relaxed">
+            Miles de personas ya están afilando sus habilidades de IA con Promptly. No te quedes atrás.
           </p>
           <Link
-            href="/lessons"
-            className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 px-8 py-4 text-base font-bold text-white shadow-xl shadow-violet-600/30 transition-all duration-200 hover:from-violet-500 hover:to-purple-500 hover:-translate-y-0.5 active:translate-y-0"
+            href="/lesson"
+            className="mt-6 flex items-center justify-center gap-2 w-full min-h-[60px] rounded-2xl bg-violet-500 text-white font-extrabold text-lg
+              shadow-[0_6px_0_#4c1d95] hover:shadow-[0_3px_0_#4c1d95] hover:translate-y-[3px]
+              active:shadow-[0_1px_0_#4c1d95] active:translate-y-[5px]
+              transition-all duration-100 select-none"
           >
-            Start Learning Free →
+            🚀 Empieza Gratis
           </Link>
-        </div>
+          <p className="mt-3 text-xs text-gray-600">Sin tarjeta · Gratis para siempre</p>
+        </motion.div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-white/5 px-6 py-8">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-sm text-gray-600 sm:flex-row">
-          <div className="flex items-center gap-2 font-semibold text-gray-500">
+      {/* ── FOOTER ── */}
+      <footer className="w-full border-t border-white/5 px-5 py-8">
+        <div className="mx-auto flex max-w-2xl flex-col items-center justify-between gap-4 text-sm text-gray-600 sm:flex-row">
+          <div className="flex items-center gap-2 font-bold text-gray-500">
             <span>⚡</span>
             <span>Promptly</span>
           </div>
-          <p>© {new Date().getFullYear()} Promptly. All rights reserved.</p>
-          <div className="flex gap-6">
-            <Link href="/privacy" className="hover:text-gray-400 transition-colors">Privacy</Link>
-            <Link href="/terms" className="hover:text-gray-400 transition-colors">Terms</Link>
-            <Link href="/contact" className="hover:text-gray-400 transition-colors">Contact</Link>
+          <p>© {new Date().getFullYear()} Promptly. Todos los derechos reservados.</p>
+          <div className="flex gap-5">
+            <Link href="/lessons" className="hover:text-gray-400 transition-colors">Lecciones</Link>
+            <Link href="/sandbox" className="hover:text-gray-400 transition-colors">Sandbox</Link>
+            <Link href="/leaderboard" className="hover:text-gray-400 transition-colors">Clasificación</Link>
           </div>
         </div>
       </footer>

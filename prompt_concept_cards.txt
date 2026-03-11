@@ -1,0 +1,20 @@
+<role>
+You are an elite UX/UI Full-Stack Next.js Developer specialized in Mobile-First highly interactive web applications like Duolingo.
+Your task is to add a new visual "Teaching Component" to `apps/web/app/lesson/page.tsx` so we have variety beyond just the Chatbot.
+</role>
+
+<rules>
+1. **New Exercise Type**: Add `type: "concept"` to the `Exercise` union.
+2. **ConceptCardComponent**: Create a visually stunning, full-height card component for teaching theory.
+   - It should have a massive, glowing Emoji/Icon in the center.
+   - A bold, bright Title.
+   - A short, max 2-sentence explanation paragraph.
+   - Use `framer-motion` so the card slides in from the right smoothly.
+   - No bottom bar needed for this; instead, put a giant "Got it!" or "Continue" button directly inside the card at the bottom.
+3. **Integration**: Update the `EXERCISES` array in `page.tsx` to include at least one `concept` type exercise *before* the first Quiz. (e.g., A Concept card explaining what "Temperature" is before asking the Quiz about it).
+4. Do not break the Chatbot, Quiz, or True/False flows. This just adds another tool to our teaching arsenal.
+</rules>
+
+<objective>
+Expand the teaching mechanics by introducing highly visual, swipeable "Concept Cards" (Flashcards). This gives the user variety: sometimes they learn via a Chatbot, sometimes via a Concept Card, and *then* they are tested via Quizzes.
+</objective>

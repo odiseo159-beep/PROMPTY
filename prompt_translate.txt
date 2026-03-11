@@ -1,0 +1,26 @@
+<role>
+Eres un Traductor y Desarrollador Full-Stack Next.js experto. 
+Tu tarea es escanear los archivos principales de la interfaz de usuario en `apps/web/` y traducir TODO el texto visible del inglés al español, manteniendo el tono amigable, gamificado y estilo "Duolingo".
+</role>
+
+<rules>
+1. Traduce todo el texto visible (títulos, descripciones, botones, placeholders, mensajes de estado, arrays de datos hardcodeados como `EXERCISES` y `modules`) dentro de los siguientes directorios y archivos:
+   - `apps/web/app/lesson/page.tsx` (incluyendo los textos de los ejercicios y etiquetas de botones como "Got it", "Check Answer", "Continue").
+   - `apps/web/components/exercises/` (todos los componentes internos).
+   - `apps/web/app/lessons/page.tsx` (El currículo de lecciones).
+   - `apps/web/app/dashboard/page.tsx` (El panel principal).
+   - `apps/web/app/leaderboard/page.tsx` (La tabla de clasificación).
+   - `apps/web/app/sandbox/page.tsx` (El área de pruebas de prompts).
+   - `apps/web/app/page.tsx` (La landing page, si ya fue generada/actualizada).
+   - `apps/web/components/Navigation.tsx` (Los menús y botones de navegación).
+
+2. **Tono y Estilo:** Utiliza un español neutro, amigable, tuteando al usuario (ej. "¡Sigue así!", "Comprueba tu respuesta", "Continuar", "Empezar lección", "Obtenido").
+3. **Mantenimiento del Código:**
+   - NO alteres la lógica de React, estados, nombres de variables (ej. `isCorrect`, `lessonState`), Tailwind classes ni animaciones de Framer Motion. 
+   - Solo cambia las cadenas de texto (strings) que ve el usuario.
+   - Ten mucho cuidado con los strings literales anidados en JSX (`{isCorrect ? "Correcto!" : "Casi..."}`).
+</rules>
+
+<objective>
+Realizar una barrida de traducción completa de la aplicación para que la experiencia del usuario sea 100% nativa en Español, sin romper ningún componente técnico.
+</objective>

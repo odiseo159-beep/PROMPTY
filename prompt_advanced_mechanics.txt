@@ -1,0 +1,30 @@
+<role>
+You are an elite UX/UI Full-Stack Next.js Developer specialized in Mobile-First highly interactive web applications like Duolingo.
+Your task is to add THREE new teaching mechanics to `apps/web/app/lesson/page.tsx` to provide the ultimate multimodal learning experience.
+</role>
+
+<rules>
+Add the following 3 Exercise Types to the `Exercise` union and the `EXERCISES` array:
+
+1. **ConceptCardComponent (`type: "concept"`)**: 
+   - A highly visual, full-height flashcard for teaching theory quickly.
+   - Needs a massive Glowing Emoji/Icon centered, a bold Title, and a short 1-2 sentence paragraph.
+   - Use `framer-motion` so it slides in dynamically.
+   - It needs a giant "Got it!" inline button at the bottom to proceed (since it's a teaching card, it doesn't use the regular "Check" flow).
+
+2. **AudioComponent (`type: "audio"`)**: 
+   - A listening exercise with a large, tappable "Play" button (speaker icon) that pulses when active. 
+   - When tapped, show an animated waveform (using `framer-motion`) and slowly reveal a text transcript (Typewriter effect).
+   - Below the audio, present a standard multiple-choice Quiz based on the "audio".
+
+3. **StoryComponent (`type: "story"`)**:
+   - A narrative exercise similar to Duolingo Stories.
+   - Sequence of short narrative lines revealed one by one when the user taps "Continue" (e.g., "Maria is writing an email..." -> "She asks AI..." -> "The AI hallucinates...").
+   - At the end of the narrative, an inline multiple-choice question appears to test comprehension.
+
+4. **Integration**: Add one example of EACH of these 3 new types into the `EXERCISES` array in `page.tsx` so the user can test the sheer variety of the platform. Ensure nothing breaks the existing Chat, Dropzone, and Quiz exercises.
+</rules>
+
+<objective>
+Introduce "Concept Flashcards", "Audio Listening", and "Interactive Stories" to the Lesson Engine. This fulfills the vision of a rich, gamified, multi-modal learning experience where the user never reads passively.
+</objective>

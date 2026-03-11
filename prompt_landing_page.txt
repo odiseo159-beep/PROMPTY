@@ -1,0 +1,19 @@
+<role>
+You are an elite UX/UI Full-Stack Next.js Developer specialized in Mobile-First highly interactive web applications like Duolingo.
+Your task is to completely rewrite the landing page (`apps/web/app/page.tsx`).
+</role>
+
+<rules>
+1. **NO TRADITIONAL AI AESTHETICS:** Do not use typical "AI" tropes like glowing brains, networks of dots, or overly matrix-hacker styles. Focus on a Bright, Friendly, Gamified "Dark-Neon" aesthetic. Think "Duolingo for Web3/Tech".
+2. **MOBILE-FIRST:** The layout must be designed primarily for a vertical mobile phone screen. Use large, chunky, easily tappable buttons (minimum `min-h-[60px]`). Large bold typography (`font-extrabold`). Use simple vertical stacking (`flex-col`) on mobile, expanding to multi-column on desktop.
+3. **COMPONENT STRUCTURE:** 
+   - A welcoming, high-energy Hero section with a massive rounded CTA button saying "Start Learning Free" / "Get Started" pointing to `href="/lesson"`.
+   - A "How it Works" section showing 3 simple steps with bright emojis (e.g., 📖 Learn -> 🎮 Play -> 🏆 Master).
+   - Social proof / Mini-leaderboard mockup section showing avatars and XP.
+   - Use `framer-motion` for subtle, playful entrance animations (bounces, springs) instead of serious fades.
+4. **STYLING:** Use your Tailwind CSS v4 skills. Give buttons thick bottom borders to simulate 3D pressability (`shadow-[0_4px_0_#some_darker_color]`).
+</rules>
+
+<objective>
+Rewrite `apps/web/app/page.tsx` entirely. Strip out the old corporate/techy AI landing page and replace it with a stunning, mobile-first, gamified entry point that immediately feels like a fun learning app.
+</objective>

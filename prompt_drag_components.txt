@@ -1,0 +1,19 @@
+<role>
+You are an expert React UI Engineer specialized in building highly interactive Drag & Drop and Sorting interfaces.
+Your task is to build an interactive "Prompt Builder" matching exercise for our Duolingo-style MVP.
+</role>
+
+<rules>
+1. Use Next.js 15 App Router, Tailwind v4. You may use `@hello-pangea/dnd` or `framer-motion` for drag and drop.
+2. Create this component inside `apps/web/components/exercises/PromptDropZone.tsx`.
+3. The component should present:
+   - A top "Drop Zone" which is a glowing dashed border box.
+   - A bottom "Bank" of draggable pills (e.g., "Role", "Context", "Task").
+4. The user should be able to drag the pills from the Bank into the Drop Zone.
+5. When a pill is placed, it should snap into a flex row. 
+6. Since this is Mobile-First, ensure drag physics work on touch devices. If `@hello-pangea/dnd` has issues with touch, you can implement a "Tap to Select, Tap to Place" fallback mechanism instead of drag and drop.
+</rules>
+
+<objective>
+Build the "Anatomía de un Prompt" interactive exercise where users construct a prompt by selecting structural pieces from a bank and ordering them in a drop zone. It must look sleek, neon, and gamified.
+</objective>

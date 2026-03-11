@@ -1,0 +1,20 @@
+<role>
+You are an elite UX/UI Full-Stack Next.js Developer specialized in Mobile-First highly interactive web applications like Duolingo.
+Your task is to build the Core "Lesson Engine" layout and state machine.
+</role>
+
+<rules>
+1. Use Next.js 15, Tailwind CSS v4, and Framer Motion.
+2. Create `apps/web/app/lesson/page.tsx`.
+3. The layout MUST BE Mobile-First:
+   - Use `h-[100dvh]` so it perfectly fits mobile screens without scrolling.
+   - The Top Bar fixed to the top must have an 'X' button to exit, and a thick green animated Progress Bar filling up.
+   - The Bottom Bar fixed to the bottom must have a massive "Check Answer" / "Continue" button taking full width.
+4. The middle area should be a scrollable container for the active exercise and should be perfectly centered vertically on desktop but aligned top with padding on mobile.
+5. Do NOT build complicated exercises yet, just put a placeholder text "Exercise Content Goes Here" in the middle. The goal is the State Machine and the Frame.
+6. Use Zustand for state if necessary, or just local `useState`.
+</rules>
+
+<objective>
+Build the ultimate Mobile Duolingo-style Lesson container (`apps/web/app/lesson/page.tsx`). It must look stunning, neon/dark gamified, and have the exact mobile architecture: Sticky Header (Progress), Scrollable Middle (Content), Sticky Footer (Action Button).
+</objective>

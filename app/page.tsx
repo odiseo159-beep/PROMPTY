@@ -294,13 +294,13 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.34, type: "spring", stiffness: 240, damping: 20 }}
-              className="mt-8 flex flex-col items-stretch w-full sm:flex-row sm:items-center gap-3 max-w-xs mx-auto sm:mx-0 sm:max-w-none"
+              className="mt-8 flex flex-col items-center gap-3 sm:flex-row"
             >
               <Button
                 as={Link}
                 href="/lesson"
                 size="lg"
-                className="w-full sm:w-auto font-extrabold text-base bg-violet-500 text-white shadow-[0_6px_0_#4c1d95] hover:shadow-[0_3px_0_#4c1d95] hover:translate-y-[3px] active:shadow-[0_1px_0_#4c1d95] active:translate-y-[5px] transition-all duration-100 px-8"
+                className="w-[260px] sm:w-auto font-extrabold text-base bg-violet-500 text-white shadow-[0_6px_0_#4c1d95] hover:shadow-[0_3px_0_#4c1d95] hover:translate-y-[3px] active:shadow-[0_1px_0_#4c1d95] active:translate-y-[5px] transition-all duration-100 px-8"
                 startContent={<span>🚀</span>}
               >
                 Empieza Gratis
@@ -310,7 +310,7 @@ export default function HomePage() {
                 href="/sandbox"
                 size="lg"
                 variant="bordered"
-                className="w-full sm:w-auto font-bold text-gray-300 border-white/15 bg-white/5 hover:border-white/30 hover:bg-white/10 hover:text-white"
+                className="w-[260px] sm:w-auto font-bold text-gray-300 border-white/15 bg-white/5 hover:border-white/30 hover:bg-white/10 hover:text-white"
                 startContent={<span>🧪</span>}
               >
                 Ver Sandbox

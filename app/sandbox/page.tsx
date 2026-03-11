@@ -2,6 +2,37 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Chip,
+  Progress,
+  Divider,
+  Textarea,
+  Spinner,
+} from "@heroui/react";
+import { motion, AnimatePresence } from "framer-motion";
+import type { EvaluationResult } from "@/lib/prompt-evaluation-rubric";
+
+const BREAKDOWN_MAX: Record<string, number> = {
+  clarity: 20,
+  specificity: 20,
+  context: 20,
+  constraints: 15,
+  format: 10,
+  tone: 15,
+};
+
+const BREAKDOWN_LABELS: Record<string, string> = {
+  clarity: "Claridad",
+  specificity: "Especificidad",
+  context: "Contexto",
+  constraints: "Restricciones",
+  format: "Formato",
+  tone: "Tono",
+};
 
 const upcomingFeatures = [
   { icon: "✍️", label: "Editor de prompts en vivo con resaltado de sintaxis" },
@@ -11,10 +42,22 @@ const upcomingFeatures = [
   { icon: "🔬", label: "Compara dos prompts en modo A/B" },
 ];
 
+function scoreColor(score: number) {
+  if (score >= 80) return "text-emerald-400";
+  if (score >= 55) return "text-amber-400";
+  return "text-rose-400";
+}
+
+function scoreLabel(score: number) {
+  if (score >= 80) return { label: "Excelente", color: "success" as const };
+  if (score >= 55) return { label: "En progreso", color: "warning" as const };
+  return { label: "Mejorable", color: "danger" as const };
+}
+
 export default function SandboxPage() {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<{ response: string; evaluation: EvaluationResult } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,187 +74,310 @@ export default function SandboxPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt }),
       });
-
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Error al evaluar el prompt");
-
       setResult(data);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Error inesperado");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="relative isolate flex flex-col items-center px-6 py-24 text-center">
-      {/* Background glow */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute left-1/2 top-0 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-emerald-600/15 blur-[120px]" />
-        <div className="absolute left-1/3 top-1/2 h-[250px] w-[350px] -translate-y-1/2 rounded-full bg-violet-600/10 blur-[90px]" />
-        <div className="absolute right-1/3 top-1/2 h-[250px] w-[350px] -translate-y-1/2 rounded-full bg-amber-600/10 blur-[90px]" />
+    <div className="relative min-h-screen px-4 py-14 sm:px-8">
+      {/* Background glows */}
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
+        <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[700px] h-[400px] rounded-full bg-emerald-600/10 blur-[130px]" />
+        <div className="absolute left-1/4 top-1/2 w-[350px] h-[350px] rounded-full bg-violet-600/8 blur-[100px]" />
+        <div className="absolute right-1/4 top-1/2 w-[350px] h-[350px] rounded-full bg-cyan-600/6 blur-[100px]" />
       </div>
 
-      {/* Próximamente badge */}
-      <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-sm font-semibold text-emerald-400">
-        <span className="relative flex h-2 w-2">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-        </span>
-        Próximamente
-      </span>
+      <div className="mx-auto max-w-3xl flex flex-col items-center">
 
-      {/* Heading */}
-      <h1 className="max-w-3xl text-5xl font-extrabold tracking-tight text-white sm:text-6xl leading-[1.1]">
-        Sandbox de{" "}
-        <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
-          Prompts
-        </span>
-      </h1>
-
-      {/* Subheading */}
-      <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-400 leading-relaxed">
-        El Sandbox es tu laboratorio libre de prompt engineering. Escribe prompts, dispáralos contra modelos de IA reales y obtén puntuaciones instantáneas por rúbrica — sin estructura de lección, sin restricciones. Experimentación pura.
-      </p>
-
-      {/* Decorative editor mockup */}
-      <div className="mt-12 w-full max-w-2xl overflow-hidden rounded-2xl border border-white/10 bg-[#111122] shadow-2xl shadow-black/50 text-left">
-        {/* Window chrome */}
-        <div className="flex items-center gap-2 border-b border-white/5 bg-white/[0.03] px-5 py-3.5">
-          <span className="h-3 w-3 rounded-full bg-red-500/70" />
-          <span className="h-3 w-3 rounded-full bg-amber-500/70" />
-          <span className="h-3 w-3 rounded-full bg-emerald-500/70" />
-          <span className="ml-3 text-xs font-mono text-gray-500">sandbox.promptly.dev</span>
-        </div>
-
-        {/* Mock/Real editor body */}
-        <div className="p-6 font-mono text-sm overflow-x-auto">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <textarea
-              className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-gray-300 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-colors resize-y min-h-[120px]"
-              placeholder="Escribe tu prompt aquí..."
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              disabled={loading}
-            />
-
-            <button
-              type="submit"
-              disabled={loading || !prompt.trim()}
-              className="self-end inline-flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-violet-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? "Evaluando..." : "Evaluar"}
-              {!loading && <span>✨</span>}
-            </button>
-          </form>
-
-          {error && (
-            <div className="mt-4 p-4 rounded-xl border border-red-500/20 bg-red-500/10 text-red-400">
-              <p className="font-semibold text-xs uppercase tracking-widest mb-1">Error</p>
-              {error}
-            </div>
-          )}
-
-          {/* AI Response Preview */}
-          {result && (
-            <div className="mt-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="rounded-xl border border-violet-500/30 bg-violet-500/5 p-5 mb-6">
-                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-violet-400 flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-violet-400 animate-pulse" />
-                  Respuesta de Claude 3.5 Sonnet
-                </p>
-                <div className="prose prose-invert prose-sm max-w-none text-gray-300">
-                  {result.response}
-                </div>
-              </div>
-
-              {/* Score breakdown */}
-              <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-5">
-                <div className="flex justify-between items-end mb-4">
-                  <p className="text-xs font-semibold uppercase tracking-widest text-emerald-400">
-                    Evaluación del Sandbox
-                  </p>
-                  <p className="text-2xl font-black text-emerald-400">
-                    {result.evaluation.score}/100
-                  </p>
-                </div>
-
-                <div className="space-y-3 mb-6">
-                  {Object.entries(result.evaluation.breakdown).map(([key, maxPoints]) => (
-                    <div key={key} className="flex flex-col gap-1">
-                      <div className="flex justify-between text-xs text-gray-400">
-                        <span className="capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                        <span>{maxPoints as number} / {(key === 'clarity' || key === 'specificity' || key === 'context') ? 20 : (key === 'constraints' ? 15 : (key === 'format' ? 10 : 15))}</span>
-                      </div>
-                      <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-emerald-500 to-teal-400"
-                          style={{ width: `${((maxPoints as number) / ((key === 'clarity' || key === 'specificity' || key === 'context') ? 20 : (key === 'constraints' ? 15 : (key === 'format' ? 10 : 15)))) * 100}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="border-t border-emerald-500/20 pt-4">
-                  <p className="text-xs font-semibold uppercase text-emerald-400 mb-2">Técnicas Detectadas</p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {result.evaluation.recognizedTechniques.length > 0 ? (
-                      result.evaluation.recognizedTechniques.map((t: string) => (
-                        <span key={t} className="text-xs px-2 py-1 rounded bg-emerald-500/20 text-emerald-200">
-                          {t}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="text-xs text-gray-500">Ninguna detectada</span>
-                    )}
-                  </div>
-
-                  <p className="text-xs font-semibold uppercase text-emerald-400 mb-2">Sugerencias de mejora</p>
-                  <ul className="list-disc pl-4 text-xs text-emerald-200/80 space-y-1">
-                    {result.evaluation.suggestions.map((s: string, i: number) => (
-                      <li key={i}>{s}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Upcoming features list */}
-      <div className="mt-14 w-full max-w-lg">
-        <h2 className="mb-6 text-sm font-semibold uppercase tracking-widest text-gray-500">
-          Próximamente
-        </h2>
-        <ul className="space-y-3 text-left">
-          {upcomingFeatures.map((feature) => (
-            <li
-              key={feature.label}
-              className="flex items-center gap-3 rounded-xl border border-white/5 bg-white/[0.02] px-5 py-3.5 text-sm text-gray-300"
-            >
-              <span className="text-base">{feature.icon}</span>
-              {feature.label}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* CTAs */}
-      <div className="mt-14 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-        <Link
-          href="/lessons"
-          className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 px-7 py-3.5 text-sm font-bold text-white shadow-lg shadow-violet-600/30 transition-all duration-200 hover:from-violet-500 hover:to-purple-500 hover:-translate-y-px"
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 260, damping: 22 }}
+          className="text-center mb-12"
         >
-          Ir a las Lecciones →
-        </Link>
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-7 py-3.5 text-sm font-semibold text-gray-400 transition-all duration-200 hover:border-white/20 hover:bg-white/10 hover:text-white"
+          <Chip
+            startContent={
+              <span className="relative flex h-2 w-2 ml-1">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+              </span>
+            }
+            variant="flat"
+            classNames={{ base: "bg-emerald-500/10 border border-emerald-500/25 mb-4", content: "text-emerald-400 font-semibold" }}
+          >
+            Beta Disponible
+          </Chip>
+
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mt-3 mb-4 leading-[1.1]">
+            Sandbox de{" "}
+            <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
+              Prompts
+            </span>
+          </h1>
+          <p className="text-gray-400 text-lg max-w-xl leading-relaxed">
+            Tu laboratorio libre de prompt engineering. Escribe un prompt, dispáralo contra IA real y obtén una puntuación instantánea por rúbrica.
+          </p>
+        </motion.div>
+
+        {/* Editor Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1, type: "spring", stiffness: 240, damping: 22 }}
+          className="w-full"
         >
-          ← Volver al Inicio
-        </Link>
+          <Card className="w-full bg-[#0e0e1a] border border-white/10 shadow-2xl shadow-black/60">
+            {/* Window chrome */}
+            <CardHeader className="border-b border-white/5 bg-white/[0.02] px-5 py-3 flex items-center gap-2">
+              <span className="h-3 w-3 rounded-full bg-rose-500/70" />
+              <span className="h-3 w-3 rounded-full bg-amber-500/70" />
+              <span className="h-3 w-3 rounded-full bg-emerald-500/70" />
+              <span className="ml-3 text-xs font-mono text-gray-500">sandbox.promptly.dev</span>
+            </CardHeader>
+
+            <CardBody className="p-5 gap-4 flex flex-col">
+              <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                <Textarea
+                  placeholder="Escribe tu prompt aquí… Sé específico, añade contexto y define el formato de salida."
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  disabled={loading}
+                  minRows={5}
+                  classNames={{
+                    base: "font-mono",
+                    inputWrapper: "bg-white/[0.04] border border-white/10 hover:border-white/20 focus-within:!border-violet-500 focus-within:!ring-violet-500/30 shadow-none",
+                    input: "text-gray-300 text-sm placeholder:text-gray-600",
+                  }}
+                />
+                <div className="flex justify-end">
+                  <Button
+                    type="submit"
+                    isDisabled={loading || !prompt.trim()}
+                    isLoading={loading}
+                    spinner={<Spinner size="sm" color="white" />}
+                    className="bg-violet-600 text-white font-semibold hover:bg-violet-500 transition-colors"
+                    endContent={!loading && <span>✨</span>}
+                  >
+                    {loading ? "Evaluando..." : "Evaluar"}
+                  </Button>
+                </div>
+              </form>
+
+              {/* Error */}
+              <AnimatePresence>
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <Card className="bg-rose-500/10 border border-rose-500/25">
+                      <CardBody className="p-4 flex flex-row items-start gap-3">
+                        <span className="text-rose-400 mt-0.5">⚠</span>
+                        <div>
+                          <p className="text-xs font-bold uppercase tracking-widest text-rose-400 mb-1">Error</p>
+                          <p className="text-sm text-rose-300">{error}</p>
+                        </div>
+                      </CardBody>
+                    </Card>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Results */}
+              <AnimatePresence>
+                {result && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 260, damping: 22 }}
+                    className="flex flex-col gap-4 mt-2"
+                  >
+                    {/* AI Response */}
+                    <Card className="bg-violet-500/8 border border-violet-500/25">
+                      <CardHeader className="px-5 pt-4 pb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="h-2 w-2 rounded-full bg-violet-400 animate-pulse" />
+                          <p className="text-xs font-bold uppercase tracking-widest text-violet-400">
+                            Respuesta de Claude
+                          </p>
+                        </div>
+                      </CardHeader>
+                      <CardBody className="px-5 pb-5 pt-0">
+                        <p className="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">
+                          {result.response}
+                        </p>
+                      </CardBody>
+                    </Card>
+
+                    {/* Evaluation */}
+                    <Card className="bg-emerald-500/5 border border-emerald-500/20">
+                      <CardHeader className="px-5 pt-4 pb-3 flex items-center justify-between">
+                        <p className="text-xs font-bold uppercase tracking-widest text-emerald-400">
+                          Evaluación del Sandbox
+                        </p>
+                        <div className="flex items-center gap-2">
+                          <Chip
+                            color={scoreLabel(result.evaluation.score).color}
+                            variant="flat"
+                            size="sm"
+                          >
+                            {scoreLabel(result.evaluation.score).label}
+                          </Chip>
+                          <span className={`text-2xl font-black ${scoreColor(result.evaluation.score)}`}>
+                            {result.evaluation.score}<span className="text-base font-semibold text-gray-500">/100</span>
+                          </span>
+                        </div>
+                      </CardHeader>
+
+                      <Divider className="bg-emerald-500/10" />
+
+                      <CardBody className="px-5 py-4 flex flex-col gap-5">
+                        {/* Score breakdown */}
+                        <div className="flex flex-col gap-3">
+                          {Object.entries(result.evaluation.breakdown).map(([key, points]) => {
+                            const max = BREAKDOWN_MAX[key] ?? 20;
+                            const pct = Math.round(((points as number) / max) * 100);
+                            return (
+                              <div key={key} className="flex flex-col gap-1">
+                                <div className="flex justify-between items-center text-xs">
+                                  <span className="text-gray-400 font-medium">{BREAKDOWN_LABELS[key] ?? key}</span>
+                                  <span className="text-gray-500 font-semibold tabular-nums">
+                                    {points as number}<span className="text-gray-700">/{max}</span>
+                                  </span>
+                                </div>
+                                <Progress
+                                  size="sm"
+                                  value={pct}
+                                  classNames={{
+                                    track: "bg-white/5",
+                                    indicator: pct >= 75 ? "bg-emerald-500" : pct >= 50 ? "bg-amber-500" : "bg-rose-500",
+                                  }}
+                                  aria-label={`${BREAKDOWN_LABELS[key]}: ${points}/${max}`}
+                                />
+                              </div>
+                            );
+                          })}
+                        </div>
+
+                        <Divider className="bg-emerald-500/10" />
+
+                        {/* Techniques */}
+                        <div>
+                          <p className="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-2">
+                            Técnicas Detectadas
+                          </p>
+                          <div className="flex flex-wrap gap-2">
+                            {result.evaluation.recognizedTechniques.length > 0 ? (
+                              result.evaluation.recognizedTechniques.map((t) => (
+                                <Chip
+                                  key={t}
+                                  size="sm"
+                                  variant="flat"
+                                  classNames={{ base: "bg-emerald-500/15 border border-emerald-500/25", content: "text-emerald-200 font-medium" }}
+                                >
+                                  {t}
+                                </Chip>
+                              ))
+                            ) : (
+                              <span className="text-xs text-gray-600">Ninguna detectada</span>
+                            )}
+                          </div>
+                        </div>
+
+                        <Divider className="bg-emerald-500/10" />
+
+                        {/* Suggestions */}
+                        <div>
+                          <p className="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-3">
+                            Sugerencias de Mejora
+                          </p>
+                          <ul className="flex flex-col gap-2">
+                            {result.evaluation.suggestions.map((s, i) => (
+                              <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
+                                <span className="shrink-0 mt-0.5 h-5 w-5 rounded-full bg-emerald-500/15 border border-emerald-500/25 flex items-center justify-center text-emerald-400 text-xs font-bold">
+                                  {i + 1}
+                                </span>
+                                {s}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </CardBody>
+                    </Card>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </CardBody>
+          </Card>
+        </motion.div>
+
+        {/* Upcoming features */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ type: "spring", stiffness: 240, damping: 22, delay: 0.1 }}
+          className="w-full mt-14 max-w-lg"
+        >
+          <p className="text-xs font-semibold uppercase tracking-widest text-gray-600 text-center mb-5">
+            Próximamente
+          </p>
+          <div className="flex flex-col gap-2">
+            {upcomingFeatures.map((feature, i) => (
+              <motion.div
+                key={feature.label}
+                initial={{ opacity: 0, x: -16 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.07, type: "spring", stiffness: 260, damping: 22 }}
+              >
+                <Card className="bg-white/[0.02] border border-white/5 shadow-none">
+                  <CardBody className="px-5 py-3.5 flex flex-row items-center gap-3">
+                    <span className="text-base">{feature.icon}</span>
+                    <span className="text-sm text-gray-400">{feature.label}</span>
+                  </CardBody>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* CTAs */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ type: "spring", stiffness: 240, damping: 22, delay: 0.2 }}
+          className="mt-10 flex flex-col sm:flex-row gap-3"
+        >
+          <Button
+            as={Link}
+            href="/lessons"
+            className="font-bold bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-600/25 hover:-translate-y-px transition-transform"
+            endContent={<span>→</span>}
+          >
+            Ir a las Lecciones
+          </Button>
+          <Button
+            as={Link}
+            href="/"
+            variant="bordered"
+            className="font-semibold text-gray-400 border-white/10 bg-white/5 hover:text-white hover:bg-white/10 hover:border-white/20"
+            startContent={<span>←</span>}
+          >
+            Volver al Inicio
+          </Button>
+        </motion.div>
+
       </div>
     </div>
   );

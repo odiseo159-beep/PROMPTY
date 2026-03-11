@@ -1,10 +1,25 @@
+"use client";
+
 import Link from "next/link";
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  Chip,
+  Button,
+  Progress,
+} from "@heroui/react";
+import { motion } from "framer-motion";
 
 const modules = [
   {
     id: 1,
+    emoji: "🧱",
     title: "Módulo 1: Fundamentos del Prompt",
     description: "Aprende la sintaxis básica y el comportamiento de los LLMs.",
+    color: "from-emerald-500 to-teal-500",
+    accent: "border-emerald-500/30",
+    glow: "shadow-emerald-500/10",
     lessons: [
       { id: "1-1", title: "Hola Mundo (Zero-Shot)", desc: "La instrucción más simple posible.", status: "completed", xp: 100 },
       { id: "1-2", title: "Añadir Contexto", desc: "Proporcionar información de fondo para guiar las respuestas.", status: "completed", xp: 150 },
@@ -13,8 +28,12 @@ const modules = [
   },
   {
     id: 2,
+    emoji: "⚡",
     title: "Módulo 2: Técnicas Avanzadas",
     description: "Dominando el few-shot prompting y los system personas.",
+    color: "from-violet-500 to-purple-500",
+    accent: "border-violet-500/30",
+    glow: "shadow-violet-500/10",
     lessons: [
       { id: "2-1", title: "Few-Shot Prompting", desc: "Dar ejemplos para enseñar nuevos patrones.", status: "completed", xp: 250 },
       { id: "2-2", title: "Chain of Thought", desc: "Forzar al modelo a razonar paso a paso en matemáticas y lógica.", status: "current", xp: 300 },
@@ -23,8 +42,12 @@ const modules = [
   },
   {
     id: 3,
+    emoji: "🛡️",
     title: "Módulo 3: Jailbreaks y Seguridad",
     description: "Comprendiendo la inyección de prompts y las barreras de seguridad.",
+    color: "from-rose-500 to-pink-500",
+    accent: "border-rose-500/20",
+    glow: "shadow-rose-500/10",
     lessons: [
       { id: "3-1", title: "Exploits de Roleplay", desc: "Cómo los actores maliciosos eluden los filtros de seguridad.", status: "locked", xp: 500 },
       { id: "3-2", title: "Prompting Defensivo", desc: "Redactar instrucciones de sistema seguras e inviolables.", status: "locked", xp: 500 },
@@ -32,112 +55,207 @@ const modules = [
   },
 ];
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  show: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.08, type: "spring" as const, stiffness: 260, damping: 22 },
+  }),
+};
+
+function statusChip(status: string) {
+  if (status === "completed")
+    return <Chip size="sm" color="success" variant="flat" startContent={<span>✓</span>}>Completada</Chip>;
+  if (status === "current")
+    return <Chip size="sm" color="warning" variant="flat" className="animate-pulse">Activa</Chip>;
+  return <Chip size="sm" variant="flat" classNames={{ base: "bg-white/5", content: "text-gray-500" }}>🔒</Chip>;
+}
+
 export default function LessonsPage() {
   return (
-    <div className="relative isolate min-h-screen px-6 py-12 lg:px-8">
+    <div className="relative min-h-screen px-4 py-14 sm:px-8">
       {/* Background glow */}
-      <div
-        className="absolute inset-x-0 top-0 -z-10 transform-gpu overflow-hidden blur-3xl pointer-events-none"
-        aria-hidden="true"
-      >
-        <div
-          className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-emerald-500 to-teal-500 opacity-20 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
-          style={{
-            clipPath:
-              "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
-          }}
-        />
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
+        <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-violet-600/10 blur-[120px]" />
+        <div className="absolute right-0 bottom-0 w-[400px] h-[400px] rounded-full bg-emerald-600/8 blur-[100px]" />
       </div>
 
       <div className="mx-auto max-w-4xl">
-        <header className="mb-16 text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-white mb-4">Currículo</h1>
-          <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+
+        {/* Header */}
+        <motion.header
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 260, damping: 22 }}
+          className="mb-16 text-center"
+        >
+          <Chip
+            variant="flat"
+            classNames={{ base: "bg-violet-500/10 border border-violet-500/20 mb-4", content: "text-violet-300 font-semibold" }}
+          >
+            📚 Currículo Completo
+          </Chip>
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-white mt-3 mb-4 tracking-tight">
+            Tu Ruta de Aprendizaje
+          </h1>
+          <p className="text-gray-400 text-lg max-w-xl mx-auto leading-relaxed">
             Domina el arte del prompt engineering a través de lecciones interactivas puntuadas por Claude.
           </p>
-        </header>
+        </motion.header>
 
-        <div className="space-y-16">
-          {modules.map((mod) => (
-            <section key={mod.id} className="relative">
-              <div className="mb-8 pl-8 border-l-2 border-emerald-500/30">
-                <h2 className="text-2xl font-bold text-white mb-2">{mod.title}</h2>
-                <p className="text-gray-400">{mod.description}</p>
-              </div>
+        {/* Modules */}
+        <div className="flex flex-col gap-16">
+          {modules.map((mod, modIdx) => {
+            const completed = mod.lessons.filter(l => l.status === "completed").length;
+            const progressPct = Math.round((completed / mod.lessons.length) * 100);
+            const allLocked = mod.lessons.every(l => l.status === "locked");
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {mod.lessons.map((lesson) => {
-                  const isLocked = lesson.status === "locked";
-                  const isCurrent = lesson.status === "current";
-                  const isCompleted = lesson.status === "completed";
-
-                  const cardClass = `relative rounded-2xl border p-6 flex flex-col transition-all ${
-                    isLocked
-                      ? "border-white/5 bg-white/5 opacity-50 cursor-not-allowed"
-                      : isCurrent
-                      ? "border-emerald-500/50 bg-emerald-500/10 hover:border-emerald-400 shadow-[0_0_30px_rgba(16,185,129,0.15)] cursor-pointer"
-                      : "border-white/20 bg-white/5 hover:border-white/40 hover:bg-white/10 cursor-pointer"
-                  }`;
-
-                  const cardContent = (
-                    <>
-                      <div className="absolute -top-3 right-4">
-                        {isCompleted && (
-                          <span className="inline-flex items-center rounded-full bg-emerald-500 px-2 py-1 text-xs font-bold text-white shadow-lg">
-                            ✓
-                          </span>
-                        )}
-                        {isCurrent && (
-                          <span className="inline-flex items-center rounded-full bg-emerald-500 px-2 py-1 text-xs font-bold text-white shadow-lg animate-pulse">
-                            Activa
-                          </span>
-                        )}
-                        {isLocked && (
-                          <span className="inline-flex items-center rounded-full bg-gray-700 px-2 py-1 text-xs font-bold text-gray-300 shadow-lg">
-                            🔒
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="flex-1">
-                        <span className="text-xs font-mono text-emerald-400 mb-2 block">
-                          Lección {lesson.id}
-                        </span>
-                        <h3 className={`text-lg font-bold mb-2 ${isLocked ? "text-gray-500" : "text-white"}`}>
-                          {lesson.title}
-                        </h3>
-                        <p className={`text-sm ${isLocked ? "text-gray-600" : "text-gray-400"}`}>
-                          {lesson.desc}
-                        </p>
-                      </div>
-
-                      <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center text-xs font-semibold">
-                        <span className={isLocked ? "text-gray-600" : "text-emerald-400"}>
-                          +{lesson.xp} XP
-                        </span>
-                        {!isLocked && (
-                          <span className={isCurrent ? "text-emerald-300" : "text-gray-500"}>
-                            {isCurrent ? "Empezar ➔" : "Repasar"}
-                          </span>
-                        )}
-                      </div>
-                    </>
-                  );
-
-                  return isLocked ? (
-                    <div key={lesson.id} className={cardClass}>
-                      {cardContent}
+            return (
+              <motion.section
+                key={mod.id}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                custom={modIdx}
+              >
+                {/* Module Header */}
+                <div className={`mb-6 pl-5 border-l-2 ${mod.accent}`}>
+                  <div className="flex items-center gap-3 mb-1">
+                    <span className="text-2xl">{mod.emoji}</span>
+                    <h2 className={`text-xl sm:text-2xl font-extrabold text-white ${allLocked ? "opacity-40" : ""}`}>
+                      {mod.title}
+                    </h2>
+                  </div>
+                  <p className={`text-sm text-gray-400 mb-3 ${allLocked ? "opacity-40" : ""}`}>
+                    {mod.description}
+                  </p>
+                  {!allLocked && (
+                    <div className="flex items-center gap-3 max-w-xs">
+                      <Progress
+                        size="sm"
+                        value={progressPct}
+                        classNames={{
+                          track: "bg-white/5",
+                          indicator: `bg-gradient-to-r ${mod.color}`,
+                        }}
+                        aria-label={`${progressPct}% completado`}
+                      />
+                      <span className="text-xs font-semibold text-gray-500 shrink-0">
+                        {completed}/{mod.lessons.length}
+                      </span>
                     </div>
-                  ) : (
-                    <Link key={lesson.id} href="/lesson" className={cardClass}>
-                      {cardContent}
-                    </Link>
-                  );
-                })}
-              </div>
-            </section>
-          ))}
+                  )}
+                </div>
+
+                {/* Lesson Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {mod.lessons.map((lesson, lessonIdx) => {
+                    const isLocked = lesson.status === "locked";
+                    const isCurrent = lesson.status === "current";
+
+                    const cardInner = (
+                      <Card
+                        key={lesson.id}
+                        isPressable={!isLocked}
+                        className={[
+                          "border transition-all duration-200 shadow-lg",
+                          isLocked
+                            ? "bg-white/[0.02] border-white/5 opacity-40 cursor-not-allowed"
+                            : isCurrent
+                            ? `bg-gradient-to-br from-violet-500/10 to-purple-500/5 border-violet-500/40 ${mod.glow} hover:border-violet-400/60`
+                            : "bg-white/[0.04] border-white/10 hover:border-white/25 hover:bg-white/[0.07]",
+                        ].join(" ")}
+                      >
+                        <CardBody className="p-5 flex flex-col gap-3">
+                          {/* Top row */}
+                          <div className="flex items-start justify-between gap-2">
+                            <span className={`text-xs font-mono font-semibold ${isLocked ? "text-gray-600" : "text-emerald-400"}`}>
+                              Lección {lesson.id}
+                            </span>
+                            {statusChip(lesson.status)}
+                          </div>
+
+                          {/* Title & desc */}
+                          <div>
+                            <h3 className={`font-bold text-base leading-snug ${isLocked ? "text-gray-600" : "text-white"}`}>
+                              {lesson.title}
+                            </h3>
+                            <p className={`mt-1 text-sm leading-relaxed ${isLocked ? "text-gray-700" : "text-gray-400"}`}>
+                              {lesson.desc}
+                            </p>
+                          </div>
+                        </CardBody>
+
+                        <CardFooter className="px-5 pt-0 pb-4 flex items-center justify-between">
+                          <Chip
+                            size="sm"
+                            variant="flat"
+                            classNames={{
+                              base: isLocked ? "bg-white/[0.03]" : "bg-amber-500/10 border border-amber-500/20",
+                              content: isLocked ? "text-gray-700 font-bold" : "text-amber-400 font-bold",
+                            }}
+                          >
+                            +{lesson.xp} XP
+                          </Chip>
+
+                          {!isLocked && (
+                            <Button
+                              size="sm"
+                              variant={isCurrent ? "solid" : "flat"}
+                              className={
+                                isCurrent
+                                  ? "bg-violet-500 text-white font-semibold shadow-md shadow-violet-500/30"
+                                  : "text-gray-400 font-semibold hover:text-white"
+                              }
+                              endContent={<span>→</span>}
+                            >
+                              {isCurrent ? "Empezar" : "Repasar"}
+                            </Button>
+                          )}
+                        </CardFooter>
+                      </Card>
+                    );
+
+                    return isLocked ? (
+                      <div key={lesson.id}>{cardInner}</div>
+                    ) : (
+                      <Link key={lesson.id} href="/lesson">
+                        {cardInner}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </motion.section>
+            );
+          })}
         </div>
+
+        {/* Bottom CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ type: "spring", stiffness: 240, damping: 22, delay: 0.2 }}
+          className="mt-20 text-center"
+        >
+          <Card className="bg-gradient-to-br from-violet-900/40 via-purple-900/30 to-fuchsia-900/20 border border-violet-500/20 max-w-lg mx-auto">
+            <CardBody className="p-8 flex flex-col items-center gap-4">
+              <p className="text-4xl">🎯</p>
+              <h3 className="text-xl font-extrabold text-white">¿Listo para el siguiente desafío?</h3>
+              <p className="text-sm text-gray-400">Continúa donde lo dejaste y sigue ganando XP.</p>
+              <Button
+                as={Link}
+                href="/lesson"
+                size="lg"
+                className="font-bold bg-violet-500 text-white shadow-[0_6px_0_#4c1d95] hover:shadow-[0_3px_0_#4c1d95] hover:translate-y-[3px] transition-all duration-100 mt-1"
+              >
+                Continuar Aprendiendo →
+              </Button>
+            </CardBody>
+          </Card>
+        </motion.div>
       </div>
     </div>
   );

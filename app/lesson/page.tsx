@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { Button, Progress, Card, CardBody, Chip } from "@heroui/react";
 import { QuizComponent, type QuizOption } from "@/components/exercises/QuizComponent";
 import { TrueFalseComponent } from "@/components/exercises/TrueFalseComponent";
 import { PromptDropZone } from "@/components/exercises/PromptDropZone";
@@ -79,7 +80,6 @@ const SELF_CONTAINED: Exercise["type"][] = ["chat", "concept", "audio", "story"]
 // ── Ejercicios ─────────────────────────────────────────────────────────────────
 
 const EXERCISES: Exercise[] = [
-  // 1 ── Chat de bienvenida
   {
     type: "chat",
     messages: [
@@ -91,16 +91,12 @@ const EXERCISES: Exercise[] = [
     ],
     replyLabel: "¡Entendido! A practicar →",
   },
-
-  // 2 ── Ficha conceptual: Few-Shot Prompting
   {
     type: "concept",
     emoji: "🎯",
     title: "Few-Shot Prompting",
     body: "Le das a la IA 2–5 ejemplos de entrada/salida dentro del prompt. El modelo aprende el patrón sin ningún fine-tuning — solo a partir del contexto.",
   },
-
-  // 3 ── Quiz: instrucción de rol
   {
     type: "quiz",
     question: "¿Qué parte de un prompt le indica a la IA qué rol asumir?",
@@ -114,8 +110,6 @@ const EXERCISES: Exercise[] = [
       { id: "d", text: "La configuración de temperatura", icon: "🌡️" },
     ],
   },
-
-  // 4 ── Audio: alucinaciones
   {
     type: "audio",
     speakerLabel: "Prof. Ada · Seguridad en IA",
@@ -132,8 +126,6 @@ const EXERCISES: Exercise[] = [
       { id: "d", text: "El prompt era demasiado corto", icon: "📏" },
     ],
   },
-
-  // 5 ── Verdadero/Falso: verbosidad
   {
     type: "truefalse",
     question: "Añadir más palabras a un prompt siempre produce una mejor respuesta de la IA.",
@@ -141,8 +133,6 @@ const EXERCISES: Exercise[] = [
     theoryExplanation:
       "La verbosidad suele confundir al modelo. Los prompts concisos y específicos superan a los extensos porque cada token compite por la atención del modelo.",
   },
-
-  // 6 ── Historia: María y la IA alucinando
   {
     type: "story",
     lines: [
@@ -163,8 +153,6 @@ const EXERCISES: Exercise[] = [
       { id: "d", text: "Bajar la configuración de temperatura", icon: "🌡️" },
     ],
   },
-
-  // 7 ── Quiz: temperatura
   {
     type: "quiz",
     question: "¿Qué controla la 'temperatura' en un modelo de lenguaje?",
@@ -178,8 +166,6 @@ const EXERCISES: Exercise[] = [
       { id: "d", text: "El idioma utilizado", icon: "🌐" },
     ],
   },
-
-  // 8 ── Verdadero/Falso: few-shot
   {
     type: "truefalse",
     question:
@@ -188,14 +174,10 @@ const EXERCISES: Exercise[] = [
     theoryExplanation:
       "El few-shot prompting aprovecha el aprendizaje en contexto. Al mostrar al modelo 2–5 ejemplos de entrada/salida, orientas su estilo de completado sin cambiar los pesos del modelo.",
   },
-
-  // 9 ── Dropzone
   {
     type: "dropzone",
     question: "Ordena las piezas para construir una estructura de prompt perfecta.",
   },
-
-  // 10 ── Quiz: chain-of-thought
   {
     type: "quiz",
     question: "¿Qué técnica descompone una tarea difícil en pasos de razonamiento más pequeños?",
@@ -213,7 +195,7 @@ const EXERCISES: Exercise[] = [
 
 const TOTAL_STEPS = EXERCISES.length;
 
-// ── Helpers compartidos ────────────────────────────────────────────────────────
+// ── Helpers ────────────────────────────────────────────────────────────────────
 
 function BoldText({ text }: { text: string }) {
   const parts = text.split(/(\*\*[^*]+\*\*)/);
@@ -226,69 +208,59 @@ function BoldText({ text }: { text: string }) {
   );
 }
 
-function InlineFeedback({
-  isCorrect,
-  theoryExplanation,
-}: {
-  isCorrect: boolean;
-  theoryExplanation?: string;
-}) {
+// Shared inline feedback for self-contained exercises
+function InlineFeedback({ isCorrect, theoryExplanation }: { isCorrect: boolean; theoryExplanation?: string }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={`w-full rounded-2xl px-4 py-3 ${
-        isCorrect
-          ? "bg-[#58cc02]/20 border border-[#58cc02]/40"
-          : "bg-red-500/20 border border-red-500/40"
-      }`}
-    >
-      <div className="flex items-center gap-2">
-        <span className="text-xl">{isCorrect ? "✅" : "❌"}</span>
-        <p className={`font-bold text-sm ${isCorrect ? "text-[#58cc02]" : "text-red-400"}`}>
-          {isCorrect ? "¡Correcto!" : "Casi..."}
-        </p>
-      </div>
-      {!isCorrect && theoryExplanation && (
-        <motion.p
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: "auto", opacity: 1 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-          className="mt-2 text-xs text-gray-300 leading-relaxed overflow-hidden"
-        >
-          {theoryExplanation}
-        </motion.p>
-      )}
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+      <Card className={isCorrect
+        ? "bg-[#58cc02]/15 border border-[#58cc02]/40"
+        : "bg-red-500/15 border border-red-500/40"
+      }>
+        <CardBody className="p-3 gap-2">
+          <div className="flex items-center gap-2">
+            <span className="text-lg">{isCorrect ? "✅" : "❌"}</span>
+            <p className={`font-bold text-sm ${isCorrect ? "text-[#58cc02]" : "text-red-400"}`}>
+              {isCorrect ? "¡Correcto!" : "Casi..."}
+            </p>
+          </div>
+          {!isCorrect && theoryExplanation && (
+            <motion.p
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="text-xs text-gray-300 leading-relaxed overflow-hidden"
+            >
+              {theoryExplanation}
+            </motion.p>
+          )}
+        </CardBody>
+      </Card>
     </motion.div>
   );
 }
 
 function ProceedButton({ label, onClick }: { label: string; onClick: () => void }) {
   return (
-    <motion.button
+    <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2, type: "spring", stiffness: 260, damping: 20 }}
-      onClick={onClick}
-      className="w-full min-h-[60px] rounded-2xl bg-[#58cc02] text-white font-extrabold text-base
-        shadow-[0_6px_0_#389200] hover:shadow-[0_3px_0_#389200] hover:translate-y-[3px]
-        active:shadow-[0_1px_0_#389200] active:translate-y-[5px]
-        transition-all duration-100 select-none"
     >
-      {label}
-    </motion.button>
+      <Button
+        onPress={onClick}
+        fullWidth
+        size="lg"
+        className="font-extrabold text-base bg-[#58cc02] text-white shadow-[0_6px_0_#389200] hover:shadow-[0_3px_0_#389200] hover:translate-y-[3px] active:shadow-[0_1px_0_#389200] active:translate-y-[5px] transition-all duration-100"
+      >
+        {label}
+      </Button>
+    </motion.div>
   );
 }
 
 // ── ConceptCardComponent ───────────────────────────────────────────────────────
 
-function ConceptCardComponent({
-  exercise,
-  onComplete,
-}: {
-  exercise: ConceptExercise;
-  onComplete: () => void;
-}) {
+function ConceptCardComponent({ exercise, onComplete }: { exercise: ConceptExercise; onComplete: () => void }) {
   return (
     <motion.div
       initial={{ opacity: 0, x: 60 }}
@@ -312,9 +284,12 @@ function ConceptCardComponent({
         <p className="text-base text-gray-300 leading-relaxed max-w-sm mx-auto">{exercise.body}</p>
       </div>
 
-      <span className="px-3 py-1 rounded-full text-xs font-bold bg-violet-500/20 text-violet-300 border border-violet-500/30 uppercase tracking-widest">
+      <Chip
+        variant="bordered"
+        classNames={{ base: "border-violet-500/30 bg-violet-500/10", content: "text-violet-300 font-bold text-xs uppercase tracking-widest" }}
+      >
         Ficha Conceptual
-      </span>
+      </Chip>
 
       <ProceedButton label="¡Entendido! ✓" onClick={onComplete} />
     </motion.div>
@@ -378,37 +353,42 @@ function AudioComponent({
   const visibleTranscript = exercise.transcript.slice(0, charIndex);
 
   return (
-    <div className="flex flex-col gap-5">
-      <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/5 border border-white/8">
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-lg shrink-0">
-          🎓
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-xs text-gray-500 uppercase tracking-widest font-bold">Escuchando</p>
-          <p className="text-sm font-semibold text-white truncate">{exercise.speakerLabel}</p>
-        </div>
-        {!transcriptDone ? (
-          <motion.button
-            onClick={handlePlay}
-            disabled={isPlaying}
-            whileTap={!isPlaying ? { scale: 0.9 } : undefined}
-            animate={isPlaying ? { scale: [1, 1.12, 1] } : { scale: 1 }}
-            transition={isPlaying ? { repeat: Infinity, duration: 0.8 } : {}}
-            className={`shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-xl shadow-lg transition-colors ${
-              isPlaying
-                ? "bg-cyan-500/30 border-2 border-cyan-400/60 text-cyan-300"
-                : "bg-cyan-500 text-white hover:bg-cyan-400"
-            }`}
-          >
-            {isPlaying ? "🔊" : "▶"}
-          </motion.button>
-        ) : (
-          <span className="shrink-0 w-12 h-12 rounded-full bg-[#58cc02]/20 border border-[#58cc02]/40 flex items-center justify-center text-lg">
-            ✅
-          </span>
-        )}
-      </div>
+    <div className="flex flex-col gap-4">
+      {/* Player row */}
+      <Card className="bg-white/[0.04] border border-white/8">
+        <CardBody className="flex flex-row items-center gap-3 p-3">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-lg shrink-0">
+            🎓
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Escuchando</p>
+            <p className="text-sm font-semibold text-white truncate">{exercise.speakerLabel}</p>
+          </div>
+          {!transcriptDone ? (
+            <Button
+              isIconOnly
+              onPress={handlePlay}
+              isDisabled={isPlaying}
+              className={`shrink-0 rounded-full transition-colors ${
+                isPlaying
+                  ? "bg-cyan-500/30 border-2 border-cyan-400/60 text-cyan-300"
+                  : "bg-cyan-500 text-white hover:bg-cyan-400"
+              }`}
+            >
+              <motion.span
+                animate={isPlaying ? { scale: [1, 1.12, 1] } : { scale: 1 }}
+                transition={isPlaying ? { repeat: Infinity, duration: 0.8 } : {}}
+              >
+                {isPlaying ? "🔊" : "▶"}
+              </motion.span>
+            </Button>
+          ) : (
+            <span className="shrink-0 w-10 h-10 rounded-full bg-[#58cc02]/20 border border-[#58cc02]/40 flex items-center justify-center text-base">✅</span>
+          )}
+        </CardBody>
+      </Card>
 
+      {/* Waveform */}
       <AnimatePresence>
         {isPlaying && (
           <motion.div
@@ -430,22 +410,26 @@ function AudioComponent({
         )}
       </AnimatePresence>
 
+      {/* Transcript */}
       {charIndex > 0 && (
-        <div className="rounded-2xl bg-white/[0.04] border border-white/8 px-4 py-3 min-h-[72px]">
-          <p className="text-xs text-gray-500 uppercase tracking-widest font-bold mb-1">Transcripción</p>
-          <p className="text-sm text-gray-200 leading-relaxed">
-            {visibleTranscript}
-            {isPlaying && (
-              <motion.span
-                animate={{ opacity: [1, 0] }}
-                transition={{ repeat: Infinity, duration: 0.5 }}
-                className="inline-block w-[2px] h-[14px] bg-cyan-400 align-middle ml-[2px]"
-              />
-            )}
-          </p>
-        </div>
+        <Card className="bg-white/[0.03] border border-white/8">
+          <CardBody className="p-4 min-h-[72px]">
+            <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-1">Transcripción</p>
+            <p className="text-sm text-gray-200 leading-relaxed">
+              {visibleTranscript}
+              {isPlaying && (
+                <motion.span
+                  animate={{ opacity: [1, 0] }}
+                  transition={{ repeat: Infinity, duration: 0.5 }}
+                  className="inline-block w-[2px] h-[14px] bg-cyan-400 align-middle ml-[2px]"
+                />
+              )}
+            </p>
+          </CardBody>
+        </Card>
       )}
 
+      {/* Quiz once transcript done */}
       <AnimatePresence>
         {transcriptDone && (
           <motion.div
@@ -466,13 +450,10 @@ function AudioComponent({
                     disabled={checked}
                     onClick={() => !checked && setSelectedId(opt.id)}
                     className={`flex items-center gap-3 w-full px-4 py-3 rounded-2xl border text-left font-semibold text-sm transition-all duration-150 ${
-                      isRight
-                        ? "border-[#58cc02] bg-[#58cc02]/15 text-[#58cc02]"
-                        : isWrong
-                        ? "border-red-400 bg-red-500/15 text-red-400"
-                        : isSelected
-                        ? "border-violet-400 bg-violet-500/20 text-white"
-                        : "border-white/10 bg-white/[0.04] text-gray-300 hover:border-white/25 hover:bg-white/10"
+                      isRight ? "border-[#58cc02] bg-[#58cc02]/15 text-[#58cc02]"
+                      : isWrong ? "border-red-400 bg-red-500/15 text-red-400"
+                      : isSelected ? "border-violet-400 bg-violet-500/20 text-white"
+                      : "border-white/10 bg-white/[0.04] text-gray-300 hover:border-white/25 hover:bg-white/10"
                     }`}
                   >
                     <span className="text-lg">{opt.icon}</span>
@@ -481,24 +462,25 @@ function AudioComponent({
                 );
               })}
             </div>
-
             {checked ? (
               <div className="flex flex-col gap-3">
                 <InlineFeedback isCorrect={isCorrect} theoryExplanation={exercise.theoryExplanation} />
                 <ProceedButton label="Continuar →" onClick={onComplete} />
               </div>
             ) : (
-              <button
-                disabled={!selectedId}
-                onClick={handleCheck}
-                className={`w-full min-h-[56px] rounded-2xl font-extrabold text-base transition-all duration-150 ${
+              <Button
+                isDisabled={!selectedId}
+                onPress={handleCheck}
+                fullWidth
+                size="lg"
+                className={`font-extrabold text-base transition-all duration-150 ${
                   selectedId
                     ? "bg-[#58cc02] text-white shadow-[0_4px_0_#389200] hover:bg-[#4ab001]"
                     : "bg-white/10 text-gray-600 cursor-not-allowed"
                 }`}
               >
                 Comprobar Respuesta
-              </button>
+              </Button>
             )}
           </motion.div>
         )}
@@ -532,11 +514,8 @@ function StoryComponent({
   const isLastLine = lineIndex >= exercise.lines.length - 1;
 
   function handleNext() {
-    if (!isLastLine) {
-      setLineIndex((i) => i + 1);
-    } else {
-      setPhase("quiz");
-    }
+    if (!isLastLine) setLineIndex((i) => i + 1);
+    else setPhase("quiz");
   }
 
   function handleCheck() {
@@ -551,7 +530,7 @@ function StoryComponent({
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2 mb-1">
         <span className="text-xl">📖</span>
-        <p className="text-xs text-gray-500 uppercase tracking-widest font-bold">Historia Interactiva</p>
+        <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Historia Interactiva</p>
       </div>
 
       <div className="flex flex-col gap-3 min-h-[160px]">
@@ -570,13 +549,11 @@ function StoryComponent({
                   <p className="text-xs text-gray-500 italic text-center px-4">{line.text}</p>
                 ) : (
                   <div className={`flex ${isBot ? "justify-start" : "justify-end"}`}>
-                    <div
-                      className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
-                        isBot
-                          ? "bg-white/10 text-white border border-white/8 rounded-tl-sm"
-                          : "bg-violet-500 text-white rounded-tr-sm"
-                      }`}
-                    >
+                    <div className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
+                      isBot
+                        ? "bg-white/10 text-white border border-white/8 rounded-tl-sm"
+                        : "bg-violet-500 text-white rounded-tr-sm"
+                    }`}>
                       {line.speaker && (
                         <p className={`text-[10px] font-bold mb-1 ${isBot ? "text-cyan-400" : "text-violet-200"}`}>
                           {line.speaker}
@@ -593,16 +570,16 @@ function StoryComponent({
       </div>
 
       {phase === "reading" && (
-        <motion.button
-          key={lineIndex}
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          onClick={handleNext}
-          className="w-full min-h-[52px] rounded-2xl border-2 border-violet-400/40 bg-violet-500/10 text-violet-300 font-bold text-sm
-            hover:bg-violet-500/20 hover:border-violet-400/70 transition-all duration-150"
-        >
-          {isLastLine ? "Ver la pregunta →" : "Continuar ›"}
-        </motion.button>
+        <motion.div key={lineIndex} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
+          <Button
+            onPress={handleNext}
+            fullWidth
+            variant="bordered"
+            className="border-violet-400/40 bg-violet-500/10 text-violet-300 font-bold hover:bg-violet-500/20 hover:border-violet-400/70"
+          >
+            {isLastLine ? "Ver la pregunta →" : "Continuar ›"}
+          </Button>
+        </motion.div>
       )}
 
       <AnimatePresence>
@@ -625,13 +602,10 @@ function StoryComponent({
                     disabled={checked}
                     onClick={() => !checked && setSelectedId(opt.id)}
                     className={`flex items-center gap-3 w-full px-4 py-3 rounded-2xl border text-left font-semibold text-sm transition-all duration-150 ${
-                      isRight
-                        ? "border-[#58cc02] bg-[#58cc02]/15 text-[#58cc02]"
-                        : isWrong
-                        ? "border-red-400 bg-red-500/15 text-red-400"
-                        : isSelected
-                        ? "border-violet-400 bg-violet-500/20 text-white"
-                        : "border-white/10 bg-white/[0.04] text-gray-300 hover:border-white/25 hover:bg-white/10"
+                      isRight ? "border-[#58cc02] bg-[#58cc02]/15 text-[#58cc02]"
+                      : isWrong ? "border-red-400 bg-red-500/15 text-red-400"
+                      : isSelected ? "border-violet-400 bg-violet-500/20 text-white"
+                      : "border-white/10 bg-white/[0.04] text-gray-300 hover:border-white/25 hover:bg-white/10"
                     }`}
                   >
                     <span className="text-lg">{opt.icon}</span>
@@ -640,24 +614,25 @@ function StoryComponent({
                 );
               })}
             </div>
-
             {checked ? (
               <div className="flex flex-col gap-3">
                 <InlineFeedback isCorrect={isCorrect} theoryExplanation={exercise.theoryExplanation} />
                 <ProceedButton label="Continuar →" onClick={onComplete} />
               </div>
             ) : (
-              <button
-                disabled={!selectedId}
-                onClick={handleCheck}
-                className={`w-full min-h-[56px] rounded-2xl font-extrabold text-base transition-all duration-150 ${
+              <Button
+                isDisabled={!selectedId}
+                onPress={handleCheck}
+                fullWidth
+                size="lg"
+                className={`font-extrabold text-base transition-all duration-150 ${
                   selectedId
                     ? "bg-[#58cc02] text-white shadow-[0_4px_0_#389200] hover:bg-[#4ab001]"
                     : "bg-white/10 text-gray-600 cursor-not-allowed"
                 }`}
               >
                 Comprobar Respuesta
-              </button>
+              </Button>
             )}
           </motion.div>
         )}
@@ -668,13 +643,7 @@ function StoryComponent({
 
 // ── ChatComponent ──────────────────────────────────────────────────────────────
 
-function ChatComponent({
-  exercise,
-  onComplete,
-}: {
-  exercise: ChatExercise;
-  onComplete: () => void;
-}) {
+function ChatComponent({ exercise, onComplete }: { exercise: ChatExercise; onComplete: () => void }) {
   const [visibleCount, setVisibleCount] = useState(0);
 
   if (visibleCount < exercise.messages.length) {
@@ -684,7 +653,7 @@ function ChatComponent({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-3 mb-2">
-        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-2xl shadow-lg">
+        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-2xl shadow-lg shadow-violet-500/30">
           ⚡
         </div>
         <div>
@@ -713,112 +682,101 @@ function ChatComponent({
 
       <AnimatePresence>
         {visibleCount >= exercise.messages.length && (
-          <motion.button
+          <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25, type: "spring", stiffness: 260, damping: 20 }}
-            onClick={onComplete}
-            className="mt-2 w-full min-h-[60px] rounded-2xl bg-violet-500 text-white font-extrabold text-base
-              shadow-[0_6px_0_#4c1d95] hover:shadow-[0_3px_0_#4c1d95] hover:translate-y-[3px]
-              active:shadow-[0_1px_0_#4c1d95] active:translate-y-[5px]
-              transition-all duration-100 select-none"
           >
-            {exercise.replyLabel}
-          </motion.button>
+            <Button
+              onPress={onComplete}
+              fullWidth
+              size="lg"
+              className="mt-2 font-extrabold text-base bg-violet-500 text-white shadow-[0_6px_0_#4c1d95] hover:shadow-[0_3px_0_#4c1d95] hover:translate-y-[3px] active:shadow-[0_1px_0_#4c1d95] active:translate-y-[5px] transition-all duration-100"
+            >
+              {exercise.replyLabel}
+            </Button>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
   );
 }
 
-// ── Sub-componentes de UI ──────────────────────────────────────────────────────
+// ── Header sub-components ──────────────────────────────────────────────────────
 
-function XButton({ onClick }: { onClick: () => void }) {
+function LessonProgressBar({ progress }: { progress: number }) {
   return (
-    <button
-      onClick={onClick}
-      aria-label="Salir de la lección"
-      className="flex items-center justify-center w-10 h-10 rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition-colors shrink-0"
-    >
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <path d="M1 1l16 16M17 1L1 17" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      </svg>
-    </button>
-  );
-}
-
-function ProgressBar({ progress }: { progress: number }) {
-  return (
-    <div className="flex-1 h-4 bg-white/10 rounded-full overflow-hidden">
-      <motion.div
-        className="h-full rounded-full bg-gradient-to-r from-[#58cc02] to-[#89e219] shadow-[0_0_12px_#58cc02aa]"
-        initial={{ width: 0 }}
-        animate={{ width: `${progress}%` }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-      />
-    </div>
+    <Progress
+      value={progress}
+      size="md"
+      classNames={{
+        base: "flex-1",
+        track: "bg-white/10",
+        indicator: "bg-gradient-to-r from-[#58cc02] to-[#89e219] shadow-[0_0_10px_#58cc02aa]",
+      }}
+      aria-label="Progreso de la lección"
+    />
   );
 }
 
 function HeartCounter({ hearts }: { hearts: number }) {
   return (
     <div className="flex items-center gap-1 shrink-0">
-      <span className="text-red-400 text-lg">❤️</span>
+      <span className="text-lg">❤️</span>
       <span className="font-bold text-red-400 text-sm">{hearts}</span>
     </div>
   );
 }
 
-function FeedbackBanner({
-  state,
-  theoryExplanation,
-}: {
-  state: LessonState;
-  theoryExplanation?: string;
-}) {
+// ── FeedbackBanner ─────────────────────────────────────────────────────────────
+
+function FeedbackBanner({ state, theoryExplanation }: { state: LessonState; theoryExplanation?: string }) {
   if (state !== "correct" && state !== "incorrect") return null;
   const isCorrect = state === "correct";
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 20 }}
+      exit={{ opacity: 0, y: 16 }}
       transition={{ duration: 0.25 }}
-      className={`w-full px-5 py-4 rounded-2xl mb-4 ${
-        isCorrect
-          ? "bg-[#58cc02]/20 border border-[#58cc02]/40"
-          : "bg-red-500/20 border border-red-500/40"
-      }`}
+      className="mb-3"
     >
-      <div className="flex items-center gap-3">
-        <span className="text-2xl">{isCorrect ? "✅" : "❌"}</span>
-        <div>
-          <p className={`font-bold text-base ${isCorrect ? "text-[#58cc02]" : "text-red-400"}`}>
-            {isCorrect ? "¡Muy bien!" : "No del todo"}
-          </p>
-          <p className="text-gray-400 text-sm">
-            {isCorrect ? "¡Lo clavaste! ¡Sigue así!" : "¿Por qué?"}
-          </p>
-        </div>
-      </div>
-      <AnimatePresence>
-        {!isCorrect && theoryExplanation && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.35, ease: "easeOut" }}
-            className="overflow-hidden"
-          >
-            <p className="mt-3 pt-3 border-t border-red-500/20 text-sm text-gray-300 leading-relaxed">
-              {theoryExplanation}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Card className={isCorrect
+        ? "bg-[#58cc02]/15 border border-[#58cc02]/40"
+        : "bg-red-500/15 border border-red-500/40"
+      }>
+        <CardBody className="p-4 gap-2">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">{isCorrect ? "✅" : "❌"}</span>
+            <div>
+              <p className={`font-bold text-base ${isCorrect ? "text-[#58cc02]" : "text-red-400"}`}>
+                {isCorrect ? "¡Muy bien!" : "No del todo"}
+              </p>
+              <p className="text-gray-400 text-sm">{isCorrect ? "¡Lo clavaste! ¡Sigue así!" : "¿Por qué?"}</p>
+            </div>
+          </div>
+          <AnimatePresence>
+            {!isCorrect && theoryExplanation && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+                className="overflow-hidden"
+              >
+                <p className="pt-3 border-t border-red-500/20 text-sm text-gray-300 leading-relaxed">
+                  {theoryExplanation}
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </CardBody>
+      </Card>
     </motion.div>
   );
 }
+
+// ── ActionButton ───────────────────────────────────────────────────────────────
 
 function ActionButton({
   hasSelection,
@@ -835,24 +793,27 @@ function ActionButton({
   const isCorrect = lessonState === "correct";
   const isDisabled = !isAnswered && !hasSelection;
   const label = !isAnswered ? "Comprobar Respuesta" : isCorrect ? "Continuar" : "Entendido";
-  const colorClasses = isDisabled
+
+  const colorClass = isDisabled
     ? "bg-white/10 text-gray-600 cursor-not-allowed"
-    : !isAnswered
-      ? "bg-[#58cc02] hover:bg-[#4ab001] text-white shadow-[0_4px_0_#389200]"
-      : isCorrect
-        ? "bg-[#58cc02] hover:bg-[#4ab001] text-white shadow-[0_4px_0_#389200]"
-        : "bg-red-500 hover:bg-red-600 text-white shadow-[0_4px_0_#b91c1c]";
+    : !isAnswered || isCorrect
+      ? "bg-[#58cc02] text-white shadow-[0_4px_0_#389200] hover:bg-[#4ab001]"
+      : "bg-red-500 text-white shadow-[0_4px_0_#b91c1c] hover:bg-red-600";
+
   return (
-    <motion.button
-      whileTap={!isDisabled ? { scale: 0.97 } : undefined}
-      onClick={isAnswered ? onContinue : onCheck}
-      disabled={isDisabled}
-      className={`w-full py-4 rounded-2xl font-extrabold text-lg tracking-wide transition-all duration-200 shadow-lg ${colorClasses}`}
+    <Button
+      onPress={isAnswered ? onContinue : onCheck}
+      isDisabled={isDisabled}
+      fullWidth
+      size="lg"
+      className={`font-extrabold text-lg tracking-wide transition-all duration-200 ${colorClass}`}
     >
       {label}
-    </motion.button>
+    </Button>
   );
 }
+
+// ── FinishedScreen ─────────────────────────────────────────────────────────────
 
 function FinishedScreen({ onRestart, onExit }: { onRestart: () => void; onExit: () => void }) {
   return (
@@ -860,40 +821,51 @@ function FinishedScreen({ onRestart, onExit }: { onRestart: () => void; onExit: 
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5, ease: "backOut" }}
-      className="flex flex-col items-center justify-center h-full gap-6 text-center px-6"
+      className="flex flex-col items-center justify-center h-full gap-6 text-center px-6 py-12"
     >
       <div className="relative">
         <div className="w-28 h-28 rounded-full bg-[#58cc02]/20 flex items-center justify-center">
           <span className="text-6xl">🏆</span>
         </div>
         <motion.div
-          className="absolute inset-0 rounded-full border-4 border-[#58cc02]/60"
-          animate={{ scale: [1, 1.3, 1], opacity: [0.8, 0, 0.8] }}
+          className="absolute inset-0 rounded-full border-4 border-[#58cc02]/50"
+          animate={{ scale: [1, 1.35, 1], opacity: [0.7, 0, 0.7] }}
           transition={{ repeat: Infinity, duration: 2 }}
         />
       </div>
+
       <div>
         <h2 className="text-3xl font-extrabold text-white mb-2">¡Lección Completada!</h2>
-        <p className="text-gray-400 text-base">
-          Terminaste los {TOTAL_STEPS} ejercicios. ¡Mantén la racha!
-        </p>
+        <p className="text-gray-400 text-base">Terminaste los {TOTAL_STEPS} ejercicios. ¡Mantén la racha!</p>
       </div>
-      <div className="flex items-center gap-2 bg-yellow-400/10 border border-yellow-400/30 rounded-full px-5 py-2">
-        <span className="text-yellow-400 text-xl">⚡</span>
-        <span className="text-yellow-400 font-bold text-lg">+50 XP</span>
+
+      <Chip
+        size="lg"
+        startContent={<span className="text-yellow-400 text-xl ml-1">⚡</span>}
+        classNames={{ base: "bg-yellow-400/10 border border-yellow-400/30 h-10 px-4", content: "text-yellow-400 font-bold text-lg" }}
+      >
+        +50 XP
+      </Chip>
+
+      <div className="flex flex-col gap-3 w-full max-w-xs mt-2">
+        <Button
+          onPress={onRestart}
+          fullWidth
+          size="lg"
+          className="font-extrabold text-lg bg-[#58cc02] text-white shadow-[0_4px_0_#389200] hover:bg-[#4ab001] active:scale-95 transition-all"
+        >
+          Practicar de Nuevo
+        </Button>
+        <Button
+          onPress={onExit}
+          fullWidth
+          size="lg"
+          variant="bordered"
+          className="font-bold text-white border-white/10 bg-white/5 hover:bg-white/10"
+        >
+          Volver a Lecciones
+        </Button>
       </div>
-      <button
-        onClick={onRestart}
-        className="mt-2 w-full max-w-xs py-4 rounded-2xl bg-[#58cc02] hover:bg-[#4ab001] text-white font-extrabold text-lg shadow-[0_4px_0_#389200] active:scale-95 transition-all"
-      >
-        Practicar de Nuevo
-      </button>
-      <button
-        onClick={onExit}
-        className="mt-2 w-full max-w-xs py-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-lg transition-colors border border-white/5 shadow-sm"
-      >
-        Volver a Lecciones
-      </button>
     </motion.div>
   );
 }
@@ -963,15 +935,27 @@ export default function LessonPage() {
       : undefined;
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#0d0d1a] flex flex-col h-[100dvh] overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-[#0a0a0f] flex flex-col h-[100dvh] overflow-hidden">
+      {/* Header */}
       {!isFinished && (
-        <header className="shrink-0 flex items-center gap-3 px-4 py-3 border-b border-white/5">
-          <XButton onClick={() => router.back()} />
-          <ProgressBar progress={progress} />
+        <header className="shrink-0 flex items-center gap-3 px-4 py-3 border-b border-white/5 bg-black/20">
+          <Button
+            isIconOnly
+            variant="light"
+            onPress={() => router.back()}
+            aria-label="Salir de la lección"
+            className="text-gray-400 hover:text-white shrink-0"
+          >
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M1 1l16 16M17 1L1 17" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+            </svg>
+          </Button>
+          <LessonProgressBar progress={progress} />
           <HeartCounter hearts={hearts} />
         </header>
       )}
 
+      {/* Main content */}
       <main className="flex-1 overflow-y-auto overscroll-contain">
         {isFinished ? (
           <FinishedScreen onRestart={handleRestart} onExit={() => router.push("/lessons")} />
@@ -986,9 +970,15 @@ export default function LessonPage() {
                 transition={{ duration: 0.35, ease: "easeOut" }}
                 className="w-full max-w-lg mx-auto"
               >
-                <p className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-5">
-                  {currentStep + 1} / {TOTAL_STEPS}
-                </p>
+                <div className="flex items-center gap-2 mb-5">
+                  <Chip
+                    size="sm"
+                    variant="flat"
+                    classNames={{ base: "bg-white/5 border-white/10", content: "text-gray-500 font-bold text-xs uppercase tracking-widest" }}
+                  >
+                    {currentStep + 1} / {TOTAL_STEPS}
+                  </Chip>
+                </div>
 
                 {exercise.type === "chat" && (
                   <ChatComponent exercise={exercise} onComplete={handleContinue} />
@@ -997,18 +987,10 @@ export default function LessonPage() {
                   <ConceptCardComponent exercise={exercise} onComplete={handleContinue} />
                 )}
                 {exercise.type === "audio" && (
-                  <AudioComponent
-                    exercise={exercise}
-                    onComplete={handleContinue}
-                    onWrongAnswer={handleWrongAnswer}
-                  />
+                  <AudioComponent exercise={exercise} onComplete={handleContinue} onWrongAnswer={handleWrongAnswer} />
                 )}
                 {exercise.type === "story" && (
-                  <StoryComponent
-                    exercise={exercise}
-                    onComplete={handleContinue}
-                    onWrongAnswer={handleWrongAnswer}
-                  />
+                  <StoryComponent exercise={exercise} onComplete={handleContinue} onWrongAnswer={handleWrongAnswer} />
                 )}
                 {exercise.type === "quiz" && (
                   <QuizComponent
@@ -1030,10 +1012,7 @@ export default function LessonPage() {
                   />
                 )}
                 {exercise.type === "dropzone" && (
-                  <PromptDropZone
-                    isChecked={isChecked}
-                    onPlacedChange={setDropzonePlaced}
-                  />
+                  <PromptDropZone isChecked={isChecked} onPlacedChange={setDropzonePlaced} />
                 )}
               </motion.div>
             </AnimatePresence>
@@ -1041,14 +1020,11 @@ export default function LessonPage() {
         )}
       </main>
 
+      {/* Footer */}
       {!isFinished && !isSelfContained && (
-        <footer className="shrink-0 border-t border-white/5 px-4 pt-3 pb-6">
+        <footer className="shrink-0 border-t border-white/5 bg-black/20 px-4 pt-3 pb-6">
           <AnimatePresence mode="wait">
-            <FeedbackBanner
-              key={lessonState}
-              state={lessonState}
-              theoryExplanation={theoryExplanation}
-            />
+            <FeedbackBanner key={lessonState} state={lessonState} theoryExplanation={theoryExplanation} />
           </AnimatePresence>
           <ActionButton
             hasSelection={exercise.type === "dropzone" ? dropzoneReady : selectedId !== null}

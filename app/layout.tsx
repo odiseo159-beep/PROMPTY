@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className="dark scroll-smooth">
-      <body className="bg-background text-foreground antialiased min-h-screen flex flex-col overflow-x-hidden">
+      <body className="bg-[#0a0a0f] text-white antialiased min-h-screen flex flex-col overflow-x-hidden">
         <Providers>
           <Navigation />
           <main className="flex-1">{children}</main>

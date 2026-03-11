@@ -5,7 +5,11 @@
       "Bash(npm install:*)",
       "Bash(npx tsc:*)",
       "Bash(npm run:*)",
-      "Bash(cd \"C:/Users/danie/Downloads/PROMPTY/apps/web\" && npm run build 2>&1; echo \"EXIT:$?\")"
+      "Bash(cd \"C:/Users/danie/Downloads/PROMPTY/apps/web\" && npm run build 2>&1; echo \"EXIT:$?\")",
+      "Bash(cd \"C:/Users/danie/Downloads/PROMPTY\" && rsync -av \\\\\n  --exclude='node_modules' \\\\\n  --exclude='.next' \\\\\n  --exclude='supabase' \\\\\n  --exclude='tsconfig.tsbuildinfo' \\\\\n  --exclude='.env.local' \\\\\n  apps/web/ ./ \\\\\n  2>&1 | tail -30)",
+      "Bash(cd \"C:/Users/danie/Downloads/PROMPTY\" && cp -r apps/web/app . && cp -r apps/web/components . && cp -r apps/web/hooks . && cp -r apps/web/lib . && cp -r apps/web/public . && cp -r apps/web/src . && cp -r apps/web/store . && cp -r apps/web/utils . && echo \"dirs done\")",
+      "Bash(cd \"C:/Users/danie/Downloads/PROMPTY\" && cp apps/web/package.json . && cp apps/web/package-lock.json . && cp apps/web/tsconfig.json . && cp apps/web/next.config.ts . && cp apps/web/next-env.d.ts . && cp apps/web/postcss.config.mjs . && cp apps/web/eslint.config.mjs . && cp apps/web/proxy.ts . && cp apps/web/.gitignore . && cp apps/web/README.md . 2>/dev/null; cp apps/web/.env.local . && echo \"config files done\")",
+      "Bash(cd \"C:/Users/danie/Downloads/PROMPTY\" && npm run build 2>&1; echo \"EXIT:$?\")"
     ]
   }
 }

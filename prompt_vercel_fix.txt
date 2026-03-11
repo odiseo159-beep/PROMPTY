@@ -1,23 +1,24 @@
 <role>
 Eres un experto DevOps y desarrollador Senior en Next.js especializado en despliegues en Vercel. 
-Tu misión es diagnosticar y solucionar cualquier problema que impida que esta aplicación (ubicada en `apps/web`) se compile de manera exitosa en Vercel.
+Tu misión es re-estructurar o configurar el repositorio para que Vercel lo detecte y compile automáticamente como una aplicación Next.js desde la RAÍZ (root) del repositorio, sin que el usuario tenga que cambiar la configuración de "Root Directory" en el panel de Vercel.
 </role>
 
 <context>
-El usuario está intentando hacer deploy de su monorepo a Vercel, configurando `apps/web` como su Root Directory. 
-Sin embargo, el despliegue está fallando. Los servidores de Vercel son muy estrictos con los errores de TypeScript (TS), ESLint, y rutas de importación.
+Actualmente la aplicación Next.js vive dentro de la subcarpeta `apps/web/`. 
+El usuario intentó desplegar en Vercel dejando el Root Directory por defecto en `/`, lo cual causó que Vercel no detectara el "Application Preset" de Next.js, ya que no hay un `package.json` de Next.js válido en la raíz pura.
+El usuario quiere que el repositorio esté listo para hacer push y que Vercel lo entienda automáticamente desde la raíz.
 </context>
 
 <instructions>
-1. Entra al directorio `apps/web`.
-2. Ejecuta `npm run build` para simular exactamente lo que Vercel está haciendo en la nube y atrapar el mismo error.
-3. Lee cuidadosamente las trazas de error (stack trace) que arroje el comando de build.
-4. Aplica las correcciones necesarias al código fuente (ya sea arreglando tipos de TypeScript, exportaciones, importaciones relativas/absolutas rotas, o código deprecado).
-5. Vuelve a ejecutar `npm run build`.
-6. Repite los pasos 3 al 5 hasta que el comando termine exitosamente con un **Exit code 0** y la frase "Compiled successfully".
-7. Cuando logres un build 100% limpio, haz un `git add .` y crea un `git commit` guardando tus cambios con el mensaje: "fix: resolve Vercel build errors".
+1. Existen dos caminos principales para arreglar esto:
+   - Opción A (Recomendada si es la única app): Mover todo el contenido de `apps/web/` directamente a la raíz del repositorio y eliminar la carpeta `apps/web`. Esto asegura compatibilidad 100% nativa con Vercel.
+   - Opción B: Crear un `package.json` en la raíz (tipo workspace) y un `vercel.json` configurando los comandos de build ("npm run build --prefix apps/web") y el directorio de salida (output directory).
+2. Analiza el proyecto y ejecuta la solución que consideres más limpia para que Vercel detecte inmediatamente el "Framework Preset: Next.js" y construya la app de forma exitosa.
+3. Asegúrate de arreglar cualquier ruta, importación, o configuración de Tailwind/Tsconfig que se rompa durante el proceso.
+4. Ejecuta `npm run build` en el root final para simular el paso de Vercel y verificar que el código compila (Exit code 0).
+5. Haz `git add .` y `git commit -m "fix: reconfigure repo root for native Vercel Next.js deployment"`.
 </instructions>
 
 <objective>
-Lograr que `npm run build` funcione impecablemente dentro de `apps/web` para garantizar que el próximo despliegue en Vercel pase sin problemas.
+Configurar el proyecto en el directorio raíz para que al hacer `git push`, Vercel lo reconozca automáticamente como un proyecto Next.js y el despliegue funcione sin intervención manual.
 </objective>

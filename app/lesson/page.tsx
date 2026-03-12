@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useRef, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button, Progress, Card, CardBody, Chip } from "@heroui/react";
 import { QuizComponent, type QuizOption } from "@/components/exercises/QuizComponent";
@@ -77,123 +77,263 @@ type Exercise =
 
 const SELF_CONTAINED: Exercise["type"][] = ["chat", "concept", "audio", "story"];
 
-// ── Ejercicios ─────────────────────────────────────────────────────────────────
+// ── Ejercicios por lección ──────────────────────────────────────────────────────
 
-const EXERCISES: Exercise[] = [
-  {
-    type: "chat",
-    messages: [
-      { from: "bot", text: "¡Hola! 👋 Soy Promptly, tu tutor de IA." },
-      {
-        from: "bot",
-        text: "Primera lección: todo gran prompt empieza con un **Rol**. Dile a la IA *quién* debe ser — y observa la magia. 🎭",
-      },
-    ],
-    replyLabel: "¡Entendido! A practicar →",
-  },
-  {
-    type: "concept",
-    emoji: "🎯",
-    title: "Few-Shot Prompting",
-    body: "Le das a la IA 2–5 ejemplos de entrada/salida dentro del prompt. El modelo aprende el patrón sin ningún fine-tuning — solo a partir del contexto.",
-  },
-  {
-    type: "quiz",
-    question: "¿Qué parte de un prompt le indica a la IA qué rol asumir?",
-    correctId: "b",
-    theoryExplanation:
-      "Una instrucción de Rol limita el vocabulario y el estilo de razonamiento del modelo para que coincida con el de un experto, mejorando considerablemente la calidad y relevancia de la respuesta.",
-    options: [
-      { id: "a", text: "El bloque de contexto", icon: "📄" },
-      { id: "b", text: "La instrucción de sistema / rol", icon: "🎭" },
-      { id: "c", text: "El formato de salida", icon: "📋" },
-      { id: "d", text: "La configuración de temperatura", icon: "🌡️" },
-    ],
-  },
-  {
-    type: "audio",
-    speakerLabel: "Prof. Ada · Seguridad en IA",
-    transcript:
-      "Cuando un modelo de lenguaje afirma con confianza algo falso, lo llamamos alucinación. Ocurre porque el modelo predice tokens que suenan plausibles — no hechos verificados. Ancla siempre tus prompts con contexto real para reducir este riesgo.",
-    question: "¿Qué causa las alucinaciones de la IA?",
-    correctId: "b",
-    theoryExplanation:
-      "Los modelos no recuperan hechos — predicen continuaciones plausibles. Proporcionar contexto factual en el prompt actúa como ancla y reduce drásticamente las alucinaciones.",
-    options: [
-      { id: "a", text: "El modelo miente intencionalmente", icon: "🤥" },
-      { id: "b", text: "Predice tokens plausibles, no hechos verificados", icon: "🎲" },
-      { id: "c", text: "La temperatura es demasiado baja", icon: "🌡️" },
-      { id: "d", text: "El prompt era demasiado corto", icon: "📏" },
-    ],
-  },
-  {
-    type: "truefalse",
-    question: "Añadir más palabras a un prompt siempre produce una mejor respuesta de la IA.",
-    correctId: "false",
-    theoryExplanation:
-      "La verbosidad suele confundir al modelo. Los prompts concisos y específicos superan a los extensos porque cada token compite por la atención del modelo.",
-  },
-  {
-    type: "story",
-    lines: [
-      { speaker: "Narrador", text: "María necesita escribir un informe sobre política climática. 📄" },
-      { speaker: "María", text: "\"IA, escríbeme un informe sobre las actualizaciones del Acuerdo de París de 2023.\"" },
-      { speaker: "IA", text: "\"¡Claro! En 2023, el Acuerdo de París fue enmendado para exigir que todas las naciones alcancen la neutralidad de carbono en 2027...\"" },
-      { speaker: "Narrador", text: "María entrega el informe. Su profesor lo marca como incorrecto — ese plazo no existe. 😬" },
-      { speaker: "Narrador", text: "La IA alucinó un hecho porque María no proporcionó contexto de anclaje." },
-    ],
-    question: "¿Qué debería haber hecho María de forma diferente?",
-    correctId: "c",
-    theoryExplanation:
-      "Anclar los prompts con documentos reales o hechos verificados evita que el modelo invente información que suena plausible pero es falsa.",
-    options: [
-      { id: "a", text: "Pedirle a la IA que fuera más breve", icon: "✂️" },
-      { id: "b", text: "Usar un modelo de IA diferente", icon: "🤖" },
-      { id: "c", text: "Proporcionar documentos fuente reales como contexto", icon: "📎" },
-      { id: "d", text: "Bajar la configuración de temperatura", icon: "🌡️" },
-    ],
-  },
-  {
-    type: "quiz",
-    question: "¿Qué controla la 'temperatura' en un modelo de lenguaje?",
-    correctId: "c",
-    theoryExplanation:
-      "La temperatura escala la distribución de probabilidad sobre los tokens. Valores bajos (≈0) hacen las salidas deterministas; valores altos (≈1+) aumentan la creatividad pero también las alucinaciones.",
-    options: [
-      { id: "a", text: "La velocidad de la respuesta", icon: "⚡" },
-      { id: "b", text: "La longitud de la salida", icon: "📏" },
-      { id: "c", text: "La aleatoriedad / creatividad", icon: "🎲" },
-      { id: "d", text: "El idioma utilizado", icon: "🌐" },
-    ],
-  },
-  {
-    type: "truefalse",
-    question:
-      "El few-shot prompting consiste en proporcionar ejemplos dentro de tu prompt para que el modelo aprenda el patrón.",
-    correctId: "true",
-    theoryExplanation:
-      "El few-shot prompting aprovecha el aprendizaje en contexto. Al mostrar al modelo 2–5 ejemplos de entrada/salida, orientas su estilo de completado sin cambiar los pesos del modelo.",
-  },
-  {
-    type: "dropzone",
-    question: "Ordena las piezas para construir una estructura de prompt perfecta.",
-  },
-  {
-    type: "quiz",
-    question: "¿Qué técnica descompone una tarea difícil en pasos de razonamiento más pequeños?",
-    correctId: "a",
-    theoryExplanation:
-      "El prompting de Cadena de Pensamiento (CoT) elicita razonamiento paso a paso, permitiendo al modelo dedicar más cómputo a subproblemas difíciles antes de comprometerse con una respuesta final.",
-    options: [
-      { id: "a", text: "Prompting de Cadena de Pensamiento", icon: "🔗" },
-      { id: "b", text: "Zero-shot prompting", icon: "🎯" },
-      { id: "c", text: "Inyección de Prompt", icon: "💉" },
-      { id: "d", text: "Fine-tuning", icon: "🛠️" },
-    ],
-  },
-];
+const LESSON_EXERCISES: Record<string, Exercise[]> = {
 
-const TOTAL_STEPS = EXERCISES.length;
+  // ── Lección 1-1: ¿Qué es un Prompt? ──────────────────────────────────────
+  "1-1": [
+    {
+      type: "concept",
+      emoji: "💬",
+      title: "¿Qué es un Prompt?",
+      body: "Un prompt es la instrucción que le das a la IA. Piénsalo como pedir comida: si dices «quiero algo», te traerán cualquier cosa. Pero si dices «quiero una pizza mediana con extra queso», ¡obtienes exactamente lo que quieres!",
+    },
+    {
+      type: "chat",
+      messages: [
+        { from: "bot", text: "¡Hola! 👋 Soy Promptly, tu guía de IA." },
+        { from: "bot", text: "Los prompts están en todas partes: «Tradúceme esto al inglés», «Hazme un resumen», «Escríbeme un correo formal»... Cada vez que le pides algo a la IA, eso es un prompt. 🎯" },
+        { from: "bot", text: "No necesitas saber programar ni usar palabras técnicas. Solo comunicarte con claridad — ¡igual que en la vida real! 💡" },
+      ],
+      replyLabel: "¡Tiene sentido! →",
+    },
+    {
+      type: "truefalse",
+      question: "Un prompt puede ser una pregunta, un pedido o una instrucción.",
+      correctId: "true",
+      theoryExplanation:
+        "¡Exacto! Los prompts tienen muchas formas: preguntas («¿Cómo funciona el Wi-Fi?»), órdenes («Traduce esto al inglés») o peticiones («Ayúdame a escribir un correo»). Lo importante es que sea claro.",
+    },
+    {
+      type: "quiz",
+      question: "¿Cuál de estos es un ejemplo de prompt?",
+      correctId: "c",
+      theoryExplanation:
+        "Un prompt siempre es algo que TÚ escribes para pedirle algo a la IA. «Resume este texto en 5 puntos clave» es un prompt porque es una instrucción directa. Los demás son solo conceptos o nombres.",
+      options: [
+        { id: "a", text: "ChatGPT", icon: "🤖" },
+        { id: "b", text: "Inteligencia Artificial", icon: "💻" },
+        { id: "c", text: "Resume este texto en 5 puntos clave", icon: "📝" },
+        { id: "d", text: "Algoritmo", icon: "⚙️" },
+      ],
+    },
+    {
+      type: "truefalse",
+      question: "Solo los expertos en tecnología pueden escribir buenos prompts.",
+      correctId: "false",
+      theoryExplanation:
+        "¡Para nada! Escribir prompts es una habilidad que cualquiera puede aprender. No necesitas saber programar ni términos técnicos. Solo necesitas practicar cómo comunicarte de forma clara — igual que en la vida real.",
+    },
+  ],
+
+  // ── Lección 1-2: Sé Específico ────────────────────────────────────────────
+  "1-2": [
+    {
+      type: "concept",
+      emoji: "🎯",
+      title: "Sé Específico",
+      body: "La diferencia entre un buen y un mal prompt es la especificidad. «Escríbeme un correo» da un resultado genérico. «Escríbeme un correo formal de 3 líneas para pedir un día libre a mi jefa» da exactamente lo que necesitas. ¡Los detalles importan!",
+    },
+    {
+      type: "chat",
+      messages: [
+        { from: "bot", text: "¡Hola! 👋 Imagina que le pides a un chef que te cocine «algo rico». Podría hacerte pasta, sushi o una ensalada. 🤷" },
+        { from: "bot", text: "Pero si le dices «hazme tacos de pollo con guacamole, sin picante», el resultado será perfecto. Con la IA pasa exactamente lo mismo." },
+        { from: "bot", text: "**Cuanto más específico seas, mejor será la respuesta.** Vamos a practicarlo. 🌮" },
+      ],
+      replyLabel: "¡A practicar! →",
+    },
+    {
+      type: "truefalse",
+      question: "El prompt «Escríbeme algo sobre perros» dará un resultado más útil que «Dame 5 datos curiosos sobre los perros Golden Retriever».",
+      correctId: "false",
+      theoryExplanation:
+        "El prompt específico siempre gana. «Algo sobre perros» puede generar un poema, un artículo científico o una lista — la IA no sabe qué quieres. El segundo prompt es claro y te dará exactamente lo que necesitas.",
+    },
+    {
+      type: "quiz",
+      question: "Necesitas una receta de pasta para una cena especial. ¿Cuál es el mejor prompt?",
+      correctId: "c",
+      theoryExplanation:
+        "La opción C incluye qué plato (carbonara), para cuántos (4 personas), el formato (paso a paso) y los detalles necesarios (ingredientes exactos). Con esa información, la IA puede darte una receta perfecta.",
+      options: [
+        { id: "a", text: "Pasta", icon: "🍝" },
+        { id: "b", text: "Dame una receta", icon: "📋" },
+        { id: "c", text: "Dame una receta de pasta carbonara para 4 personas, paso a paso y con los ingredientes exactos", icon: "👨‍🍳" },
+        { id: "d", text: "Necesito cocinar algo", icon: "🍴" },
+      ],
+    },
+    {
+      type: "story",
+      lines: [
+        { speaker: "Narrador", text: "Carlos quiere que la IA le ayude a aprender inglés. 📚" },
+        { speaker: "Carlos", text: "«IA, enséñame inglés.»" },
+        { speaker: "IA", text: "«¡Claro! El inglés tiene 26 letras. El alfabeto es A, B, C, D... Hay tiempos verbales como el presente simple, el pasado...»" },
+        { speaker: "Narrador", text: "Carlos recibe una respuesta genérica que no le sirve de mucho. 😕" },
+        { speaker: "Carlos", text: "«Soy hispanohablante con nivel básico. Dame 5 frases para presentarme en el trabajo, con traducción y cómo se pronuncian.»" },
+        { speaker: "IA", text: "«¡Perfecto! 1. 'My name is Carlos' = Me llamo Carlos (Mai neim is Carlos). 2. 'I work in marketing'...» ✅" },
+        { speaker: "Narrador", text: "¡Mucho mejor! El prompt específico dio exactamente lo que Carlos necesitaba. 🎉" },
+      ],
+      question: "¿Qué hizo Carlos para obtener una respuesta útil?",
+      correctId: "b",
+      theoryExplanation:
+        "Carlos añadió su nivel (básico), el contexto (trabajo), y el formato exacto que necesitaba (5 frases con traducción y pronunciación). Esos detalles transforman una respuesta genérica en algo realmente útil.",
+      options: [
+        { id: "a", text: "Usó palabras más largas y complicadas", icon: "📖" },
+        { id: "b", text: "Añadió su nivel, el contexto y el formato que necesitaba", icon: "🎯" },
+        { id: "c", text: "Le preguntó a otra IA diferente", icon: "🤖" },
+        { id: "d", text: "Esperó más tiempo antes de enviar", icon: "⏱️" },
+      ],
+    },
+    {
+      type: "quiz",
+      question: "¿Qué elemento hace que un prompt sea más específico?",
+      correctId: "a",
+      theoryExplanation:
+        "La especificidad viene de los detalles: qué quieres exactamente, para qué situación y en qué formato. Nada de eso tiene que ver con el idioma, las mayúsculas o la longitud.",
+      options: [
+        { id: "a", text: "Indicar qué quieres, para qué y en qué formato", icon: "✅" },
+        { id: "b", text: "Usar mayúsculas y signos de exclamación", icon: "❗" },
+        { id: "c", text: "Escribirlo en inglés en lugar de español", icon: "🌐" },
+        { id: "d", text: "Hacerlo lo más corto posible", icon: "✂️" },
+      ],
+    },
+  ],
+
+  // ── Lección 1-3: Añade Contexto ───────────────────────────────────────────
+  "1-3": [
+    {
+      type: "concept",
+      emoji: "📎",
+      title: "El Contexto es Clave",
+      body: "El contexto es la información de fondo que le das a la IA sobre tu situación. Sin contexto, responde de forma genérica. Con contexto («soy estudiante de medicina», «esto es para una presentación», «mi presupuesto es 50€»), la respuesta se vuelve perfecta para ti.",
+    },
+    {
+      type: "chat",
+      messages: [
+        { from: "bot", text: "¡Hola! 👋 Piensa en esto: si le preguntas a un médico «¿qué medicamento tomo?» sin decirle qué te duele, no podrá ayudarte bien. 🏥" },
+        { from: "bot", text: "Pero si le dices «tengo dolor de cabeza desde hace 2 días, soy alérgico a la aspirina y tengo 35 años», su consejo será mucho más útil." },
+        { from: "bot", text: "**El contexto le da a la IA lo que necesita para personalizar su respuesta.** ¡Esa es la clave! 💡" },
+      ],
+      replyLabel: "¡Entendido! →",
+    },
+    {
+      type: "truefalse",
+      question: "Decirle a la IA quién eres y para qué necesitas la respuesta mejora el resultado.",
+      correctId: "true",
+      theoryExplanation:
+        "¡Exacto! Cuando la IA sabe que eres estudiante, profesional, principiante o experto, adapta su respuesta a tu nivel y situación. Ese contexto es la diferencia entre una respuesta genérica y una perfecta para ti.",
+    },
+    {
+      type: "audio",
+      speakerLabel: "Prof. Ana · Experta en IA",
+      transcript:
+        "Imagina que le pides consejo a un amigo sobre qué trabajo aceptar. Si no le cuentas nada de tu situación, te dará un consejo muy genérico. Pero si le explicas que tienes familia, que valoras el horario flexible y que el salario es secundario, su consejo cambia completamente. Con la IA funciona igual: el contexto transforma una respuesta cualquiera en una respuesta hecha para ti.",
+      question: "Según la profesora, ¿para qué sirve el contexto en un prompt?",
+      correctId: "b",
+      theoryExplanation:
+        "El contexto permite a la IA personalizar su respuesta. Sin contexto, responde para «cualquier persona». Con contexto, responde exactamente para ti y tu situación.",
+      options: [
+        { id: "a", text: "Para hacer el prompt más largo", icon: "📏" },
+        { id: "b", text: "Para que la IA adapte su respuesta a tu situación", icon: "🎯" },
+        { id: "c", text: "Para que la IA responda más rápido", icon: "⚡" },
+        { id: "d", text: "Para evitar que la IA cometa errores", icon: "🛡️" },
+      ],
+    },
+    {
+      type: "quiz",
+      question: "Necesitas consejos para ahorrar dinero. ¿Qué prompt tiene el mejor contexto?",
+      correctId: "d",
+      theoryExplanation:
+        "La opción D incluye edad, ingresos, gastos fijos, objetivo y tiempo. Con toda esa información, la IA puede crear un plan de ahorro personalizado y realista, no un consejo genérico que vale para cualquiera.",
+      options: [
+        { id: "a", text: "Dame consejos para ahorrar", icon: "💰" },
+        { id: "b", text: "¿Cómo ahorro dinero?", icon: "🤔" },
+        { id: "c", text: "Necesito ahorrar, ayúdame", icon: "😟" },
+        { id: "d", text: "Tengo 28 años, gano 1.500€/mes, pago 600€ de alquiler y quiero ahorrar para un viaje en 6 meses. Dame un plan realista.", icon: "📊" },
+      ],
+    },
+    {
+      type: "dropzone",
+      question: "Ordena las partes para construir un prompt completo y bien estructurado.",
+    },
+  ],
+
+  // ── Lección 2-1: Dale un Rol a la IA ─────────────────────────────────────
+  "2-1": [
+    {
+      type: "concept",
+      emoji: "🎭",
+      title: "Dale un Rol a la IA",
+      body: "Cuando le dices a la IA «actúa como un chef experto», responde con el conocimiento y el vocabulario de un chef de verdad. Es como contratar a un especialista: obtienes respuestas mucho más útiles que si le preguntas a alguien genérico.",
+    },
+    {
+      type: "chat",
+      messages: [
+        { from: "bot", text: "¡Hola! 👋 Prueba esto: escríbele a la IA «Dame consejos de salud». Te dará algo genérico. 🤷" },
+        { from: "bot", text: "Ahora prueba: «Actúa como un nutricionista deportivo. Dame 3 consejos para comer mejor antes de hacer ejercicio.»" },
+        { from: "bot", text: "¡La diferencia es enorme! Un rol convierte a la IA en el **experto exacto** que necesitas. 🏅" },
+      ],
+      replyLabel: "¡Entendido! Practicamos →",
+    },
+    {
+      type: "truefalse",
+      question: "Decirle a la IA «actúa como un abogado» hace que sus respuestas sean más útiles en temas legales.",
+      correctId: "true",
+      theoryExplanation:
+        "¡Correcto! Cuando le das un rol, la IA adapta su vocabulario, nivel de detalle y enfoque al de ese profesional. No reemplaza a un experto real, pero sus respuestas serán mucho más precisas y útiles.",
+    },
+    {
+      type: "quiz",
+      question: "Quieres consejos para decorar tu apartamento con poco dinero. ¿Cuál es el mejor prompt?",
+      correctId: "b",
+      theoryExplanation:
+        "La opción B usa un rol (decorador de interiores) y añade contexto (poco presupuesto). Esa combinación produce consejos profesionales y adaptados a tu situación, en lugar de ideas genéricas.",
+      options: [
+        { id: "a", text: "¿Cómo decoro mi casa?", icon: "🏠" },
+        { id: "b", text: "Actúa como un decorador de interiores. Dame 5 ideas para decorar un apartamento pequeño con menos de 100€.", icon: "🛋️" },
+        { id: "c", text: "Necesito decorar algo barato", icon: "💸" },
+        { id: "d", text: "Decoración de interiores", icon: "🎨" },
+      ],
+    },
+    {
+      type: "story",
+      lines: [
+        { speaker: "Narrador", text: "Laura tiene una entrevista de trabajo mañana y está muy nerviosa. 😰" },
+        { speaker: "Laura", text: "«IA, ayúdame a prepararme para una entrevista.»" },
+        { speaker: "IA", text: "«¡Claro! Practica responder preguntas frecuentes. Prepara tu currículum. Viste de forma profesional...»" },
+        { speaker: "Narrador", text: "Laura recibe consejos genéricos que ya conocía. 😕" },
+        { speaker: "Laura", text: "«Actúa como un coach de entrevistas con 10 años de experiencia. Voy a una entrevista para diseñadora gráfica junior. Dame 3 preguntas difíciles que me pueden hacer y cómo responderlas.»" },
+        { speaker: "IA", text: "«¡Perfecto! Pregunta 1: ¿Cuéntame un proyecto del que estés orgullosa? Responde mostrando tu proceso creativo... ✅»" },
+        { speaker: "Narrador", text: "¡Mucho mejor! El rol convirtió a la IA en el coach exacto que Laura necesitaba. 🎉" },
+      ],
+      question: "¿Qué hizo Laura para obtener una ayuda más útil?",
+      correctId: "c",
+      theoryExplanation:
+        "Laura añadió un rol específico (coach de entrevistas), experiencia (10 años), su situación (diseñadora junior) y lo que necesitaba exactamente (preguntas difíciles con respuestas). Todo eso juntos da una respuesta de experto.",
+      options: [
+        { id: "a", text: "Escribió el prompt más largo posible", icon: "📜" },
+        { id: "b", text: "Cambió a una IA diferente", icon: "🤖" },
+        { id: "c", text: "Le dio un rol concreto y explicó su situación", icon: "🎭" },
+        { id: "d", text: "Repitió la misma pregunta varias veces", icon: "🔁" },
+      ],
+    },
+    {
+      type: "quiz",
+      question: "¿Cuál de estas frases es un buen ejemplo de dar un rol a la IA?",
+      correctId: "d",
+      theoryExplanation:
+        "La opción D es la única que establece un rol claro («profesor de matemáticas para niños de 10 años»). Las demás son solo preguntas directas sin rol, que darán respuestas genéricas.",
+      options: [
+        { id: "a", text: "¿Qué es una fracción?", icon: "🔢" },
+        { id: "b", text: "Explícame las fracciones", icon: "📐" },
+        { id: "c", text: "Fracciones para principiantes", icon: "📚" },
+        { id: "d", text: "Eres un profesor de matemáticas para niños de 10 años. Explícame las fracciones con un ejemplo de pizza.", icon: "🍕" },
+      ],
+    },
+  ],
+};
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -814,7 +954,7 @@ function ActionButton({
 
 // ── FinishedScreen ─────────────────────────────────────────────────────────────
 
-function FinishedScreen({ onRestart, onExit }: { onRestart: () => void; onExit: () => void }) {
+function FinishedScreen({ onRestart, onExit, totalSteps }: { onRestart: () => void; onExit: () => void; totalSteps: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -835,7 +975,7 @@ function FinishedScreen({ onRestart, onExit }: { onRestart: () => void; onExit: 
 
       <div>
         <h2 className="text-3xl font-extrabold text-[#1A1A18] mb-2">¡Lección Completada!</h2>
-        <p className="text-[#6B6960] text-base">Terminaste los {TOTAL_STEPS} ejercicios. ¡Mantén la racha!</p>
+        <p className="text-[#6B6960] text-base">Terminaste los {totalSteps} ejercicios. ¡Mantén la racha!</p>
       </div>
 
       <Chip
@@ -873,8 +1013,13 @@ function FinishedScreen({ onRestart, onExit }: { onRestart: () => void; onExit: 
 
 const DEFAULT_CORRECT_ORDER = ["role", "context", "task", "format", "tone"];
 
-export default function LessonPage() {
+function LessonEngine() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const lessonId = searchParams.get("id") ?? "1-1";
+  const EXERCISES = LESSON_EXERCISES[lessonId] ?? LESSON_EXERCISES["1-1"];
+  const TOTAL_STEPS = EXERCISES.length;
+
   const [currentStep, setCurrentStep] = useState(0);
   const [lessonState, setLessonState] = useState<LessonState>("idle");
   const [hearts, setHearts] = useState(3);
@@ -958,7 +1103,7 @@ export default function LessonPage() {
       <main className="flex-1 overflow-y-auto overscroll-contain">
         <h1 className="sr-only">Motor de Lecciones — Promptly</h1>
         {isFinished ? (
-          <FinishedScreen onRestart={handleRestart} onExit={() => router.push("/lessons")} />
+          <FinishedScreen onRestart={handleRestart} onExit={() => router.push("/lessons")} totalSteps={TOTAL_STEPS} />
         ) : (
           <div className="min-h-full flex flex-col justify-start md:justify-center px-5 py-8">
             <AnimatePresence mode="wait">
@@ -1035,5 +1180,17 @@ export default function LessonPage() {
         </footer>
       )}
     </div>
+  );
+}
+
+export default function LessonPage() {
+  return (
+    <Suspense fallback={
+      <div className="fixed inset-0 bg-[#FAFAF8] flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-[#E2654A] border-t-transparent animate-spin" />
+      </div>
+    }>
+      <LessonEngine />
+    </Suspense>
   );
 }

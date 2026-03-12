@@ -9,40 +9,40 @@ import { Button, Chip, Progress } from "@heroui/react";
 const modules = [
   {
     id: 1,
-    emoji: "🧱",
-    title: "Módulo 1: Fundamentos del Prompt",
-    description: "Aprende la sintaxis básica y el comportamiento de los LLMs.",
+    emoji: "🌱",
+    title: "Módulo 1: Tus Primeros Prompts",
+    description: "Aprende qué es un prompt y cómo escribir uno que funcione de verdad.",
     modBg: "bg-[#2D6A6A]",
     ringColor: "ring-[#2D6A6A]/30",
     lessons: [
-      { id: "1-1", title: "Hola Mundo (Zero-Shot)", desc: "La instrucción más simple posible.", status: "completed", xp: 100 },
-      { id: "1-2", title: "Añadir Contexto",        desc: "Proporcionar información de fondo para guiar las respuestas.", status: "completed", xp: 150 },
-      { id: "1-3", title: "Formatear la Salida",    desc: "Forzar a la IA a generar JSON, Markdown o tablas.", status: "completed", xp: 200 },
+      { id: "1-1", title: "¿Qué es un Prompt?",  desc: "Descubre qué es un prompt y por qué son tan importantes.", status: "completed", xp: 100 },
+      { id: "1-2", title: "Sé Específico",        desc: "Instrucciones claras = respuestas mucho mejores.",          status: "completed", xp: 150 },
+      { id: "1-3", title: "Añade Contexto",       desc: "Da más información para que la IA te ayude mejor.",         status: "completed", xp: 200 },
     ],
   },
   {
     id: 2,
     emoji: "⚡",
-    title: "Módulo 2: Técnicas Avanzadas",
-    description: "Dominando el few-shot prompting y los system personas.",
+    title: "Módulo 2: Mejora tus Prompts",
+    description: "Técnicas sencillas para que tus prompts sean mucho más efectivos.",
     modBg: "bg-[#E2654A]",
     ringColor: "ring-[#E2654A]/30",
     lessons: [
-      { id: "2-1", title: "Few-Shot Prompting", desc: "Dar ejemplos para enseñar nuevos patrones.",                       status: "completed", xp: 250 },
-      { id: "2-2", title: "Chain of Thought",   desc: "Forzar al modelo a razonar paso a paso en matemáticas y lógica.", status: "current",   xp: 300 },
-      { id: "2-3", title: "System Personas",    desc: "Adoptar identidades de experto.",                                 status: "locked",    xp: 350 },
+      { id: "2-1", title: "Dale un Rol a la IA",       desc: "Convierte a la IA en el experto que necesitas.",          status: "current", xp: 250 },
+      { id: "2-2", title: "Pide el Formato Correcto",  desc: "Obtén listas, pasos, tablas o lo que necesites.",         status: "locked",  xp: 300 },
+      { id: "2-3", title: "Un Paso a la Vez",          desc: "Divide tareas complejas en instrucciones simples.",        status: "locked",  xp: 350 },
     ],
   },
   {
     id: 3,
-    emoji: "🛡️",
-    title: "Módulo 3: Jailbreaks y Seguridad",
-    description: "Comprendiendo la inyección de prompts y las barreras de seguridad.",
+    emoji: "🚀",
+    title: "Módulo 3: Nivel Avanzado",
+    description: "Técnicas más poderosas para obtener resultados extraordinarios.",
     modBg: "bg-[#9C9890]",
     ringColor: "ring-[#9C9890]/20",
     lessons: [
-      { id: "3-1", title: "Exploits de Roleplay", desc: "Cómo los actores maliciosos eluden los filtros de seguridad.", status: "locked", xp: 500 },
-      { id: "3-2", title: "Prompting Defensivo",  desc: "Redactar instrucciones de sistema seguras e inviolables.",      status: "locked", xp: 500 },
+      { id: "3-1", title: "Aprende con Ejemplos", desc: "Muéstrale a la IA exactamente qué resultado quieres.", status: "locked", xp: 500 },
+      { id: "3-2", title: "Prompts para el Trabajo", desc: "Aplica todo lo aprendido en situaciones reales del día a día.", status: "locked", xp: 500 },
     ],
   },
 ];
@@ -156,18 +156,14 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
         </div>
       )}
       {current && (
-        <Button
-          size="sm"
-          className="mt-3 w-full font-bold text-sm bg-[#E2654A] text-white
-                     hover:bg-[#C9553D] active:scale-[0.98] transition-all duration-150 border-0"
-        >
+        <div className="mt-3 w-full h-9 rounded-xl bg-[#E2654A] flex items-center justify-center text-white text-sm font-bold">
           Empezar lección →
-        </Button>
+        </div>
       )}
     </div>
   );
 
-  return locked ? inner : <Link href="/lesson">{inner}</Link>;
+  return locked ? inner : <Link href={`/lesson?id=${lesson.id}`}>{inner}</Link>;
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────

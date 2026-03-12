@@ -11,7 +11,8 @@
       "Bash(cd \"C:/Users/danie/Downloads/PROMPTY\" && cp apps/web/package.json . && cp apps/web/package-lock.json . && cp apps/web/tsconfig.json . && cp apps/web/next.config.ts . && cp apps/web/next-env.d.ts . && cp apps/web/postcss.config.mjs . && cp apps/web/eslint.config.mjs . && cp apps/web/proxy.ts . && cp apps/web/.gitignore . && cp apps/web/README.md . 2>/dev/null; cp apps/web/.env.local . && echo \"config files done\")",
       "Bash(cd \"C:/Users/danie/Downloads/PROMPTY\" && npm run build 2>&1; echo \"EXIT:$?\")",
       "Bash(node -e \"const t = require\\('@heroui/theme'\\); console.log\\(typeof t, typeof t.heroui, Object.keys\\(t\\).slice\\(0,10\\)\\)\")",
-      "Bash(node -e \"const { heroui } = require\\('@heroui/theme'\\); const result = heroui\\(\\); console.log\\(typeof result, Object.keys\\(result\\).slice\\(0,8\\)\\)\")"
+      "Bash(node -e \"const { heroui } = require\\('@heroui/theme'\\); const result = heroui\\(\\); console.log\\(typeof result, Object.keys\\(result\\).slice\\(0,8\\)\\)\")",
+      "Bash(del \"C:\\\\Users\\\\danie\\\\Downloads\\\\PROMPTY\\\\components\\\\DottedSurface.tsx\")"
     ]
   }
 }

@@ -4,65 +4,59 @@ import { Card, CardBody, CardHeader, Chip, Divider } from "@heroui/react";
 import { motion } from "framer-motion";
 
 const users = [
-  { rank: 1, name: "Daniel F.", username: "@odiseo", xp: 12400, level: 12, trend: "up", avatar: "🤖" },
-  { rank: 2, name: "Alex Chen", username: "@alexc", xp: 11850, level: 11, trend: "same", avatar: "⚡" },
-  { rank: 3, name: "Sarah J.", username: "@sarah_j", xp: 10200, level: 10, trend: "up", avatar: "✨" },
-  { rank: 4, name: "Mike T.", username: "@mike_tech", xp: 9500, level: 9, trend: "down", avatar: "👨‍💻" },
-  { rank: 5, name: "Elena R.", username: "@elena_prompts", xp: 8900, level: 9, trend: "up", avatar: "🎨" },
-  { rank: 6, name: "David K.", username: "@davidk", xp: 8200, level: 8, trend: "same", avatar: "🧠" },
-  { rank: 7, name: "AI Whisperer", username: "@whisper", xp: 7500, level: 8, trend: "down", avatar: "🔮" },
-  { rank: 8, name: "Leo M.", username: "@leo_m", xp: 6800, level: 7, trend: "up", avatar: "🚀" },
+  { rank: 1, name: "Daniel F.",    username: "@odiseo",         xp: 12400, level: 12, trend: "up",   avatar: "🤖" },
+  { rank: 2, name: "Alex Chen",    username: "@alexc",          xp: 11850, level: 11, trend: "same", avatar: "⚡" },
+  { rank: 3, name: "Sarah J.",     username: "@sarah_j",        xp: 10200, level: 10, trend: "up",   avatar: "✨" },
+  { rank: 4, name: "Mike T.",      username: "@mike_tech",      xp: 9500,  level: 9,  trend: "down", avatar: "👨‍💻" },
+  { rank: 5, name: "Elena R.",     username: "@elena_prompts",  xp: 8900,  level: 9,  trend: "up",   avatar: "🎨" },
+  { rank: 6, name: "David K.",     username: "@davidk",         xp: 8200,  level: 8,  trend: "same", avatar: "🧠" },
+  { rank: 7, name: "AI Whisperer", username: "@whisper",        xp: 7500,  level: 8,  trend: "down", avatar: "🔮" },
+  { rank: 8, name: "Leo M.",       username: "@leo_m",          xp: 6800,  level: 7,  trend: "up",   avatar: "🚀" },
 ];
 
 const TOP3_STYLES = [
   // rank 1
   {
-    ring: "ring-2 ring-amber-400/60 shadow-lg shadow-amber-400/20",
-    badge: "bg-amber-400 text-black",
-    xpColor: "text-amber-400",
-    bg: "bg-gradient-to-r from-amber-500/10 to-transparent",
-    medal: "🥇",
-    avatarBg: "bg-amber-500/15 border border-amber-400/30",
+    ring:     "ring-2 ring-amber-400/60 shadow-sm shadow-amber-400/10",
+    badge:    "bg-amber-400 text-black",
+    xpColor:  "text-amber-600",
+    bg:       "bg-amber-50/60",
+    medal:    "🥇",
+    avatarBg: "bg-amber-50 border border-amber-200",
   },
   // rank 2
   {
-    ring: "ring-2 ring-gray-400/40 shadow-lg shadow-gray-400/10",
-    badge: "bg-gray-300 text-black",
-    xpColor: "text-gray-300",
-    bg: "bg-gradient-to-r from-gray-400/8 to-transparent",
-    medal: "🥈",
-    avatarBg: "bg-gray-400/10 border border-gray-300/20",
+    ring:     "ring-2 ring-[#E8E5E0] shadow-sm",
+    badge:    "bg-[#6B6960] text-white",
+    xpColor:  "text-[#6B6960]",
+    bg:       "bg-[#FAFAF8]",
+    medal:    "🥈",
+    avatarBg: "bg-[#FAFAF8] border border-[#E8E5E0]",
   },
   // rank 3
   {
-    ring: "ring-2 ring-amber-700/50 shadow-lg shadow-amber-700/15",
-    badge: "bg-amber-700 text-white",
-    xpColor: "text-amber-600",
-    bg: "bg-gradient-to-r from-amber-700/8 to-transparent",
-    medal: "🥉",
-    avatarBg: "bg-amber-700/15 border border-amber-700/30",
+    ring:     "ring-2 ring-amber-700/40 shadow-sm",
+    badge:    "bg-amber-700 text-white",
+    xpColor:  "text-amber-700",
+    bg:       "bg-amber-50/40",
+    medal:    "🥉",
+    avatarBg: "bg-amber-50 border border-amber-200/60",
   },
 ];
 
 const trendIcon = (trend: string) => {
-  if (trend === "up") return <span className="text-emerald-400 text-xs font-bold" aria-label="Subiendo">▲</span>;
-  if (trend === "down") return <span className="text-rose-400 text-xs font-bold" aria-label="Bajando">▼</span>;
-  return <span className="text-gray-500 text-xs font-bold" aria-label="Sin cambio">—</span>;
+  if (trend === "up")   return <span className="text-[#2D6A6A] text-xs font-bold" aria-label="Subiendo">▲</span>;
+  if (trend === "down") return <span className="text-[#E2654A] text-xs font-bold" aria-label="Bajando">▼</span>;
+  return <span className="text-[#9C9890] text-xs font-bold" aria-label="Sin cambio">—</span>;
 };
 
 export default function LeaderboardPage() {
   const topThree = users.slice(0, 3);
-  const rest = users.slice(3);
-  const maxXP = users[0].xp;
+  const rest     = users.slice(3);
+  const maxXP    = users[0].xp;
 
   return (
-    <div className="relative min-h-screen px-4 py-14 sm:px-8">
-      {/* Background glow */}
-      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-fuchsia-600/10 blur-[130px]" />
-        <div className="absolute right-0 bottom-1/3 w-[300px] h-[300px] rounded-full bg-amber-500/6 blur-[100px]" />
-      </div>
-
+    <div className="relative min-h-screen px-4 py-14 sm:px-8 bg-[#FAFAF8]">
       <div className="mx-auto max-w-3xl">
 
         {/* Header */}
@@ -80,17 +74,16 @@ export default function LeaderboardPage() {
           >
             🏆
           </motion.span>
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-3">
+          <h1 className="font-display text-4xl sm:text-5xl tracking-tight text-[#1A1A18] mb-3">
             Clasificación Global
           </h1>
-          <p className="text-gray-400 text-base max-w-md mx-auto leading-relaxed">
+          <p className="text-[#6B6960] text-base max-w-md mx-auto leading-relaxed">
             Clasificaciones actualizadas diariamente según lecciones completadas y puntuaciones del Sandbox.
           </p>
         </motion.header>
 
         {/* Podium — Top 3 */}
         <div className="grid grid-cols-3 gap-3 mb-8 items-end">
-          {/* 2nd place */}
           {[topThree[1], topThree[0], topThree[2]].map((user, visualIdx) => {
             const realIdx = [1, 0, 2][visualIdx];
             const style = TOP3_STYLES[realIdx];
@@ -102,15 +95,15 @@ export default function LeaderboardPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + visualIdx * 0.1, type: "spring", stiffness: 260, damping: 22 }}
               >
-                <Card className={`${style.ring} border-0 ${style.bg} backdrop-blur-sm`}>
+                <Card className={`${style.ring} border border-[#E8E5E0] ${style.bg}`}>
                   <CardBody className="flex flex-col items-center gap-2 py-4 px-2">
                     <span className="text-xl">{style.medal}</span>
                     <div className={`w-12 h-12 rounded-2xl ${style.avatarBg} flex items-center justify-center text-2xl`}>
                       {user.avatar}
                     </div>
                     <div className="text-center">
-                      <p className="font-extrabold text-white text-sm leading-tight">{user.name}</p>
-                      <p className="text-xs text-gray-500 font-mono">{user.username}</p>
+                      <p className="font-extrabold text-[#1A1A18] text-sm leading-tight">{user.name}</p>
+                      <p className="text-xs text-[#9C9890] font-mono">{user.username}</p>
                     </div>
                     <Chip
                       size="sm"
@@ -118,7 +111,7 @@ export default function LeaderboardPage() {
                     >
                       {user.xp.toLocaleString()} XP
                     </Chip>
-                    <div className={`w-full ${heights[visualIdx]} rounded-b-lg bg-white/5 flex items-end justify-center pb-2`}>
+                    <div className={`w-full ${heights[visualIdx]} rounded-b-lg bg-[#F0EDE8] flex items-end justify-center pb-2`}>
                       <span className={`text-xs font-bold ${style.xpColor}`}>#{user.rank}</span>
                     </div>
                   </CardBody>
@@ -134,10 +127,10 @@ export default function LeaderboardPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35, type: "spring", stiffness: 240, damping: 22 }}
         >
-          <Card className="bg-[#0e0e1a] border border-white/10 shadow-xl shadow-black/40 overflow-hidden">
+          <Card className="bg-white border border-[#E8E5E0] shadow-sm overflow-hidden">
             {/* Table header */}
-            <CardHeader className="bg-white/[0.03] border-b border-white/8 px-5 py-3">
-              <div className="grid grid-cols-12 w-full text-xs font-semibold uppercase tracking-widest text-gray-500">
+            <CardHeader className="bg-[#FAFAF8] border-b border-[#E8E5E0] px-5 py-3">
+              <div className="grid grid-cols-12 w-full text-xs font-semibold uppercase tracking-widest text-[#9C9890]">
                 <div className="col-span-1 text-center">#</div>
                 <div className="col-span-6 sm:col-span-5 pl-2">Prompt Engineer</div>
                 <div className="col-span-2 text-center">Nivel</div>
@@ -149,8 +142,8 @@ export default function LeaderboardPage() {
             <CardBody className="p-0">
               {users.map((user, i) => {
                 const isTop3 = user.rank <= 3;
-                const style = isTop3 ? TOP3_STYLES[user.rank - 1] : null;
-                const xpPct = Math.round((user.xp / maxXP) * 100);
+                const style  = isTop3 ? TOP3_STYLES[user.rank - 1] : null;
+                const xpPct  = Math.round((user.xp / maxXP) * 100);
 
                 return (
                   <motion.div
@@ -161,7 +154,7 @@ export default function LeaderboardPage() {
                   >
                     <div
                       className={[
-                        "grid grid-cols-12 items-center px-5 py-3.5 gap-2 transition-colors hover:bg-white/[0.025]",
+                        "grid grid-cols-12 items-center px-5 py-3.5 gap-2 transition-colors hover:bg-[#FAFAF8]",
                         isTop3 ? style!.bg : "",
                       ].join(" ")}
                     >
@@ -169,7 +162,7 @@ export default function LeaderboardPage() {
                       <div className="col-span-1 flex justify-center">
                         <span className={[
                           "w-7 h-7 rounded-full flex items-center justify-center font-extrabold text-xs",
-                          isTop3 ? style!.badge : "bg-white/5 text-gray-500",
+                          isTop3 ? style!.badge : "bg-[#FAFAF8] border border-[#E8E5E0] text-[#9C9890]",
                         ].join(" ")}>
                           {user.rank}
                         </span>
@@ -179,21 +172,21 @@ export default function LeaderboardPage() {
                       <div className="col-span-6 sm:col-span-5 flex items-center gap-3 pl-1">
                         <div className={[
                           "hidden sm:flex w-9 h-9 rounded-xl items-center justify-center text-lg shrink-0",
-                          isTop3 ? style!.avatarBg : "bg-white/5 border border-white/5",
+                          isTop3 ? style!.avatarBg : "bg-[#FAFAF8] border border-[#E8E5E0]",
                         ].join(" ")}>
                           {user.avatar}
                         </div>
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5">
-                            <span className="font-bold text-white text-sm truncate">{user.name}</span>
-                            {user.rank === 1 && <span className="text-amber-400 text-xs">👑</span>}
+                            <span className="font-bold text-[#1A1A18] text-sm truncate">{user.name}</span>
+                            {user.rank === 1 && <span className="text-amber-500 text-xs">👑</span>}
                           </div>
                           <div className="flex items-center gap-2 mt-0.5">
-                            <span className="text-xs text-gray-500 font-mono truncate">{user.username}</span>
+                            <span className="text-xs text-[#9C9890] font-mono truncate">{user.username}</span>
                             {/* XP bar — mobile only */}
-                            <div className="sm:hidden flex-1 h-1 rounded-full bg-white/5 overflow-hidden min-w-[40px]">
+                            <div className="sm:hidden flex-1 h-1 rounded-full bg-[#E8E5E0] overflow-hidden min-w-[40px]">
                               <div
-                                className="h-full bg-gradient-to-r from-fuchsia-500 to-violet-500"
+                                className="h-full bg-[#E2654A]"
                                 style={{ width: `${xpPct}%` }}
                               />
                             </div>
@@ -207,8 +200,8 @@ export default function LeaderboardPage() {
                           size="sm"
                           variant="flat"
                           classNames={{
-                            base: "bg-fuchsia-500/10 border border-fuchsia-500/20",
-                            content: "text-fuchsia-400 font-bold text-xs",
+                            base: "bg-[#FDF0ED] border border-[#E2654A]/20",
+                            content: "text-[#E2654A] font-bold text-xs",
                           }}
                         >
                           Niv. {user.level}
@@ -217,12 +210,12 @@ export default function LeaderboardPage() {
 
                       {/* XP — desktop */}
                       <div className="hidden sm:flex sm:col-span-3 flex-col gap-1 items-end pr-1">
-                        <span className={`font-mono font-extrabold text-sm ${isTop3 ? style!.xpColor : "text-emerald-400"}`}>
+                        <span className={`font-mono font-extrabold text-sm ${isTop3 ? style!.xpColor : "text-[#2D6A6A]"}`}>
                           {user.xp.toLocaleString()} XP
                         </span>
-                        <div className="w-full h-1 rounded-full bg-white/5 overflow-hidden">
+                        <div className="w-full h-1 rounded-full bg-[#E8E5E0] overflow-hidden">
                           <div
-                            className="h-full bg-gradient-to-r from-fuchsia-500 to-violet-500"
+                            className="h-full bg-[#E2654A]"
                             style={{ width: `${xpPct}%` }}
                           />
                         </div>
@@ -234,34 +227,34 @@ export default function LeaderboardPage() {
                       </div>
                     </div>
 
-                    {i < users.length - 1 && <Divider className="bg-white/[0.04]" />}
+                    {i < users.length - 1 && <Divider className="bg-[#E8E5E0]" />}
                   </motion.div>
                 );
               })}
 
               {/* "You" placeholder row */}
-              <Divider className="bg-white/8" />
-              <div className="grid grid-cols-12 items-center px-5 py-3.5 gap-2 bg-violet-500/5">
+              <Divider className="bg-[#E8E5E0]" />
+              <div className="grid grid-cols-12 items-center px-5 py-3.5 gap-2 bg-[#FDF0ED]/30">
                 <div className="col-span-1 flex justify-center">
-                  <span className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center font-extrabold text-xs text-gray-600">?</span>
+                  <span className="w-7 h-7 rounded-full bg-[#FAFAF8] border border-[#E8E5E0] flex items-center justify-center font-extrabold text-xs text-[#9C9890]">?</span>
                 </div>
                 <div className="col-span-6 sm:col-span-5 flex items-center gap-3 pl-1">
-                  <div className="hidden sm:flex w-9 h-9 rounded-xl items-center justify-center text-lg bg-violet-500/10 border border-violet-500/20 shrink-0">👤</div>
+                  <div className="hidden sm:flex w-9 h-9 rounded-xl items-center justify-center text-lg bg-[#FDF0ED] border border-[#E2654A]/20 shrink-0">👤</div>
                   <div>
-                    <p className="font-bold text-violet-400 text-sm">Tú</p>
-                    <p className="text-xs text-gray-600">¡Completa lecciones para aparecer aquí!</p>
+                    <p className="font-bold text-[#E2654A] text-sm">Tú</p>
+                    <p className="text-xs text-[#9C9890]">¡Completa lecciones para aparecer aquí!</p>
                   </div>
                 </div>
                 <div className="col-span-2 flex justify-center">
-                  <Chip size="sm" variant="flat" classNames={{ base: "bg-white/5 border-white/5", content: "text-gray-600 font-bold text-xs" }}>
+                  <Chip size="sm" variant="flat" classNames={{ base: "bg-[#FAFAF8] border border-[#E8E5E0]", content: "text-[#9C9890] font-bold text-xs" }}>
                     Niv. 1
                   </Chip>
                 </div>
                 <div className="hidden sm:flex sm:col-span-3 justify-end pr-1">
-                  <span className="font-mono font-extrabold text-sm text-gray-700">0 XP</span>
+                  <span className="font-mono font-extrabold text-sm text-[#9C9890]">0 XP</span>
                 </div>
                 <div className="col-span-3 sm:col-span-1 flex justify-center">
-                  <span className="text-gray-700 text-xs font-bold">—</span>
+                  <span className="text-[#9C9890] text-xs font-bold">—</span>
                 </div>
               </div>
             </CardBody>
@@ -273,7 +266,7 @@ export default function LeaderboardPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.9 }}
-          className="text-center text-xs text-gray-400 mt-6"
+          className="text-center text-xs text-[#9C9890] mt-6"
         >
           Clasificaciones actualizadas cada 24h · Gana XP completando lecciones y el Sandbox
         </motion.p>

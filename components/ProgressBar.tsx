@@ -12,18 +12,11 @@ interface ProgressBarProps {
   size?: "sm" | "md" | "lg";
 }
 
-const colorGradients: Record<NonNullable<ProgressBarProps["color"]>, string> = {
-  purple: "from-violet-600 to-purple-500",
-  amber: "from-amber-500 to-yellow-400",
-  emerald: "from-emerald-500 to-green-400",
-  blue: "from-blue-600 to-cyan-400",
-};
-
-const colorGlow: Record<NonNullable<ProgressBarProps["color"]>, string> = {
-  purple: "shadow-violet-500/50",
-  amber: "shadow-amber-400/50",
-  emerald: "shadow-emerald-500/50",
-  blue: "shadow-blue-500/50",
+const colorClasses: Record<NonNullable<ProgressBarProps["color"]>, string> = {
+  purple:  "bg-[#E2654A]",
+  amber:   "bg-amber-500",
+  emerald: "bg-[#2D6A6A]",
+  blue:    "bg-sky-600",
 };
 
 const trackHeights: Record<NonNullable<ProgressBarProps["size"]>, string> = {
@@ -49,10 +42,10 @@ export function ProgressBar({
       {(label || showPercentage) && (
         <div className="flex items-center justify-between">
           {label && (
-            <span className="text-sm font-medium text-gray-300">{label}</span>
+            <span className="text-sm font-medium text-[#6B6960]">{label}</span>
           )}
           {showPercentage && (
-            <span className="text-sm font-bold text-gray-200 tabular-nums">
+            <span className="text-sm font-bold text-[#1A1A18] tabular-nums">
               {percentage}%
             </span>
           )}
@@ -61,7 +54,7 @@ export function ProgressBar({
 
       <div
         className={[
-          "w-full rounded-full bg-gray-700/60 overflow-hidden",
+          "w-full rounded-full bg-[#E8E5E0] overflow-hidden",
           trackHeights[size],
         ].join(" ")}
         role="progressbar"
@@ -72,10 +65,9 @@ export function ProgressBar({
       >
         <div
           className={[
-            "h-full rounded-full bg-gradient-to-r shadow-md",
+            "h-full rounded-full",
             "transition-[width] duration-700 ease-out",
-            colorGradients[color],
-            colorGlow[color],
+            colorClasses[color],
             animated ? "animate-pulse" : "",
           ]
             .filter(Boolean)

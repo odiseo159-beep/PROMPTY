@@ -35,32 +35,29 @@ function TFCard({
   isDimmed: boolean;
   onSelect: () => void;
 }) {
-  let borderColor = "border-white/10";
-  let bgColor = "bg-white/5";
-  let textColor = "text-white";
-  let emojiRingColor = "bg-white/10";
-  let glowStyle: React.CSSProperties = {};
+  let borderColor = "border-[#E8E5E0]";
+  let bgColor     = "bg-white";
+  let textColor   = "text-[#1A1A18]";
+  let emojiRing   = "bg-[#FAFAF8]";
 
   if (!isChecked && isSelected) {
-    borderColor = "border-emerald-400";
-    bgColor = "bg-emerald-500/10";
-    emojiRingColor = "bg-emerald-400/20";
-    glowStyle = { boxShadow: "0 0 0 3px rgba(52,211,153,0.35), 0 0 28px rgba(52,211,153,0.2)" };
+    borderColor = "border-[#E2654A]";
+    bgColor     = "bg-[#FDF0ED]";
+    emojiRing   = "bg-[#FDF0ED]";
   }
 
   if (isChecked && isCorrect) {
-    borderColor = "border-emerald-400";
-    bgColor = "bg-emerald-500/15";
-    emojiRingColor = "bg-emerald-400/20";
-    glowStyle = { boxShadow: "0 0 0 3px rgba(52,211,153,0.45), 0 0 32px rgba(52,211,153,0.25)" };
+    borderColor = "border-[#2D6A6A]";
+    bgColor     = "bg-[#EFF6F6]";
+    textColor   = "text-[#2D6A6A]";
+    emojiRing   = "bg-[#EFF6F6]";
   }
 
   if (isChecked && isWrong) {
-    borderColor = "border-red-500";
-    bgColor = "bg-red-500/10";
-    textColor = "text-red-300";
-    emojiRingColor = "bg-red-500/20";
-    glowStyle = { boxShadow: "0 0 0 3px rgba(239,68,68,0.35)" };
+    borderColor = "border-[#E2654A]";
+    bgColor     = "bg-[#FDF0ED]";
+    textColor   = "text-[#E2654A]";
+    emojiRing   = "bg-[#FDF0ED]";
   }
 
   return (
@@ -70,13 +67,12 @@ function TFCard({
       whileTap={!isChecked ? { scale: 0.95 } : undefined}
       animate={isSelected && !isChecked ? { scale: [1, 0.96, 1.02, 1] } : { scale: 1 }}
       transition={{ duration: 0.25 }}
-      style={glowStyle}
       className={`
         relative flex-1 min-h-[120px] flex flex-col items-center justify-center gap-3
         rounded-2xl border-2 p-5
         transition-all duration-200 cursor-pointer
         disabled:cursor-default
-        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0a0a0f]
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2654A] focus-visible:ring-offset-2 focus-visible:ring-offset-white
         ${borderColor} ${bgColor} ${textColor}
         ${isDimmed && !isSelected ? "opacity-35" : "opacity-100"}
       `}
@@ -84,7 +80,7 @@ function TFCard({
       <motion.div
         animate={isSelected && !isChecked ? { rotate: [0, -8, 8, 0] } : {}}
         transition={{ duration: 0.3 }}
-        className={`w-14 h-14 rounded-full flex items-center justify-center text-3xl transition-colors ${emojiRingColor}`}
+        className={`w-14 h-14 rounded-full flex items-center justify-center text-3xl transition-colors ${emojiRing}`}
       >
         {emoji}
       </motion.div>
@@ -96,7 +92,7 @@ function TFCard({
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: "spring", stiffness: 400, damping: 15 }}
-          className="absolute top-3 right-3 text-emerald-400 text-2xl"
+          className="absolute top-3 right-3 text-[#2D6A6A] text-2xl"
         >
           ✓
         </motion.span>
@@ -106,7 +102,7 @@ function TFCard({
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: "spring", stiffness: 400, damping: 15 }}
-          className="absolute top-3 right-3 text-red-400 text-2xl"
+          className="absolute top-3 right-3 text-[#E2654A] text-2xl"
         >
           ✗
         </motion.span>
@@ -124,17 +120,17 @@ export function TrueFalseComponent({
   correctId,
   isChecked = false,
 }: TrueFalseComponentProps) {
-  const trueIsSelected = selectedId === "true";
+  const trueIsSelected  = selectedId === "true";
   const falseIsSelected = selectedId === "false";
-  const anySelected = selectedId !== null;
+  const anySelected     = selectedId !== null;
 
   return (
     <div className="w-full flex flex-col gap-6">
-      <h2 className="text-white text-2xl font-bold leading-snug">{questionText}</h2>
+      <h2 className="text-[#1A1A18] text-2xl font-bold leading-snug">{questionText}</h2>
 
-      <div className="rounded-2xl bg-white/5 border border-white/10 px-5 py-4 flex items-start gap-3">
-        <span className="text-yellow-400 text-xl mt-0.5">💡</span>
-        <p className="text-gray-300 text-base leading-relaxed">
+      <div className="rounded-2xl bg-[#FDF0ED] border border-[#E2654A]/20 px-5 py-4 flex items-start gap-3">
+        <span className="text-[#E2654A] text-xl mt-0.5">💡</span>
+        <p className="text-[#6B6960] text-base leading-relaxed">
           Lee el enunciado y decide si es verdadero o falso.
         </p>
       </div>

@@ -59,7 +59,7 @@ const TIPS = [
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function scoreColor(s: number) {
-  return s >= 80 ? "text-emerald-400" : s >= 55 ? "text-amber-400" : "text-rose-400";
+  return s >= 80 ? "text-[#2D6A6A]" : s >= 55 ? "text-amber-600" : "text-[#E2654A]";
 }
 function scoreLabel(s: number) {
   return s >= 80
@@ -106,7 +106,7 @@ function OutputSkeleton() {
         <motion.div
           animate={{ scale: [1, 1.5, 1], opacity: [0.6, 0.2, 0.6] }}
           transition={{ duration: 1.2, repeat: Infinity }}
-          className="w-2 h-2 rounded-full bg-violet-400 shrink-0"
+          className="w-2 h-2 rounded-full bg-[#E2654A] shrink-0"
         />
         <Skeleton className="h-3 w-32 rounded-lg" />
       </div>
@@ -121,7 +121,7 @@ function OutputSkeleton() {
         <Skeleton className="h-3.5 w-[60%] rounded-lg" />
       </div>
 
-      <Divider className="bg-white/5" />
+      <Divider className="bg-[#E8E5E0]" />
 
       {/* Score label + circle */}
       <div className="flex items-center justify-between">
@@ -145,12 +145,12 @@ function OutputSkeleton() {
         ))}
       </div>
 
-      {/* Shimmer overlay hint */}
+      {/* Processing hint */}
       <div className="flex items-center gap-2 pt-1">
         <motion.div
           animate={{ opacity: [0.3, 0.7, 0.3] }}
           transition={{ duration: 1.6, repeat: Infinity }}
-          className="text-xs text-gray-600 font-mono"
+          className="text-xs text-[#9C9890] font-mono"
         >
           ✦ Claude está procesando tu prompt...
         </motion.div>
@@ -164,8 +164,8 @@ function OutputSkeleton() {
 function IdlePanel({ onInsert }: { onInsert: (text: string) => void }) {
   return (
     <div className="flex flex-col p-5 gap-5">
-      {/* Placeholder illustration */}
-      <div className="text-center py-4 border-b border-white/[0.05]">
+      {/* Placeholder */}
+      <div className="text-center py-4 border-b border-[#E8E5E0]">
         <motion.div
           animate={{ y: [0, -5, 0] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
@@ -173,8 +173,8 @@ function IdlePanel({ onInsert }: { onInsert: (text: string) => void }) {
         >
           🧪
         </motion.div>
-        <p className="text-sm font-semibold text-gray-500 mt-1">El output aparecerá aquí</p>
-        <p className="text-xs text-gray-500">Escribe un prompt a la izquierda y pulsa Evaluar</p>
+        <p className="text-sm font-semibold text-[#6B6960] mt-1">El output aparecerá aquí</p>
+        <p className="text-xs text-[#9C9890]">Escribe un prompt a la izquierda y pulsa Evaluar</p>
       </div>
 
       {/* Tabs: Templates + Tips */}
@@ -182,10 +182,10 @@ function IdlePanel({ onInsert }: { onInsert: (text: string) => void }) {
         variant="underlined"
         size="sm"
         classNames={{
-          tabList: "border-b border-white/8 w-full gap-0 p-0",
-          tab: "h-9 px-3 text-xs data-[hover=true]:text-white",
-          cursor: "bg-violet-500 h-0.5",
-          tabContent: "text-gray-500 group-data-[selected=true]:text-white font-semibold",
+          tabList: "border-b border-[#E8E5E0] w-full gap-0 p-0",
+          tab: "h-9 px-3 text-xs data-[hover=true]:text-[#1A1A18]",
+          cursor: "bg-[#E2654A] h-0.5",
+          tabContent: "text-[#6B6960] group-data-[selected=true]:text-[#1A1A18] font-semibold",
           panel: "pt-3",
         }}
       >
@@ -195,18 +195,18 @@ function IdlePanel({ onInsert }: { onInsert: (text: string) => void }) {
               <button
                 key={t.label}
                 onClick={() => onInsert(t.text)}
-                className="w-full text-left rounded-xl border border-white/8 bg-white/[0.03]
-                           hover:bg-white/[0.07] hover:border-white/15
+                className="w-full text-left rounded-xl border border-[#E8E5E0] bg-[#FAFAF8]
+                           hover:bg-[#FDF0ED] hover:border-[#E2654A]/20
                            active:scale-[0.98] transition-all duration-150 p-3 group"
               >
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-sm">{t.icon}</span>
-                  <span className="text-xs font-bold text-gray-400 group-hover:text-white transition-colors">
+                  <span className="text-xs font-bold text-[#6B6960] group-hover:text-[#1A1A18] transition-colors">
                     {t.label}
                   </span>
-                  <span className="ml-auto text-[10px] text-gray-500 group-hover:text-gray-300">Insertar →</span>
+                  <span className="ml-auto text-[10px] text-[#9C9890] group-hover:text-[#6B6960]">Insertar →</span>
                 </div>
-                <p className="text-xs text-gray-500 leading-relaxed line-clamp-2 pl-5">{t.text}</p>
+                <p className="text-xs text-[#9C9890] leading-relaxed line-clamp-2 pl-5">{t.text}</p>
               </button>
             ))}
           </div>
@@ -217,13 +217,13 @@ function IdlePanel({ onInsert }: { onInsert: (text: string) => void }) {
             {TIPS.map((tip) => (
               <div
                 key={tip.title}
-                className="rounded-xl border border-white/8 bg-white/[0.03] p-3"
+                className="rounded-xl border border-[#E8E5E0] bg-[#FAFAF8] p-3"
               >
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-sm">{tip.icon}</span>
-                  <span className="text-xs font-bold text-gray-300">{tip.title}</span>
+                  <span className="text-xs font-bold text-[#6B6960]">{tip.title}</span>
                 </div>
-                <p className="text-xs text-gray-600 leading-relaxed pl-5">{tip.desc}</p>
+                <p className="text-xs text-[#9C9890] leading-relaxed pl-5">{tip.desc}</p>
               </div>
             ))}
           </div>
@@ -261,10 +261,10 @@ function ResultPanel({
       className="flex flex-col"
     >
       {/* Panel top bar */}
-      <div className="flex items-center justify-between px-5 py-2.5 border-b border-white/[0.05] bg-white/[0.01] shrink-0">
+      <div className="flex items-center justify-between px-5 py-2.5 border-b border-[#E8E5E0] bg-[#FAFAF8] shrink-0">
         <div className="flex items-center gap-2">
-          <span className="h-1.5 w-1.5 rounded-full bg-violet-400 animate-pulse" />
-          <span className="text-[11px] font-bold uppercase tracking-widest text-violet-400">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#E2654A] animate-pulse" />
+          <span className="text-[11px] font-bold uppercase tracking-widest text-[#E2654A]">
             Respuesta de Claude
           </span>
         </div>
@@ -273,7 +273,7 @@ function ResultPanel({
             size="sm"
             variant="flat"
             onPress={handleCopy}
-            className="h-7 px-2.5 min-w-0 bg-white/5 text-gray-500 hover:text-white text-xs font-semibold"
+            className="h-7 px-2.5 min-w-0 bg-white border border-[#E8E5E0] text-[#6B6960] hover:text-[#1A1A18] text-xs font-semibold"
             startContent={<span className="text-xs">{copied ? "✓" : "📋"}</span>}
           >
             {copied ? "Copiado" : "Copiar"}
@@ -282,7 +282,7 @@ function ResultPanel({
             size="sm"
             variant="flat"
             onPress={onReset}
-            className="h-7 px-2.5 min-w-0 bg-white/5 text-gray-600 hover:text-white text-xs font-semibold"
+            className="h-7 px-2.5 min-w-0 bg-white border border-[#E8E5E0] text-[#6B6960] hover:text-[#1A1A18] text-xs font-semibold"
           >
             Nueva prueba
           </Button>
@@ -291,19 +291,19 @@ function ResultPanel({
 
       {/* Response text with typing cursor */}
       <div className="px-5 py-4">
-        <p className="text-base text-gray-300 leading-relaxed whitespace-pre-wrap font-mono">
+        <p className="text-base text-[#1A1A18] leading-relaxed whitespace-pre-wrap font-mono">
           {displayed}
           {!isDone && (
             <motion.span
               animate={{ opacity: [1, 0] }}
               transition={{ duration: 0.5, repeat: Infinity }}
-              className="inline-block w-[2px] h-[14px] bg-violet-400 ml-0.5 align-middle rounded-full"
+              className="inline-block w-[2px] h-[14px] bg-[#E2654A] ml-0.5 align-middle rounded-full"
             />
           )}
         </p>
       </div>
 
-      <div className="mx-5 h-px bg-white/[0.06]" />
+      <div className="mx-5 h-px bg-[#E8E5E0]" />
 
       {/* Evaluation section */}
       <div className="px-5 py-4 flex flex-col gap-4">
@@ -311,12 +311,12 @@ function ResultPanel({
         {/* Score + circular gauge */}
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-[11px] font-bold uppercase tracking-widest text-emerald-400 mb-1">
+            <p className="text-[11px] font-bold uppercase tracking-widest text-[#2D6A6A] mb-1">
               Puntuación
             </p>
             <div className="flex items-end gap-1.5">
               <span className={`text-5xl font-black leading-none ${scoreColor(score)}`}>{score}</span>
-              <span className="text-sm text-gray-600 mb-1">/100</span>
+              <span className="text-sm text-[#9C9890] mb-1">/100</span>
             </div>
             <Chip
               color={scoreLabel(score).color}
@@ -332,11 +332,11 @@ function ResultPanel({
           <div className="relative w-[76px] h-[76px]">
             <svg viewBox="0 0 76 76" className="w-full h-full -rotate-90" aria-hidden="true">
               <circle cx="38" cy="38" r="30"
-                fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="7" />
+                fill="none" stroke="#E8E5E0" strokeWidth="7" />
               <motion.circle
                 cx="38" cy="38" r="30"
                 fill="none"
-                stroke={score >= 80 ? "#34d399" : score >= 55 ? "#fbbf24" : "#f43f5e"}
+                stroke={score >= 80 ? "#2D6A6A" : score >= 55 ? "#D97706" : "#E2654A"}
                 strokeWidth="7"
                 strokeLinecap="round"
                 strokeDasharray={`${2 * Math.PI * 30}`}
@@ -346,7 +346,7 @@ function ResultPanel({
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-xs font-extrabold text-white">{score}%</span>
+              <span className="text-xs font-extrabold text-[#1A1A18]">{score}%</span>
             </div>
           </div>
         </div>
@@ -359,17 +359,17 @@ function ResultPanel({
             return (
               <div key={key}>
                 <div className="flex justify-between items-center text-xs mb-1">
-                  <span className="text-gray-400 font-medium">{BREAKDOWN_LABELS[key] ?? key}</span>
-                  <span className="text-gray-600 font-semibold tabular-nums">
-                    {pts as number}<span className="text-gray-700">/{max}</span>
+                  <span className="text-[#6B6960] font-medium">{BREAKDOWN_LABELS[key] ?? key}</span>
+                  <span className="text-[#9C9890] font-semibold tabular-nums">
+                    {pts as number}<span className="text-[#E8E5E0]">/{max}</span>
                   </span>
                 </div>
                 <Progress
                   size="sm"
                   value={pct}
                   classNames={{
-                    track: "bg-white/5",
-                    indicator: pct >= 75 ? "bg-emerald-500" : pct >= 50 ? "bg-amber-500" : "bg-rose-500",
+                    track: "bg-[#E8E5E0]",
+                    indicator: pct >= 75 ? "bg-[#2D6A6A]" : pct >= 50 ? "bg-amber-500" : "bg-[#E2654A]",
                   }}
                   aria-label={`${BREAKDOWN_LABELS[key]}: ${pts}/${max}`}
                 />
@@ -378,41 +378,41 @@ function ResultPanel({
           })}
         </div>
 
-        <div className="h-px bg-white/[0.06]" />
+        <div className="h-px bg-[#E8E5E0]" />
 
         {/* Techniques */}
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-widest text-emerald-400 mb-2">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-[#2D6A6A] mb-2">
             Técnicas Detectadas
           </p>
           <div className="flex flex-wrap gap-1.5">
             {recognizedTechniques.length > 0 ? (
               recognizedTechniques.map((t) => (
                 <Chip key={t} size="sm" classNames={{
-                  base: "bg-emerald-500/15 border border-emerald-500/25 h-6",
-                  content: "text-emerald-300 text-xs font-medium",
+                  base: "bg-[#EFF6F6] border border-[#2D6A6A]/25 h-6",
+                  content: "text-[#2D6A6A] text-xs font-medium",
                 }}>
                   {t}
                 </Chip>
               ))
             ) : (
-              <span className="text-xs text-gray-500">Ninguna detectada aún</span>
+              <span className="text-xs text-[#9C9890]">Ninguna detectada aún</span>
             )}
           </div>
         </div>
 
-        <div className="h-px bg-white/[0.06]" />
+        <div className="h-px bg-[#E8E5E0]" />
 
         {/* Suggestions */}
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-widest text-cyan-400 mb-3">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-[#E2654A] mb-3">
             Sugerencias de Mejora
           </p>
           <ul className="flex flex-col gap-2">
             {suggestions.map((s, i) => (
-              <li key={i} className="flex items-start gap-2.5 text-sm text-gray-400 leading-relaxed">
-                <span className="shrink-0 mt-0.5 w-5 h-5 rounded-full bg-cyan-500/15 border border-cyan-500/20
-                                flex items-center justify-center text-cyan-400 text-[10px] font-extrabold">
+              <li key={i} className="flex items-start gap-2.5 text-sm text-[#6B6960] leading-relaxed">
+                <span className="shrink-0 mt-0.5 w-5 h-5 rounded-full bg-[#FDF0ED] border border-[#E2654A]/20
+                                flex items-center justify-center text-[#E2654A] text-[10px] font-extrabold">
                   {i + 1}
                 </span>
                 {s}
@@ -433,7 +433,6 @@ export default function SandboxPage() {
   const [result,  setResult]  = useState<{ response: string; evaluation: EvaluationResult } | null>(null);
   const [error,   setError]   = useState<string | null>(null);
 
-  // Stable ref so keyboard shortcut doesn't need to re-register
   const submitRef = useRef<() => void>(() => {});
 
   async function handleSubmit() {
@@ -458,10 +457,8 @@ export default function SandboxPage() {
     }
   }
 
-  // Keep ref current on every render
   submitRef.current = handleSubmit;
 
-  // Cmd+Enter / Ctrl+Enter
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
@@ -473,25 +470,15 @@ export default function SandboxPage() {
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  const charPct      = Math.round((prompt.length / MAX_CHARS) * 100);
-  const nearLimit    = prompt.length > MAX_CHARS * 0.8;
-  const overLimit    = prompt.length > MAX_CHARS;
-  const outputState  = loading ? "loading" : result ? "result" : error ? "error" : "idle";
+  const charPct     = Math.round((prompt.length / MAX_CHARS) * 100);
+  const nearLimit   = prompt.length > MAX_CHARS * 0.8;
+  const overLimit   = prompt.length > MAX_CHARS;
+  const outputState = loading ? "loading" : result ? "result" : error ? "error" : "idle";
 
   function reset() { setResult(null); setError(null); }
 
   return (
-    <div className="relative min-h-screen px-4 py-14 sm:px-6 overflow-x-hidden">
-
-      {/* Background glows */}
-      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[700px] h-[500px]
-                        rounded-[60%] bg-emerald-600/10 blur-[130px]" />
-        <div className="absolute left-[8%] top-[40%] w-[350px] h-[350px]
-                        rounded-full bg-violet-600/8 blur-[100px]" />
-        <div className="absolute right-[8%] top-[35%] w-[350px] h-[350px]
-                        rounded-full bg-cyan-600/6 blur-[100px]" />
-      </div>
+    <div className="relative min-h-screen px-4 py-14 sm:px-6 overflow-x-hidden bg-[#FAFAF8]">
 
       <div className="mx-auto max-w-6xl">
 
@@ -505,25 +492,23 @@ export default function SandboxPage() {
           <Chip
             startContent={
               <span className="relative flex h-2 w-2 ml-1">
-                <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative h-2 w-2 rounded-full bg-emerald-400" />
+                <span className="absolute inset-0 animate-ping rounded-full bg-[#E2654A] opacity-75" />
+                <span className="relative h-2 w-2 rounded-full bg-[#E2654A]" />
               </span>
             }
             variant="flat"
             classNames={{
-              base: "bg-emerald-500/10 border border-emerald-500/25 mb-4",
-              content: "text-emerald-400 font-semibold",
+              base: "bg-[#FDF0ED] border border-[#E2654A]/20 mb-4",
+              content: "text-[#E2654A] font-semibold",
             }}
           >
             Beta Disponible
           </Chip>
-          <h1 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tight text-white mt-3 mb-3 leading-[1.1]">
+          <h1 className="font-display text-4xl sm:text-5xl text-[#1A1A18] mt-3 mb-3 leading-[1.1]">
             Sandbox de{" "}
-            <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
-              Prompts
-            </span>
+            <span className="text-[#E2654A]">Prompts</span>
           </h1>
-          <p className="text-gray-400 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
+          <p className="text-[#6B6960] text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
             Escribe un prompt, dispáralo contra Claude y obtén puntuación instantánea por rúbrica.
           </p>
         </motion.div>
@@ -534,24 +519,24 @@ export default function SandboxPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, type: "spring", stiffness: 240, damping: 22 }}
         >
-          <Card className="w-full bg-[#0d0d18] border border-white/10 shadow-2xl shadow-black/60 overflow-hidden">
+          <Card className="w-full bg-white border border-[#E8E5E0] shadow-lg shadow-black/5 overflow-hidden">
 
             {/* Window chrome */}
-            <CardHeader className="border-b border-white/[0.07] bg-white/[0.02] px-5 py-3 flex items-center gap-3 shrink-0">
+            <CardHeader className="border-b border-[#E8E5E0] bg-[#FAFAF8] px-5 py-3 flex items-center gap-3 shrink-0">
               <div className="flex gap-1.5 shrink-0">
-                <span className="h-3 w-3 rounded-full bg-rose-500/70" />
-                <span className="h-3 w-3 rounded-full bg-amber-500/70" />
-                <span className="h-3 w-3 rounded-full bg-emerald-500/70" />
+                <span className="h-3 w-3 rounded-full bg-rose-400" />
+                <span className="h-3 w-3 rounded-full bg-amber-400" />
+                <span className="h-3 w-3 rounded-full bg-emerald-400" />
               </div>
               <div className="flex-1 flex justify-center">
-                <div className="flex items-center gap-2 bg-white/[0.04] border border-white/8 rounded-md px-3 h-6 max-w-[220px] w-full">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400/60 shrink-0" />
-                  <span className="text-[11px] font-mono text-gray-600 truncate">sandbox.promptly.dev</span>
+                <div className="flex items-center gap-2 bg-white border border-[#E8E5E0] rounded-md px-3 h-6 max-w-[220px] w-full">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#E2654A]/60 shrink-0" />
+                  <span className="text-[11px] font-mono text-[#9C9890] truncate">sandbox.promptly.dev</span>
                 </div>
               </div>
               <Chip size="sm" classNames={{
-                base: "bg-violet-500/10 border border-violet-500/20 h-5 shrink-0",
-                content: "text-violet-400 text-[10px] font-bold px-1",
+                base: "bg-[#FDF0ED] border border-[#E2654A]/20 h-5 shrink-0",
+                content: "text-[#E2654A] text-[10px] font-bold px-1",
               }}>
                 Prompt Engineering
               </Chip>
@@ -561,14 +546,14 @@ export default function SandboxPage() {
             <div className="flex flex-col lg:flex-row" style={{ minHeight: 560 }}>
 
               {/* ── LEFT: Editor ── */}
-              <div className="flex flex-col border-b lg:border-b-0 lg:border-r border-white/[0.07] lg:w-1/2">
+              <div className="flex flex-col border-b lg:border-b-0 lg:border-r border-[#E8E5E0] lg:w-1/2">
 
                 {/* Editor tab bar */}
-                <div className="flex items-center justify-between px-5 py-2 border-b border-white/[0.05] bg-white/[0.01] shrink-0">
+                <div className="flex items-center justify-between px-5 py-2 border-b border-[#E8E5E0] bg-[#FAFAF8] shrink-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono text-gray-600">editor.prompt</span>
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400/60" />
-                    <span className="text-[10px] text-amber-500/80 font-semibold">sin guardar</span>
+                    <span className="text-xs font-mono text-[#9C9890]">editor.prompt</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                    <span className="text-[10px] text-amber-600 font-semibold">sin guardar</span>
                   </div>
                   {/* Character counter */}
                   <div className="flex items-center gap-2">
@@ -578,15 +563,15 @@ export default function SandboxPage() {
                           size="sm"
                           value={charPct}
                           classNames={{
-                            track: "bg-white/5",
-                            indicator: overLimit ? "bg-rose-500" : "bg-amber-500",
+                            track: "bg-[#E8E5E0]",
+                            indicator: overLimit ? "bg-[#E2654A]" : "bg-amber-500",
                           }}
                           aria-label="Uso de caracteres"
                         />
                       </div>
                     )}
                     <span className={`text-[11px] font-mono font-semibold tabular-nums transition-colors ${
-                      overLimit ? "text-rose-400" : nearLimit ? "text-amber-400" : "text-gray-600"
+                      overLimit ? "text-[#E2654A]" : nearLimit ? "text-amber-600" : "text-[#9C9890]"
                     }`}>
                       {prompt.length}/{MAX_CHARS}
                     </span>
@@ -609,8 +594,8 @@ export default function SandboxPage() {
                         "hover:bg-transparent focus-within:!bg-transparent !ring-0 !shadow-none",
                       ].join(" "),
                       input: [
-                        "text-gray-200 text-sm leading-relaxed font-mono resize-none",
-                        "placeholder:text-gray-700 placeholder:text-xs placeholder:leading-relaxed placeholder:font-sans",
+                        "text-[#1A1A18] text-sm leading-relaxed font-mono resize-none",
+                        "placeholder:text-[#9C9890] placeholder:text-xs placeholder:leading-relaxed placeholder:font-sans",
                       ].join(" "),
                     }}
                   />
@@ -618,7 +603,7 @@ export default function SandboxPage() {
 
                 {/* Template chips */}
                 <div className="px-4 pb-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-500 mb-2">
+                  <p className="text-[10px] font-semibold uppercase tracking-widest text-[#9C9890] mb-2">
                     Insertar plantilla:
                   </p>
                   <div className="flex flex-wrap gap-1.5">
@@ -631,8 +616,8 @@ export default function SandboxPage() {
                         onClick={() => setPrompt(t.text)}
                         onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setPrompt(t.text); } }}
                         classNames={{
-                          base: "bg-white/[0.04] border border-white/8 hover:bg-violet-500/15 hover:border-violet-500/30 cursor-pointer transition-all duration-150 h-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400",
-                          content: "text-gray-500 hover:text-violet-300 text-xs font-medium transition-colors",
+                          base: "bg-[#FAFAF8] border border-[#E8E5E0] hover:bg-[#FDF0ED] hover:border-[#E2654A]/20 cursor-pointer transition-all duration-150 h-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2654A]",
+                          content: "text-[#6B6960] hover:text-[#E2654A] text-xs font-medium transition-colors",
                         }}
                         startContent={<span className="text-xs leading-none">{t.icon}</span>}
                       >
@@ -643,17 +628,17 @@ export default function SandboxPage() {
                 </div>
 
                 {/* Status bar + submit */}
-                <div className="flex items-center justify-between px-4 py-3 border-t border-white/[0.07] bg-white/[0.01] shrink-0">
+                <div className="flex items-center justify-between px-4 py-3 border-t border-[#E8E5E0] bg-[#FAFAF8] shrink-0">
                   <div className="flex items-center gap-3">
-                    <span className="hidden sm:flex items-center gap-1.5 text-[11px] text-gray-700">
-                      <kbd className="px-1.5 py-0.5 rounded bg-white/8 border border-white/10 font-mono text-[10px] text-gray-600">⌘</kbd>
-                      <kbd className="px-1.5 py-0.5 rounded bg-white/8 border border-white/10 font-mono text-[10px] text-gray-600">↵</kbd>
+                    <span className="hidden sm:flex items-center gap-1.5 text-[11px] text-[#9C9890]">
+                      <kbd className="px-1.5 py-0.5 rounded bg-white border border-[#E8E5E0] font-mono text-[10px] text-[#6B6960]">⌘</kbd>
+                      <kbd className="px-1.5 py-0.5 rounded bg-white border border-[#E8E5E0] font-mono text-[10px] text-[#6B6960]">↵</kbd>
                       <span>evaluar</span>
                     </span>
                     {(prompt || result) && (
                       <button
                         onClick={() => { setPrompt(""); reset(); }}
-                        className="text-[11px] text-gray-500 hover:text-gray-400 transition-colors min-h-[44px] flex items-center px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 rounded-md"
+                        className="text-[11px] text-[#9C9890] hover:text-[#6B6960] transition-colors min-h-[44px] flex items-center px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2654A] rounded-md"
                       >
                         Limpiar
                       </button>
@@ -664,10 +649,9 @@ export default function SandboxPage() {
                     isDisabled={loading || !prompt.trim() || overLimit}
                     isLoading={loading}
                     size="sm"
-                    className="font-bold bg-violet-500 text-white text-sm
-                               shadow-[0_4px_0_#4c1d95] hover:shadow-[0_2px_0_#4c1d95]
-                               hover:translate-y-[2px] active:translate-y-[4px]
-                               transition-all duration-100 px-5 disabled:opacity-40"
+                    className="font-bold bg-[#E2654A] text-white text-sm
+                               hover:bg-[#C9553D] active:scale-[0.98]
+                               transition-all duration-150 px-5 disabled:opacity-40 border-0"
                     endContent={!loading ? <span className="text-sm">✨</span> : undefined}
                   >
                     {loading ? "Evaluando..." : "Evaluar"}
@@ -679,33 +663,31 @@ export default function SandboxPage() {
               <div className="flex-1 overflow-y-auto lg:w-1/2">
 
                 {/* Output tab bar */}
-                <div className="flex items-center gap-2 px-5 py-2 border-b border-white/[0.05] bg-white/[0.01] shrink-0">
-                  <span className="text-xs font-mono text-gray-600">output.result</span>
+                <div className="flex items-center gap-2 px-5 py-2 border-b border-[#E8E5E0] bg-[#FAFAF8] shrink-0">
+                  <span className="text-xs font-mono text-[#9C9890]">output.result</span>
                   <span className={`w-1.5 h-1.5 rounded-full transition-colors ${
                     loading ? "bg-amber-400 animate-pulse" :
-                    result  ? "bg-emerald-400" :
-                    error   ? "bg-rose-400" :
-                    "bg-gray-700"
+                    result  ? "bg-[#2D6A6A]" :
+                    error   ? "bg-[#E2654A]" :
+                    "bg-[#E8E5E0]"
                   }`} />
                   <span className={`text-[10px] font-semibold transition-colors ${
-                    loading ? "text-amber-500/70" :
-                    result  ? "text-emerald-500/70" :
-                    error   ? "text-rose-500/70" :
-                    "text-gray-700"
+                    loading ? "text-amber-600" :
+                    result  ? "text-[#2D6A6A]" :
+                    error   ? "text-[#E2654A]" :
+                    "text-[#9C9890]"
                   }`}>
                     {loading ? "procesando" : result ? "completado" : error ? "error" : "esperando"}
                   </span>
                 </div>
 
                 <AnimatePresence mode="wait">
-                  {/* Loading skeleton */}
                   {outputState === "loading" && (
                     <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                       <OutputSkeleton />
                     </motion.div>
                   )}
 
-                  {/* Error */}
                   {outputState === "error" && (
                     <motion.div
                       key="error"
@@ -714,12 +696,12 @@ export default function SandboxPage() {
                       exit={{ opacity: 0 }}
                       className="p-5"
                     >
-                      <div className="rounded-2xl bg-rose-500/10 border border-rose-500/25 p-4 flex items-start gap-3">
-                        <span className="text-rose-400 mt-0.5 shrink-0 text-lg">⚠</span>
+                      <div className="rounded-2xl bg-[#FDF0ED] border border-[#E2654A]/25 p-4 flex items-start gap-3">
+                        <span className="text-[#E2654A] mt-0.5 shrink-0 text-lg">⚠</span>
                         <div>
-                          <p className="text-xs font-bold uppercase tracking-widest text-rose-400 mb-1">Error</p>
-                          <p className="text-sm text-rose-300">{error}</p>
-                          <button onClick={reset} className="mt-2 text-xs text-rose-500 hover:text-rose-400 transition-colors">
+                          <p className="text-xs font-bold uppercase tracking-widest text-[#E2654A] mb-1">Error</p>
+                          <p className="text-sm text-[#6B6960]">{error}</p>
+                          <button onClick={reset} className="mt-2 text-xs text-[#E2654A] hover:text-[#C9553D] transition-colors">
                             Intentar de nuevo →
                           </button>
                         </div>
@@ -727,14 +709,12 @@ export default function SandboxPage() {
                     </motion.div>
                   )}
 
-                  {/* Result */}
                   {outputState === "result" && result && (
                     <motion.div key="result" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                       <ResultPanel result={result} onReset={reset} />
                     </motion.div>
                   )}
 
-                  {/* Idle */}
                   {outputState === "idle" && (
                     <motion.div key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                       <IdlePanel onInsert={(text) => setPrompt(text)} />
@@ -745,8 +725,8 @@ export default function SandboxPage() {
             </div>
 
             {/* ── IDE bottom status bar ── */}
-            <CardBody className="border-t border-white/[0.05] bg-white/[0.01] px-5 py-2 flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-4 text-[10px] text-gray-700 font-mono overflow-hidden">
+            <CardBody className="border-t border-[#E8E5E0] bg-[#FAFAF8] px-5 py-2 flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-4 text-[10px] text-[#9C9890] font-mono overflow-hidden">
                 <span className="shrink-0">Sandbox v2.0</span>
                 <span className="shrink-0 hidden sm:inline">·</span>
                 <span className="shrink-0 hidden sm:inline">Claude 3.5 Sonnet</span>
@@ -756,13 +736,13 @@ export default function SandboxPage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   className={`shrink-0 ${
-                    loading ? "text-amber-400" : result ? "text-emerald-400" : "text-gray-700"
+                    loading ? "text-amber-600" : result ? "text-[#2D6A6A]" : "text-[#9C9890]"
                   }`}
                 >
                   {loading ? "⚙ Procesando..." : result ? "✓ Completado" : "● Listo"}
                 </motion.span>
               </div>
-              <span className="text-[10px] text-gray-700 font-mono shrink-0">UTF-8</span>
+              <span className="text-[10px] text-[#9C9890] font-mono shrink-0">UTF-8</span>
             </CardBody>
           </Card>
         </motion.div>
@@ -778,8 +758,7 @@ export default function SandboxPage() {
           <Button
             as={Link}
             href="/lessons"
-            className="w-full sm:w-auto font-bold bg-gradient-to-r from-violet-600 to-purple-600 text-white
-                       shadow-lg shadow-violet-600/20 hover:-translate-y-px transition-transform"
+            className="w-full sm:w-auto font-bold bg-[#E2654A] text-white hover:bg-[#C9553D] transition-colors border-0"
             endContent={<span>→</span>}
           >
             Ir a las Lecciones
@@ -788,8 +767,7 @@ export default function SandboxPage() {
             as={Link}
             href="/"
             variant="bordered"
-            className="w-full sm:w-auto font-semibold text-gray-400 border-white/10 bg-white/5
-                       hover:text-white hover:bg-white/10 hover:border-white/20"
+            className="w-full sm:w-auto font-semibold text-[#6B6960] border-[#E8E5E0] bg-white hover:bg-[#FAFAF8] hover:text-[#1A1A18]"
             startContent={<span>←</span>}
           >
             Volver al Inicio

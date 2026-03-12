@@ -56,87 +56,130 @@ utils/supabase/       — Helpers Supabase (client, server, middleware)
 ## Convenciones
 
 - **Idioma UI**: Español neutro, tono amigable/gamificado (estilo Duolingo)
-- **Dark mode**: Siempre activo por defecto (`dark` class en `<html>`)
+- **Light mode**: Diseño en light mode (#FAFAF8 base). Sin clase `dark` en `<html>`.
 - **Componentes HeroUI**: Usar props semánticas (`color="primary"`, `variant="flat"`) en lugar de clases Tailwind custom cuando sea posible
 - **Middleware**: `proxy.ts` exporta `proxy` (no `middleware`) — convención Next.js 16
 - **Path alias**: `@/*` apunta a la raíz del repo (`./*` en tsconfig)
 - **Ejercicios SELF_CONTAINED**: tipos `["chat", "concept", "audio", "story"]` manejan su propio feedback sin el footer global
 
-## 🎨 Sistema de Diseño — Identidad Visual Prompty
+## Sistema de Diseño — Nueva Dirección Visual
 
-### Filosofía
-Prompty NO es una app corporativa. Es una experiencia gamificada estilo Duolingo — debe sentirse DIVERTIDA, recompensante, y adictiva. Cada interacción debe tener personalidad y feedback táctil.
+### El problema actual
+El diseño actual se ve "generado por AI" — gradientes neón violet/fuchsia, glow blobs, fondo negro puro, emojis como iconos. Esto es exactamente lo que queremos ELIMINAR.
 
-### Dirección Estética: "Neon Arcade meets Modern Learning"
-- Dark mode como base (bg-[#0a0a0f])
-- Colores neón vibrantes con propósito (no decorativos)
-- Profundidad con glassmorphism sutil y sombras con color
-- Micro-interacciones que recompensan cada acción
-- Tipografía con personalidad, no genérica
+### Nueva dirección: "Warm Editorial Education"
+Inspiración: la limpieza de Claude Desktop, la calidez de Notion, la claridad de Linear. Pero adaptado para una app educativa gamificada.
 
-### Paleta de Colores (HeroUI tokens + custom)
-- **Primary**: Violet-500 (#8b5cf6) — acciones principales, CTAs
-- **Secondary**: Fuchsia-500 (#d946ef) — acentos, highlights
-- **Success**: Emerald-400 (#34d399) — respuestas correctas, XP ganado
-- **Warning**: Amber-400 (#fbbf24) — streaks, rankings
-- **Danger**: Rose-500 (#f43f5e) — errores, respuestas incorrectas
-- **Cyan**: Cyan-400 (#22d3ee) — elementos informativos, tips
-- **Surfaces**: white/[0.04] a white/[0.08] para cards sobre dark bg
+Principios:
+1. **Limpio, no vacío** — Espacio blanco generoso pero con propósito
+2. **Cálido, no frío** — Tonos warm en vez de neón fríos
+3. **Marcado, no genérico** — Una paleta de 2 colores que se siente "Promptly"
+4. **Contenido primero** — El diseño sirve al contenido, no compite con él
+5. **Refinado, no llamativo** — La calidad se nota en los detalles sutiles
+
+### Paleta de Colores (MÁXIMO 2 colores principales + neutrales)
+
+**Color principal: un tono terracotta/warm coral**
+- Primary: #E2654A (terracotta cálido — CTAs, acentos, brand)
+- Primary hover: #C9553D
+- Primary light: #FDF0ED (backgrounds sutiles)
+
+**Color secundario: un teal/sage profundo**
+- Secondary: #2D6A6A (teal oscuro — elementos secundarios, contraste)
+- Secondary light: #EFF6F6
+
+**Neutrales warm (NO grises puros):**
+- Background: #FAFAF8 (off-white cálido, NO blanco puro #fff)
+- Surface: #FFFFFF (cards)
+- Border: #E8E5E0 (warm gray border)
+- Text primary: #1A1A18 (casi negro pero warm)
+- Text secondary: #6B6960 (gris warm)
+- Text muted: #9C9890
+
+**Dark mode (opcional futuro, NO ahora):**
+Por ahora el diseño es LIGHT MODE. El dark mode actual con negro puro y neón es exactamente lo que se ve "AI". Cambiamos a light mode limpio.
 
 ### Tipografía
-- NUNCA usar Inter, Roboto, Arial, o system fonts como fuente principal visible
-- Headings: Usar fuente display con personalidad via next/font/google
-- Body: Sans-serif legible con carácter (Plus Jakarta Sans, DM Sans, Outfit)
-- Emojis como iconografía: permitido para el tono gamificado
-- Tamaño mínimo body en móvil: 16px (text-base)
+- Display/Headings: **DM Serif Display** o **Fraunces** (serif con personalidad, NO sans-serif genérica)
+- Body: **DM Sans** o **Plus Jakarta Sans** (sans limpia y moderna)
+- Monospace (para código/prompts): **JetBrains Mono**
+- NUNCA: Inter, Roboto, Arial, Space Grotesk
+- Font weights: headings 700, subheadings 600, body 400, emphasis 500
+- Letter-spacing: -0.02em en headings grandes (tight), normal en body
 
-### Botones — Estilo "3D Pressable" (patrón existente, mantener)
-```css
-shadow-[0_6px_0_<dark-color>]
-hover:shadow-[0_3px_0_<dark-color>] hover:translate-y-[3px]
-active:shadow-[0_1px_0_<dark-color>] active:translate-y-[5px]
-transition-all duration-100
-```
+### Botones
+ELIMINAR el patrón "3D arcade" con sombras grandes. Nuevo estilo:
+- Primary: bg-[#E2654A] text-white rounded-xl px-6 py-3 font-semibold hover:bg-[#C9553D] transition-colors duration-150
+- Secondary: bg-transparent border-2 border-[#E8E5E0] text-[#1A1A18] rounded-xl px-6 py-3 font-semibold hover:border-[#E2654A] hover:text-[#E2654A] transition-colors duration-150
+- Ghost: bg-transparent text-[#6B6960] hover:text-[#1A1A18] hover:bg-[#F5F4F0] rounded-xl px-4 py-2
+- Todos con focus:ring-2 focus:ring-[#E2654A]/30
+- Feedback sutil: active:scale-[0.98] transition-transform
 
 ### Cards
-- Background: bg-white/[0.04] con border border-white/8
-- Backdrop blur sutil: backdrop-blur-sm
-- NUNCA Cards con fondo blanco sólido
-- Hover states: white/[0.08] + scale sutil
+- Background: #FFFFFF
+- Border: 1px solid #E8E5E0
+- Border-radius: rounded-2xl (16px)
+- Shadow: shadow-sm (sutil, NO dramático)
+- Hover: shadow-md + border-[#D0CDC6] transition
+- NUNCA: glassmorphism, backdrop-blur, bg-white/[0.04], glow effects
+- Padding interno generoso: p-6 o p-8
 
-### Animaciones (Framer Motion)
-- Entry: fadeUp con spring (stiffness 260, damping 20)
-- Stagger: delay incremental de 0.1-0.12s
-- PopIn para rankings: scale 0.88 → 1
-- SIEMPRE viewport={{ once: true }} en whileInView
-- Transiciones: 150-300ms
+### Iconos
+- ELIMINAR emojis como iconos principales (📖 🎮 🏆 ⚡)
+- Usar SVG icons simples (lucide-react o heroicons)
+- Si no están instalados, usar caracteres simples o crear SVG inline
+- Estilo: stroke de 1.5-2px, color monocromático
+- Los emojis están PERMITIDOS solo en contextos muy específicos de gamificación (ej: 🔥 para streaks) pero NO como iconografía principal
 
 ### Backgrounds
-- Glow blobs con blur-[90px] a blur-[140px]
-- Colores: violet-600/25, fuchsia-600/20, cyan-500/15
-- NUNCA fondo blanco o gris sólido
+- ELIMINAR todos los glow blobs, gradient meshes, noise textures
+- Fondo principal: #FAFAF8 sólido
+- Secciones alternadas: #FAFAF8 y #FFFFFF para crear ritmo
+- Si necesitas decoración: formas geométricas sutiles en #F0EDE8 o el patrón de dots/grid muy sutil
+- NUNCA: fondo negro, fondo dark, neón, blurs decorativos
 
-## 📱 Reglas Mobile-First OBLIGATORIAS
+### Animaciones
+- REDUCIR drásticamente. Menos es más.
+- Entrada de página: solo un fade-in suave (opacity 0→1, duration 400ms)
+- NO stagger de 12 elementos individualmente — es patrón AI
+- Hover: transition-colors y transition-shadow, 150ms
+- Botones: active:scale-[0.98] es suficiente
+- Scroll animations: MÁXIMO fade-in cuando entra al viewport, nada más
+- ELIMINAR: spring physics exageradas, popIn, scale animations dramáticas
 
-- SIEMPRE diseñar primero para móvil, luego escalar
-- Clases sin prefijo = MOBILE. md: y lg: = pantallas más grandes
-- flex flex-col por defecto → md:flex-row para desktop
-- Touch targets mínimo 44×44px (p-3 mínimo en interactivos)
-- Botones: w-full en móvil → sm:w-auto en desktop
-- Body text mínimo text-base (16px) en móvil
-- Headings: text-3xl sm:text-4xl lg:text-5xl
-- NUNCA anchos fijos en px para containers
+### Espaciado
+- Generoso. Las secciones respiran.
+- Entre secciones: py-20 sm:py-28
+- Entre heading y contenido: mb-4 a mb-6
+- Gap en grids: gap-4 a gap-6
+- Padding de página: px-5 sm:px-8 max-w-5xl mx-auto
+
+### Gamificación Visual (cómo mantener lo educativo sin verse AI)
+- XP y niveles: badges minimalistas con el color primary, no neón
+- Progress bars: finas (h-2), rounded-full, color primary
+- Leaderboard: tabla limpia con buen spacing, el #1 se distingue con un subtle bg-primary/5 y un icono crown SVG, NO con glows
+- Achievements: iconos SVG pequeños en círculos con borde, no emojis gigantes
+- Streaks: chip/badge pequeño, color warm, texto "7 días 🔥"
+
+## Mobile-First (mantener estas reglas)
+
+- Diseñar primero para 375px, luego escalar
+- flex flex-col → md:flex-row
+- Touch targets >= 44px
+- Body text >= 16px
+- Botones w-full en móvil → sm:w-auto en desktop
+- px-5 → sm:px-8
 - NUNCA horizontal overflow
-- Padding: px-4 móvil → px-6 md:px-8 desktop
 
-## 🚫 Anti-Patrones (NUNCA HACER)
+## Anti-Patrones (NUNCA HACER)
 
-- NUNCA Inter, Roboto, Arial, Space Grotesk como fuente principal
-- NUNCA gradientes purple-on-white genéricos
-- NUNCA card grids simétricos sin variación
-- NUNCA fondos blancos/grises sólidos
-- NUNCA componentes sin hover/active/focus states
-- NUNCA texto < 16px para contenido principal en móvil
-- NUNCA layouts solo-desktop
-- NUNCA botones sin feedback visual
-- NUNCA instalar shadcn/ui — usamos HeroUI exclusivamente
+- NUNCA fondo oscuro/negro (estamos en light mode ahora)
+- NUNCA glow blobs, blur decorativos, noise textures
+- NUNCA gradientes neón (violet, fuchsia, cyan)
+- NUNCA emojis como iconografía principal de secciones
+- NUNCA animaciones spring exageradas con stagger
+- NUNCA glassmorphism o bg-white/[0.04]
+- NUNCA más de 2 colores principales + neutrales
+- NUNCA tipografía sans-serif genérica en headings
+- NUNCA el patrón de botón "3D arcade" con shadow offset
+- NUNCA shadcn/ui — seguimos con HeroUI

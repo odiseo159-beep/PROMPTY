@@ -14,13 +14,13 @@ interface ButtonProps {
 
 const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
   primary:
-    "bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 border border-transparent",
+    "bg-[#E2654A] hover:bg-[#C9553D] text-white border border-transparent",
   secondary:
-    "bg-gradient-to-r from-amber-400 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-gray-900 shadow-lg shadow-amber-400/30 hover:shadow-amber-400/50 border border-transparent font-semibold",
+    "bg-[#FAFAF8] border-2 border-[#E8E5E0] text-[#1A1A18] hover:border-[#E2654A] hover:text-[#E2654A]",
   outline:
-    "bg-transparent border-2 border-violet-500 text-violet-400 hover:bg-violet-600 hover:text-white hover:border-violet-600 hover:shadow-lg hover:shadow-violet-500/30",
+    "bg-transparent border-2 border-[#E8E5E0] text-[#6B6960] hover:border-[#E2654A] hover:text-[#E2654A]",
   ghost:
-    "bg-transparent border border-transparent text-gray-300 hover:bg-white/10 hover:text-white",
+    "bg-transparent text-[#6B6960] hover:bg-[#FAFAF8] hover:text-[#1A1A18]",
 };
 
 const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
@@ -46,10 +46,10 @@ export function Button({
       className={[
         "inline-flex items-center justify-center gap-2",
         "rounded-xl font-semibold",
-        "transition-all duration-200 ease-out",
-        "hover:scale-105 active:scale-95",
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900",
-        "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none",
+        "transition-all duration-150 ease-out",
+        "active:scale-[0.98]",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E2654A]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+        "disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100",
         "cursor-pointer select-none",
         variantClasses[variant],
         sizeClasses[size],

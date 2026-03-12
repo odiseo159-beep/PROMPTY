@@ -66,52 +66,34 @@ const DEFAULT_CORRECT_ORDER = ["role", "context", "task", "format", "tone"];
 
 const COLOR = {
   emerald: {
-    border: "border-emerald-400/70",
-    bg: "bg-emerald-500/15",
-    text: "text-emerald-300",
-    glow: "shadow-[0_0_14px_rgba(52,211,153,0.35)]",
-    ring: "ring-emerald-400/60",
-    dot: "bg-emerald-400",
+    border: "border-[#2D6A6A]/50",
+    bg:     "bg-[#EFF6F6]",
+    text:   "text-[#2D6A6A]",
   },
   violet: {
-    border: "border-violet-400/70",
-    bg: "bg-violet-500/15",
-    text: "text-violet-300",
-    glow: "shadow-[0_0_14px_rgba(167,139,250,0.35)]",
-    ring: "ring-violet-400/60",
-    dot: "bg-violet-400",
+    border: "border-[#E2654A]/50",
+    bg:     "bg-[#FDF0ED]",
+    text:   "text-[#E2654A]",
   },
   sky: {
-    border: "border-sky-400/70",
-    bg: "bg-sky-500/15",
-    text: "text-sky-300",
-    glow: "shadow-[0_0_14px_rgba(56,189,248,0.35)]",
-    ring: "ring-sky-400/60",
-    dot: "bg-sky-400",
+    border: "border-sky-500/40",
+    bg:     "bg-sky-50",
+    text:   "text-sky-700",
   },
   amber: {
-    border: "border-amber-400/70",
-    bg: "bg-amber-500/15",
-    text: "text-amber-300",
-    glow: "shadow-[0_0_14px_rgba(251,191,36,0.35)]",
-    ring: "ring-amber-400/60",
-    dot: "bg-amber-400",
+    border: "border-amber-500/40",
+    bg:     "bg-amber-50",
+    text:   "text-amber-700",
   },
   rose: {
-    border: "border-rose-400/70",
-    bg: "bg-rose-500/15",
-    text: "text-rose-300",
-    glow: "shadow-[0_0_14px_rgba(251,113,133,0.35)]",
-    ring: "ring-rose-400/60",
-    dot: "bg-rose-400",
+    border: "border-rose-400/40",
+    bg:     "bg-rose-50",
+    text:   "text-rose-600",
   },
   fuchsia: {
-    border: "border-fuchsia-400/70",
-    bg: "bg-fuchsia-500/15",
-    text: "text-fuchsia-300",
-    glow: "shadow-[0_0_14px_rgba(232,121,249,0.35)]",
-    ring: "ring-fuchsia-400/60",
-    dot: "bg-fuchsia-400",
+    border: "border-fuchsia-500/40",
+    bg:     "bg-fuchsia-50",
+    text:   "text-fuchsia-700",
   },
 } as const;
 
@@ -146,10 +128,10 @@ function BankPill({
         transition-all duration-150
         disabled:cursor-default
         min-h-[52px]
-        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0d0d1a]
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2654A] focus-visible:ring-offset-2 focus-visible:ring-offset-white
         ${isSelected
-          ? `${c.border} ${c.bg} ${c.text} ${c.glow} ring-2 ${c.ring} ring-offset-1 ring-offset-[#0d0d1a]`
-          : "border-white/10 bg-white/5 text-gray-300 hover:border-white/25 hover:bg-white/10"
+          ? `${c.border} ${c.bg} ${c.text} shadow-sm`
+          : "border-[#E8E5E0] bg-white text-[#6B6960] hover:border-[#E8E5E0] hover:bg-[#FAFAF8]"
         }
       `}
     >
@@ -194,15 +176,15 @@ function ZonePill({
       transition={{ type: "spring", stiffness: 420, damping: 24 }}
       className="flex flex-col gap-1 min-w-[100px]"
     >
-      <span className="text-[10px] font-bold text-gray-600 uppercase tracking-widest px-1">
+      <span className="text-[10px] font-bold text-[#9C9890] uppercase tracking-widest px-1">
         #{index + 1}
       </span>
 
       <div
         className={`
           relative flex items-center gap-2 px-4 py-3 rounded-2xl border-2
-          font-bold text-sm select-none
-          ${c.border} ${c.bg} ${c.text} ${c.glow}
+          font-bold text-sm select-none shadow-sm
+          ${c.border} ${c.bg} ${c.text}
         `}
       >
         <span className="text-base">{piece.icon}</span>
@@ -211,10 +193,10 @@ function ZonePill({
         {!isChecked && (
           <button
             onClick={(e) => { e.stopPropagation(); onRemove(); }}
-            className="ml-1 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full hover:bg-white/15 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+            className="ml-1 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full hover:bg-black/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2654A]"
             aria-label={`Quitar ${piece.label}`}
           >
-            <span className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-gray-400 hover:text-white text-xs pointer-events-none">✕</span>
+            <span className="w-5 h-5 rounded-full bg-black/[0.05] flex items-center justify-center text-[#6B6960] hover:text-[#1A1A18] text-xs pointer-events-none">✕</span>
           </button>
         )}
 
@@ -223,7 +205,7 @@ function ZonePill({
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: index * 0.08, type: "spring", stiffness: 400 }}
-            className="ml-1 text-base"
+            className={`ml-1 text-base ${isCorrect ? "text-[#2D6A6A]" : "text-[#E2654A]"}`}
           >
             {isCorrect ? "✓" : "✗"}
           </motion.span>
@@ -270,29 +252,29 @@ function DropZone({
       }}
       animate={
         isActive
-          ? { borderColor: ["rgba(52,211,153,0.3)", "rgba(52,211,153,0.8)", "rgba(52,211,153,0.3)"] }
-          : { borderColor: "rgba(255,255,255,0.12)" }
+          ? { borderColor: ["rgba(226,101,74,0.3)", "rgba(226,101,74,0.8)", "rgba(226,101,74,0.3)"] }
+          : { borderColor: "rgba(232,229,224,1)" }
       }
       transition={isActive ? { repeat: Infinity, duration: 1.6 } : {}}
       className={`
         relative w-full min-h-[140px] rounded-2xl border-2 border-dashed p-4
         transition-all duration-200
         ${isActive && !isChecked
-          ? "bg-emerald-500/5 shadow-[0_0_24px_rgba(52,211,153,0.12)] cursor-pointer"
-          : "bg-white/3"
+          ? "bg-[#FDF0ED]/40 cursor-pointer"
+          : "bg-[#FAFAF8]"
         }
       `}
     >
       <div className="flex items-center gap-2 mb-3">
-        <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-        <span className="text-xs font-bold uppercase tracking-widest text-gray-500">
+        <div className="w-2 h-2 rounded-full bg-[#E2654A] animate-pulse" />
+        <span className="text-xs font-bold uppercase tracking-widest text-[#9C9890]">
           Zona de Ensamblaje — Tu Prompt
         </span>
       </div>
 
       {isEmpty ? (
         <div className="flex items-center justify-center h-16">
-          <p className="text-gray-600 text-sm text-center">
+          <p className="text-[#9C9890] text-sm text-center">
             {isActive
               ? "Toca aquí para colocar la pieza seleccionada ↓"
               : "Selecciona una pieza y toca aquí para colocarla"}
@@ -322,7 +304,7 @@ function DropZone({
               animate={{ opacity: 1 }}
               className="flex items-center self-center"
             >
-              <div className="w-10 h-10 rounded-xl border-2 border-dashed border-emerald-400/50 flex items-center justify-center text-emerald-400/70 text-lg">
+              <div className="w-10 h-10 rounded-xl border-2 border-dashed border-[#E2654A]/50 flex items-center justify-center text-[#E2654A]/70 text-lg">
                 +
               </div>
             </motion.div>
@@ -341,12 +323,12 @@ export function PromptDropZone({
   onPlacedChange,
   isChecked = false,
 }: PromptDropZoneProps) {
-  const [bank, setBank] = useState<PromptPiece[]>(pieces);
-  const [zone, setZone] = useState<PromptPiece[]>([]);
+  const [bank, setBank]           = useState<PromptPiece[]>(pieces);
+  const [zone, setZone]           = useState<PromptPiece[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const placedIds = zone.map((p) => p.id);
-  const isFullyPlaced = placedIds.length === pieces.length;
+  const placedIds      = zone.map((p) => p.id);
+  const isFullyPlaced  = placedIds.length === pieces.length;
   const isOrderCorrect =
     isFullyPlaced && placedIds.every((id, i) => correctOrder[i] === id);
 
@@ -393,10 +375,10 @@ export function PromptDropZone({
   return (
     <div className="w-full flex flex-col gap-6">
       <div>
-        <h2 className="text-white text-2xl font-bold leading-snug mb-1">
+        <h2 className="text-[#1A1A18] text-2xl font-bold leading-snug mb-1">
           Anatomía de un Prompt
         </h2>
-        <p className="text-gray-500 text-sm">
+        <p className="text-[#6B6960] text-sm">
           Toca cada pieza en el orden correcto para construir un prompt bien estructurado.
         </p>
       </div>
@@ -418,8 +400,8 @@ export function PromptDropZone({
             exit={{ opacity: 0 }}
             className={`flex items-center gap-3 px-4 py-3 rounded-2xl border ${
               isOrderCorrect
-                ? "bg-emerald-500/15 border-emerald-400/40 text-emerald-300"
-                : "bg-red-500/15 border-red-400/40 text-red-300"
+                ? "bg-[#EFF6F6] border-[#2D6A6A]/40 text-[#2D6A6A]"
+                : "bg-[#FDF0ED] border-[#E2654A]/40 text-[#E2654A]"
             }`}
           >
             <span className="text-xl">{isOrderCorrect ? "🏆" : "💡"}</span>
@@ -437,13 +419,13 @@ export function PromptDropZone({
 
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-bold uppercase tracking-widest text-gray-600">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#9C9890]">
             Banco de Piezas
           </span>
           {zone.length > 0 && !isChecked && (
             <button
               onClick={handleReset}
-              className="text-xs text-gray-500 hover:text-gray-400 underline underline-offset-2 transition-colors py-2 px-2 min-h-[44px] inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 rounded-md"
+              className="text-xs text-[#6B6960] hover:text-[#1A1A18] underline underline-offset-2 transition-colors py-2 px-2 min-h-[44px] inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2654A] rounded-md"
             >
               Reiniciar
             </button>
@@ -467,7 +449,7 @@ export function PromptDropZone({
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-gray-600 text-sm italic"
+              className="text-[#9C9890] text-sm italic"
             >
               ¡Todas las piezas colocadas! Comprueba tu respuesta.
             </motion.p>

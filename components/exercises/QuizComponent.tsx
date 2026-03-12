@@ -40,33 +40,29 @@ function OptionCard({
   isDimmed: boolean;
   onSelect: () => void;
 }) {
-  // Border & background resolve
-  let borderColor = "border-white/10";
-  let bgColor = "bg-white/5";
-  let textColor = "text-white";
-  let glowStyle: React.CSSProperties = {};
-  let labelBg = "bg-white/10 text-gray-400";
+  let borderColor = "border-[#E8E5E0]";
+  let bgColor     = "bg-white";
+  let textColor   = "text-[#1A1A18]";
+  let labelBg     = "bg-[#FAFAF8] text-[#6B6960]";
 
   if (!isChecked && isSelected) {
-    borderColor = "border-emerald-400";
-    bgColor = "bg-emerald-500/10";
-    glowStyle = { boxShadow: "0 0 0 3px rgba(52,211,153,0.35), 0 0 20px rgba(52,211,153,0.2)" };
-    labelBg = "bg-emerald-400/20 text-emerald-300";
+    borderColor = "border-[#E2654A]";
+    bgColor     = "bg-[#FDF0ED]";
+    labelBg     = "bg-[#FDF0ED] text-[#E2654A]";
   }
 
   if (isChecked && isCorrect) {
-    borderColor = "border-emerald-400";
-    bgColor = "bg-emerald-500/15";
-    glowStyle = { boxShadow: "0 0 0 3px rgba(52,211,153,0.4), 0 0 24px rgba(52,211,153,0.25)" };
-    labelBg = "bg-emerald-400/20 text-emerald-300";
+    borderColor = "border-[#2D6A6A]";
+    bgColor     = "bg-[#EFF6F6]";
+    textColor   = "text-[#2D6A6A]";
+    labelBg     = "bg-[#EFF6F6] text-[#2D6A6A]";
   }
 
   if (isChecked && isWrong) {
-    borderColor = "border-red-500";
-    bgColor = "bg-red-500/10";
-    glowStyle = { boxShadow: "0 0 0 3px rgba(239,68,68,0.35)" };
-    textColor = "text-red-300";
-    labelBg = "bg-red-500/20 text-red-400";
+    borderColor = "border-[#E2654A]/60";
+    bgColor     = "bg-[#FDF0ED]/50";
+    textColor   = "text-[#E2654A]";
+    labelBg     = "bg-[#FDF0ED] text-[#E2654A]";
   }
 
   return (
@@ -76,18 +72,17 @@ function OptionCard({
       whileTap={!isChecked ? { scale: 0.96 } : undefined}
       animate={isSelected && !isChecked ? { scale: [1, 0.97, 1.01, 1] } : { scale: 1 }}
       transition={{ duration: 0.25 }}
-      style={glowStyle}
       className={`
         relative w-full min-h-[80px] flex items-center gap-4 px-4 py-4
         rounded-2xl border-2 text-left
         transition-all duration-200 cursor-pointer
         disabled:cursor-default
-        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0a0a0f]
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2654A] focus-visible:ring-offset-2 focus-visible:ring-offset-white
         ${borderColor} ${bgColor} ${textColor}
         ${isDimmed && !isSelected ? "opacity-40" : "opacity-100"}
       `}
     >
-      {/* Letter badge */}
+      {/* Letter/icon badge */}
       <span
         className={`
           shrink-0 w-9 h-9 rounded-xl flex items-center justify-center
@@ -103,10 +98,10 @@ function OptionCard({
 
       {/* Check / X icon when checked */}
       {isChecked && isCorrect && (
-        <span className="shrink-0 text-emerald-400 text-xl">✓</span>
+        <span className="shrink-0 text-[#2D6A6A] text-xl">✓</span>
       )}
       {isChecked && isWrong && (
-        <span className="shrink-0 text-red-400 text-xl">✗</span>
+        <span className="shrink-0 text-[#E2654A] text-xl">✗</span>
       )}
     </motion.button>
   );
@@ -125,15 +120,15 @@ export function QuizComponent({
   return (
     <div className="w-full flex flex-col gap-5">
       {/* Question */}
-      <h2 className="text-white text-2xl font-bold leading-snug">{questionText}</h2>
+      <h2 className="text-[#1A1A18] text-2xl font-bold leading-snug">{questionText}</h2>
 
       {/* Options — stacked on mobile, 2-col grid on md+ */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {options.map((option) => {
           const isSelected = selectedId === option.id;
-          const isCorrect = isChecked && correctId === option.id;
-          const isWrong = isChecked && isSelected && correctId !== option.id;
-          const isDimmed = selectedId !== null && !isSelected;
+          const isCorrect  = isChecked && correctId === option.id;
+          const isWrong    = isChecked && isSelected && correctId !== option.id;
+          const isDimmed   = selectedId !== null && !isSelected;
 
           return (
             <OptionCard

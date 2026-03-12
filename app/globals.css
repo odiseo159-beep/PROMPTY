@@ -7,6 +7,20 @@
   --font-body: var(--font-body);
 }
 
+:root {
+  --color-primary: #E2654A;
+  --color-primary-hover: #C9553D;
+  --color-primary-light: #FDF0ED;
+  --color-secondary: #2D6A6A;
+  --color-secondary-light: #EFF6F6;
+  --color-bg: #FAFAF8;
+  --color-surface: #FFFFFF;
+  --color-border: #E8E5E0;
+  --color-text: #1A1A18;
+  --color-text-secondary: #6B6960;
+  --color-text-muted: #9C9890;
+}
+
 @keyframes shimmer {
   100% {
     transform: translateX(100%);

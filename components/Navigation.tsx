@@ -11,56 +11,73 @@ import {
   Button,
 } from "@heroui/react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 const links = [
-  { label: "Inicio", href: "/" },
-  { label: "Lecciones", href: "/lessons" },
-  { label: "Sandbox", href: "/sandbox" },
+  { label: "Inicio",        href: "/"            },
+  { label: "Lecciones",     href: "/lessons"     },
+  { label: "Sandbox",       href: "/sandbox"     },
   { label: "Clasificación", href: "/leaderboard" },
 ];
 
 export function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <Navbar
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
-      className="bg-black/40 backdrop-blur-xl border-b border-white/5"
-      maxWidth="xl"
+      className="bg-white/80 backdrop-blur-md border-b border-[#E8E5E0] sticky top-0 z-50"
+      classNames={{
+        wrapper: "max-w-5xl mx-auto px-5",
+        base: "shadow-none",
+      }}
+      maxWidth="full"
       isBordered={false}
     >
-      {/* Logo */}
+      {/* Logo + hamburger */}
       <NavbarContent justify="start">
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
-          className="sm:hidden text-white"
+          className="sm:hidden text-[#6B6960]"
         />
         <NavbarBrand>
-          <Link href="/" className="flex items-center gap-2.5" onClick={() => setIsMenuOpen(false)}>
-            <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-purple-700 text-lg shadow-lg shadow-violet-500/40">
-              ⚡
+          <Link
+            href="/"
+            className="flex items-center gap-2"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <span className="w-7 h-7 rounded-md bg-[#E2654A] flex items-center justify-center text-white text-xs font-bold shrink-0">
+              P
             </span>
-            <span className="font-extrabold text-xl bg-gradient-to-r from-violet-300 via-purple-300 to-fuchsia-300 bg-clip-text text-transparent">
+            <span className="font-display text-lg text-[#1A1A18] leading-none">
               Promptly
             </span>
           </Link>
         </NavbarBrand>
       </NavbarContent>
 
-      {/* Desktop Links */}
-      <NavbarContent className="hidden sm:flex gap-1" justify="center">
-        {links.map((link) => (
-          <NavbarItem key={link.href}>
-            <Link
-              href={link.href}
-              className="px-3 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/5"
-            >
-              {link.label}
-            </Link>
-          </NavbarItem>
-        ))}
+      {/* Desktop links */}
+      <NavbarContent className="hidden sm:flex gap-0" justify="center">
+        {links.map((link) => {
+          const active = pathname === link.href;
+          return (
+            <NavbarItem key={link.href}>
+              <Link
+                href={link.href}
+                className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-150 ${
+                  active
+                    ? "text-[#E2654A]"
+                    : "text-[#6B6960] hover:text-[#E2654A] hover:bg-[#FDF0ED]"
+                }`}
+              >
+                {link.label}
+              </Link>
+            </NavbarItem>
+          );
+        })}
       </NavbarContent>
 
       {/* CTA */}
@@ -69,42 +86,41 @@ export function Navigation() {
           <Button
             as={Link}
             href="/lesson"
-            color="secondary"
-            variant="solid"
             size="sm"
-            className="hidden sm:flex font-semibold bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-600/30"
-            endContent={
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
-                <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" />
-              </svg>
-            }
+            className="hidden sm:flex font-semibold bg-[#E2654A] text-white rounded-xl hover:bg-[#C9553D] active:scale-[0.98] transition-all duration-150 border-0 px-4"
           >
-            Empezar
+            Empezar →
           </Button>
         </NavbarItem>
       </NavbarContent>
 
-      {/* Mobile Menu */}
-      <NavbarMenu className="bg-black/95 pt-4 gap-2">
-        {links.map((link) => (
-          <NavbarMenuItem key={link.href}>
-            <Link
-              href={link.href}
-              onClick={() => setIsMenuOpen(false)}
-              className="block w-full px-4 py-3 text-base font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-xl transition-colors"
-            >
-              {link.label}
-            </Link>
-          </NavbarMenuItem>
-        ))}
-        <NavbarMenuItem className="pt-2 mt-2 border-t border-white/5">
+      {/* Mobile menu */}
+      <NavbarMenu className="bg-white/95 backdrop-blur-md border-t border-[#E8E5E0] pt-4 gap-1">
+        {links.map((link) => {
+          const active = pathname === link.href;
+          return (
+            <NavbarMenuItem key={link.href}>
+              <Link
+                href={link.href}
+                onClick={() => setIsMenuOpen(false)}
+                className={`block w-full px-4 py-3 text-base font-medium rounded-xl transition-colors duration-150 min-h-[44px] flex items-center ${
+                  active
+                    ? "text-[#E2654A] bg-[#FDF0ED]"
+                    : "text-[#6B6960] hover:text-[#E2654A] hover:bg-[#FDF0ED]"
+                }`}
+              >
+                {link.label}
+              </Link>
+            </NavbarMenuItem>
+          );
+        })}
+        <NavbarMenuItem className="pt-3 mt-2 border-t border-[#E8E5E0]">
           <Button
             as={Link}
             href="/lesson"
             onClick={() => setIsMenuOpen(false)}
             fullWidth
-            color="secondary"
-            className="font-semibold bg-gradient-to-r from-violet-600 to-purple-600 text-white"
+            className="font-semibold bg-[#E2654A] text-white rounded-xl hover:bg-[#C9553D] active:scale-[0.98] transition-all duration-150 border-0"
           >
             Empezar →
           </Button>

@@ -213,13 +213,13 @@ function InlineFeedback({ isCorrect, theoryExplanation }: { isCorrect: boolean; 
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
       <Card className={isCorrect
-        ? "bg-[#58cc02]/15 border border-[#58cc02]/40"
-        : "bg-red-500/15 border border-red-500/40"
+        ? "bg-[#EFF6F6] border border-[#2D6A6A]/40"
+        : "bg-[#FDF0ED] border border-[#E2654A]/40"
       }>
         <CardBody className="p-3 gap-2">
           <div className="flex items-center gap-2">
             <span className="text-lg">{isCorrect ? "✅" : "❌"}</span>
-            <p className={`font-bold text-sm ${isCorrect ? "text-[#58cc02]" : "text-red-400"}`}>
+            <p className={`font-bold text-sm ${isCorrect ? "text-[#2D6A6A]" : "text-[#E2654A]"}`}>
               {isCorrect ? "¡Correcto!" : "Casi..."}
             </p>
           </div>
@@ -228,7 +228,7 @@ function InlineFeedback({ isCorrect, theoryExplanation }: { isCorrect: boolean; 
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="text-sm text-gray-300 leading-relaxed overflow-hidden"
+              className="text-sm text-[#6B6960] leading-relaxed overflow-hidden"
             >
               {theoryExplanation}
             </motion.p>
@@ -250,7 +250,7 @@ function ProceedButton({ label, onClick }: { label: string; onClick: () => void 
         onPress={onClick}
         fullWidth
         size="lg"
-        className="font-extrabold text-base bg-[#58cc02] text-white shadow-[0_6px_0_#389200] hover:shadow-[0_3px_0_#389200] hover:translate-y-[3px] active:shadow-[0_1px_0_#389200] active:translate-y-[5px] transition-all duration-100"
+        className="font-extrabold text-base bg-[#E2654A] text-white hover:bg-[#C9553D] active:scale-[0.98] transition-all duration-150"
       >
         {label}
       </Button>
@@ -268,25 +268,24 @@ function ConceptCardComponent({ exercise, onComplete }: { exercise: ConceptExerc
       transition={{ type: "spring", stiffness: 240, damping: 22 }}
       className="flex flex-col items-center gap-6 text-center"
     >
-      <div className="relative flex items-center justify-center">
-        <div className="absolute w-32 h-32 rounded-full bg-violet-500/25 blur-2xl" />
+      <div className="flex items-center justify-center">
         <motion.span
           animate={{ scale: [1, 1.08, 1] }}
           transition={{ repeat: Infinity, duration: 2.4, ease: "easeInOut" }}
-          className="relative text-[80px] leading-none select-none"
+          className="text-[80px] leading-none select-none"
         >
           {exercise.emoji}
         </motion.span>
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="text-2xl font-extrabold text-white">{exercise.title}</h2>
-        <p className="text-base text-gray-300 leading-relaxed max-w-sm mx-auto">{exercise.body}</p>
+        <h2 className="text-2xl font-extrabold text-[#1A1A18]">{exercise.title}</h2>
+        <p className="text-base text-[#6B6960] leading-relaxed max-w-sm mx-auto">{exercise.body}</p>
       </div>
 
       <Chip
         variant="bordered"
-        classNames={{ base: "border-violet-500/30 bg-violet-500/10", content: "text-violet-300 font-bold text-xs uppercase tracking-widest" }}
+        classNames={{ base: "border-[#E2654A]/20 bg-[#FDF0ED]", content: "text-[#E2654A] font-bold text-xs uppercase tracking-widest" }}
       >
         Ficha Conceptual
       </Chip>
@@ -355,14 +354,14 @@ function AudioComponent({
   return (
     <div className="flex flex-col gap-4">
       {/* Player row */}
-      <Card className="bg-white/[0.04] border border-white/8">
+      <Card className="bg-[#FAFAF8] border border-[#E8E5E0]">
         <CardBody className="flex flex-row items-center gap-3 p-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-lg shrink-0">
+          <div className="w-10 h-10 rounded-full bg-[#FDF0ED] border border-[#E2654A]/20 flex items-center justify-center text-lg shrink-0">
             🎓
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Escuchando</p>
-            <p className="text-sm font-semibold text-white truncate">{exercise.speakerLabel}</p>
+            <p className="text-[10px] text-[#9C9890] uppercase tracking-widest font-bold">Escuchando</p>
+            <p className="text-sm font-semibold text-[#1A1A18] truncate">{exercise.speakerLabel}</p>
           </div>
           {!transcriptDone ? (
             <Button
@@ -372,8 +371,8 @@ function AudioComponent({
               aria-label={isPlaying ? "Reproduciendo audio" : "Reproducir audio"}
               className={`shrink-0 rounded-full transition-colors ${
                 isPlaying
-                  ? "bg-cyan-500/30 border-2 border-cyan-400/60 text-cyan-300"
-                  : "bg-cyan-500 text-white hover:bg-cyan-400"
+                  ? "bg-[#FDF0ED] border-2 border-[#E2654A]/40 text-[#E2654A]"
+                  : "bg-[#E2654A] text-white hover:bg-[#C9553D]"
               }`}
             >
               <motion.span
@@ -384,7 +383,7 @@ function AudioComponent({
               </motion.span>
             </Button>
           ) : (
-            <span className="shrink-0 w-10 h-10 rounded-full bg-[#58cc02]/20 border border-[#58cc02]/40 flex items-center justify-center text-base">✅</span>
+            <span className="shrink-0 w-10 h-10 rounded-full bg-[#EFF6F6] border border-[#2D6A6A]/40 flex items-center justify-center text-base">✅</span>
           )}
         </CardBody>
       </Card>
@@ -401,7 +400,7 @@ function AudioComponent({
             {WAVEFORM_BARS.map((h, i) => (
               <motion.div
                 key={i}
-                className="w-[5px] rounded-full bg-cyan-400"
+                className="w-[5px] rounded-full bg-[#E2654A]"
                 animate={{ scaleY: [h * 0.4, h, h * 0.5, h * 0.9, h * 0.3] }}
                 transition={{ repeat: Infinity, duration: 0.7 + i * 0.05, ease: "easeInOut", delay: i * 0.04 }}
                 style={{ height: 36, originY: 0.5 }}
@@ -413,16 +412,16 @@ function AudioComponent({
 
       {/* Transcript */}
       {charIndex > 0 && (
-        <Card className="bg-white/[0.03] border border-white/8">
+        <Card className="bg-[#FAFAF8] border border-[#E8E5E0]">
           <CardBody className="p-4 min-h-[72px]">
-            <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-1">Transcripción</p>
-            <p className="text-sm text-gray-200 leading-relaxed">
+            <p className="text-[10px] text-[#9C9890] uppercase tracking-widest font-bold mb-1">Transcripción</p>
+            <p className="text-sm text-[#1A1A18] leading-relaxed">
               {visibleTranscript}
               {isPlaying && (
                 <motion.span
                   animate={{ opacity: [1, 0] }}
                   transition={{ repeat: Infinity, duration: 0.5 }}
-                  className="inline-block w-[2px] h-[14px] bg-cyan-400 align-middle ml-[2px]"
+                  className="inline-block w-[2px] h-[14px] bg-[#E2654A] align-middle ml-[2px]"
                 />
               )}
             </p>
@@ -439,7 +438,7 @@ function AudioComponent({
             transition={{ delay: 0.3, duration: 0.35 }}
             className="flex flex-col gap-4"
           >
-            <p className="text-base font-extrabold text-white">{exercise.question}</p>
+            <p className="text-base font-extrabold text-[#1A1A18]">{exercise.question}</p>
             <div className="flex flex-col gap-2">
               {exercise.options.map((opt) => {
                 const isSelected = selectedId === opt.id;
@@ -450,11 +449,11 @@ function AudioComponent({
                     key={opt.id}
                     disabled={checked}
                     onClick={() => !checked && setSelectedId(opt.id)}
-                    className={`flex items-center gap-3 w-full px-4 py-3 rounded-2xl border text-left font-semibold text-sm transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0a0a0f] ${
-                      isRight ? "border-[#58cc02] bg-[#58cc02]/15 text-[#58cc02]"
-                      : isWrong ? "border-red-400 bg-red-500/15 text-red-400"
-                      : isSelected ? "border-violet-400 bg-violet-500/20 text-white"
-                      : "border-white/10 bg-white/[0.04] text-gray-300 hover:border-white/25 hover:bg-white/10"
+                    className={`flex items-center gap-3 w-full px-4 py-3 rounded-2xl border text-left font-semibold text-sm transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2654A] focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+                      isRight ? "border-[#2D6A6A] bg-[#EFF6F6] text-[#2D6A6A]"
+                      : isWrong ? "border-[#E2654A] bg-[#FDF0ED] text-[#E2654A]"
+                      : isSelected ? "border-[#E2654A] bg-[#FDF0ED] text-[#1A1A18]"
+                      : "border-[#E8E5E0] bg-white text-[#6B6960] hover:border-[#E2654A]/40 hover:bg-[#FAFAF8]"
                     }`}
                   >
                     <span className="text-lg">{opt.icon}</span>
@@ -476,8 +475,8 @@ function AudioComponent({
                 size="lg"
                 className={`font-extrabold text-base transition-all duration-150 ${
                   selectedId
-                    ? "bg-[#58cc02] text-white shadow-[0_4px_0_#389200] hover:bg-[#4ab001]"
-                    : "bg-white/10 text-gray-600 cursor-not-allowed"
+                    ? "bg-[#E2654A] text-white hover:bg-[#C9553D]"
+                    : "bg-[#E8E5E0] text-[#9C9890] cursor-not-allowed"
                 }`}
               >
                 Comprobar Respuesta
@@ -488,7 +487,7 @@ function AudioComponent({
       </AnimatePresence>
 
       {!transcriptDone && charIndex === 0 && (
-        <p className="text-center text-sm text-gray-500 mt-1">Toca ▶ para escuchar la lección</p>
+        <p className="text-center text-sm text-[#9C9890] mt-1">Toca ▶ para escuchar la lección</p>
       )}
     </div>
   );
@@ -531,7 +530,7 @@ function StoryComponent({
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2 mb-1">
         <span className="text-xl">📖</span>
-        <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Historia Interactiva</p>
+        <p className="text-[10px] text-[#9C9890] uppercase tracking-widest font-bold">Historia Interactiva</p>
       </div>
 
       <div className="flex flex-col gap-3 min-h-[160px]">
@@ -547,16 +546,16 @@ function StoryComponent({
                 transition={{ type: "spring", stiffness: 280, damping: 24 }}
               >
                 {isNarrator ? (
-                  <p className="text-xs text-gray-500 italic text-center px-4">{line.text}</p>
+                  <p className="text-xs text-[#9C9890] italic text-center px-4">{line.text}</p>
                 ) : (
                   <div className={`flex ${isBot ? "justify-start" : "justify-end"}`}>
                     <div className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
                       isBot
-                        ? "bg-white/10 text-white border border-white/8 rounded-tl-sm"
-                        : "bg-violet-500 text-white rounded-tr-sm"
+                        ? "bg-[#FAFAF8] text-[#1A1A18] border border-[#E8E5E0] rounded-tl-sm"
+                        : "bg-[#E2654A] text-white rounded-tr-sm"
                     }`}>
                       {line.speaker && (
-                        <p className={`text-[10px] font-bold mb-1 ${isBot ? "text-cyan-400" : "text-violet-200"}`}>
+                        <p className={`text-[10px] font-bold mb-1 ${isBot ? "text-[#2D6A6A]" : "text-white/80"}`}>
                           {line.speaker}
                         </p>
                       )}
@@ -576,7 +575,7 @@ function StoryComponent({
             onPress={handleNext}
             fullWidth
             variant="bordered"
-            className="border-violet-400/40 bg-violet-500/10 text-violet-300 font-bold hover:bg-violet-500/20 hover:border-violet-400/70"
+            className="border-[#E8E5E0] bg-[#FAFAF8] text-[#6B6960] font-bold hover:bg-[#FDF0ED] hover:border-[#E2654A]/40 hover:text-[#E2654A]"
           >
             {isLastLine ? "Ver la pregunta →" : "Continuar ›"}
           </Button>
@@ -589,9 +588,9 @@ function StoryComponent({
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35 }}
-            className="flex flex-col gap-4 pt-2 border-t border-white/8"
+            className="flex flex-col gap-4 pt-2 border-t border-[#E8E5E0]"
           >
-            <p className="text-base font-extrabold text-white">{exercise.question}</p>
+            <p className="text-base font-extrabold text-[#1A1A18]">{exercise.question}</p>
             <div className="flex flex-col gap-2">
               {exercise.options.map((opt) => {
                 const isSelected = selectedId === opt.id;
@@ -602,11 +601,11 @@ function StoryComponent({
                     key={opt.id}
                     disabled={checked}
                     onClick={() => !checked && setSelectedId(opt.id)}
-                    className={`flex items-center gap-3 w-full px-4 py-3 rounded-2xl border text-left font-semibold text-sm transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0a0a0f] ${
-                      isRight ? "border-[#58cc02] bg-[#58cc02]/15 text-[#58cc02]"
-                      : isWrong ? "border-red-400 bg-red-500/15 text-red-400"
-                      : isSelected ? "border-violet-400 bg-violet-500/20 text-white"
-                      : "border-white/10 bg-white/[0.04] text-gray-300 hover:border-white/25 hover:bg-white/10"
+                    className={`flex items-center gap-3 w-full px-4 py-3 rounded-2xl border text-left font-semibold text-sm transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E2654A] focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+                      isRight ? "border-[#2D6A6A] bg-[#EFF6F6] text-[#2D6A6A]"
+                      : isWrong ? "border-[#E2654A] bg-[#FDF0ED] text-[#E2654A]"
+                      : isSelected ? "border-[#E2654A] bg-[#FDF0ED] text-[#1A1A18]"
+                      : "border-[#E8E5E0] bg-white text-[#6B6960] hover:border-[#E2654A]/40 hover:bg-[#FAFAF8]"
                     }`}
                   >
                     <span className="text-lg">{opt.icon}</span>
@@ -628,8 +627,8 @@ function StoryComponent({
                 size="lg"
                 className={`font-extrabold text-base transition-all duration-150 ${
                   selectedId
-                    ? "bg-[#58cc02] text-white shadow-[0_4px_0_#389200] hover:bg-[#4ab001]"
-                    : "bg-white/10 text-gray-600 cursor-not-allowed"
+                    ? "bg-[#E2654A] text-white hover:bg-[#C9553D]"
+                    : "bg-[#E8E5E0] text-[#9C9890] cursor-not-allowed"
                 }`}
               >
                 Comprobar Respuesta
@@ -654,12 +653,12 @@ function ChatComponent({ exercise, onComplete }: { exercise: ChatExercise; onCom
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-3 mb-2">
-        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-2xl shadow-lg shadow-violet-500/30">
+        <div className="w-12 h-12 rounded-full bg-[#FDF0ED] border border-[#E2654A]/20 flex items-center justify-center text-2xl">
           ⚡
         </div>
         <div>
-          <p className="font-extrabold text-white text-sm">Promptly</p>
-          <p className="text-xs text-emerald-400">● En línea</p>
+          <p className="font-extrabold text-[#1A1A18] text-sm">Promptly</p>
+          <p className="text-xs text-[#2D6A6A]">● En línea</p>
         </div>
       </div>
 
@@ -672,8 +671,8 @@ function ChatComponent({ exercise, onComplete }: { exercise: ChatExercise; onCom
             transition={{ type: "spring", stiffness: 300, damping: 22 }}
             className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
               msg.from === "bot"
-                ? "self-start bg-white/10 text-white rounded-tl-sm border border-white/8"
-                : "self-end bg-violet-500 text-white rounded-tr-sm"
+                ? "self-start bg-[#FAFAF8] text-[#1A1A18] rounded-tl-sm border border-[#E8E5E0]"
+                : "self-end bg-[#E2654A] text-white rounded-tr-sm"
             }`}
           >
             <BoldText text={msg.text} />
@@ -692,7 +691,7 @@ function ChatComponent({ exercise, onComplete }: { exercise: ChatExercise; onCom
               onPress={onComplete}
               fullWidth
               size="lg"
-              className="mt-2 font-extrabold text-base bg-violet-500 text-white shadow-[0_6px_0_#4c1d95] hover:shadow-[0_3px_0_#4c1d95] hover:translate-y-[3px] active:shadow-[0_1px_0_#4c1d95] active:translate-y-[5px] transition-all duration-100"
+              className="mt-2 font-extrabold text-base bg-[#E2654A] text-white hover:bg-[#C9553D] active:scale-[0.98] transition-all duration-150"
             >
               {exercise.replyLabel}
             </Button>
@@ -712,8 +711,8 @@ function LessonProgressBar({ progress }: { progress: number }) {
       size="md"
       classNames={{
         base: "flex-1",
-        track: "bg-white/10",
-        indicator: "bg-gradient-to-r from-[#58cc02] to-[#89e219] shadow-[0_0_10px_#58cc02aa]",
+        track: "bg-[#E8E5E0]",
+        indicator: "bg-[#E2654A]",
       }}
       aria-label="Progreso de la lección"
     />
@@ -724,7 +723,7 @@ function HeartCounter({ hearts }: { hearts: number }) {
   return (
     <div className="flex items-center gap-1 shrink-0">
       <span className="text-lg">❤️</span>
-      <span className="font-bold text-red-400 text-sm">{hearts}</span>
+      <span className="font-bold text-red-500 text-sm">{hearts}</span>
     </div>
   );
 }
@@ -743,17 +742,17 @@ function FeedbackBanner({ state, theoryExplanation }: { state: LessonState; theo
       className="mb-3"
     >
       <Card className={isCorrect
-        ? "bg-[#58cc02]/15 border border-[#58cc02]/40"
-        : "bg-red-500/15 border border-red-500/40"
+        ? "bg-[#EFF6F6] border border-[#2D6A6A]/40"
+        : "bg-[#FDF0ED] border border-[#E2654A]/40"
       }>
         <CardBody className="p-4 gap-2">
           <div className="flex items-center gap-3">
             <span className="text-2xl">{isCorrect ? "✅" : "❌"}</span>
             <div>
-              <p className={`font-bold text-base ${isCorrect ? "text-[#58cc02]" : "text-red-400"}`}>
+              <p className={`font-bold text-base ${isCorrect ? "text-[#2D6A6A]" : "text-[#E2654A]"}`}>
                 {isCorrect ? "¡Muy bien!" : "No del todo"}
               </p>
-              <p className="text-gray-400 text-sm">{isCorrect ? "¡Lo clavaste! ¡Sigue así!" : "¿Por qué?"}</p>
+              <p className="text-[#9C9890] text-sm">{isCorrect ? "¡Lo clavaste! ¡Sigue así!" : "¿Por qué?"}</p>
             </div>
           </div>
           <AnimatePresence>
@@ -765,7 +764,7 @@ function FeedbackBanner({ state, theoryExplanation }: { state: LessonState; theo
                 transition={{ duration: 0.35, ease: "easeOut" }}
                 className="overflow-hidden"
               >
-                <p className="pt-3 border-t border-red-500/20 text-sm text-gray-300 leading-relaxed">
+                <p className="pt-3 border-t border-[#E2654A]/20 text-sm text-[#6B6960] leading-relaxed">
                   {theoryExplanation}
                 </p>
               </motion.div>
@@ -791,15 +790,14 @@ function ActionButton({
   onContinue: () => void;
 }) {
   const isAnswered = lessonState === "correct" || lessonState === "incorrect";
-  const isCorrect = lessonState === "correct";
   const isDisabled = !isAnswered && !hasSelection;
-  const label = !isAnswered ? "Comprobar Respuesta" : isCorrect ? "Continuar" : "Entendido";
+  const label = !isAnswered ? "Comprobar Respuesta" : lessonState === "correct" ? "Continuar" : "Entendido";
 
   const colorClass = isDisabled
-    ? "bg-white/10 text-gray-600 cursor-not-allowed"
-    : !isAnswered || isCorrect
-      ? "bg-[#58cc02] text-white shadow-[0_4px_0_#389200] hover:bg-[#4ab001]"
-      : "bg-red-500 text-white shadow-[0_4px_0_#b91c1c] hover:bg-red-600";
+    ? "bg-[#E8E5E0] text-[#9C9890] cursor-not-allowed"
+    : lessonState !== "incorrect"
+      ? "bg-[#E2654A] text-white hover:bg-[#C9553D]"
+      : "bg-[#E2654A] text-white hover:bg-[#C9553D]";
 
   return (
     <Button
@@ -807,7 +805,7 @@ function ActionButton({
       isDisabled={isDisabled}
       fullWidth
       size="lg"
-      className={`font-extrabold text-lg tracking-wide transition-all duration-200 ${colorClass}`}
+      className={`font-extrabold text-lg tracking-wide transition-all duration-200 active:scale-[0.98] ${colorClass}`}
     >
       {label}
     </Button>
@@ -825,25 +823,25 @@ function FinishedScreen({ onRestart, onExit }: { onRestart: () => void; onExit: 
       className="flex flex-col items-center justify-center h-full gap-6 text-center px-6 py-12"
     >
       <div className="relative">
-        <div className="w-28 h-28 rounded-full bg-[#58cc02]/20 flex items-center justify-center">
+        <div className="w-28 h-28 rounded-full bg-[#EFF6F6] flex items-center justify-center">
           <span className="text-6xl">🏆</span>
         </div>
         <motion.div
-          className="absolute inset-0 rounded-full border-4 border-[#58cc02]/50"
+          className="absolute inset-0 rounded-full border-4 border-[#2D6A6A]/50"
           animate={{ scale: [1, 1.35, 1], opacity: [0.7, 0, 0.7] }}
           transition={{ repeat: Infinity, duration: 2 }}
         />
       </div>
 
       <div>
-        <h2 className="text-3xl font-extrabold text-white mb-2">¡Lección Completada!</h2>
-        <p className="text-gray-400 text-base">Terminaste los {TOTAL_STEPS} ejercicios. ¡Mantén la racha!</p>
+        <h2 className="text-3xl font-extrabold text-[#1A1A18] mb-2">¡Lección Completada!</h2>
+        <p className="text-[#6B6960] text-base">Terminaste los {TOTAL_STEPS} ejercicios. ¡Mantén la racha!</p>
       </div>
 
       <Chip
         size="lg"
-        startContent={<span className="text-yellow-400 text-xl ml-1">⚡</span>}
-        classNames={{ base: "bg-yellow-400/10 border border-yellow-400/30 h-10 px-4", content: "text-yellow-400 font-bold text-lg" }}
+        startContent={<span className="text-yellow-500 text-xl ml-1">⚡</span>}
+        classNames={{ base: "bg-yellow-50 border border-yellow-300 h-10 px-4", content: "text-yellow-600 font-bold text-lg" }}
       >
         +50 XP
       </Chip>
@@ -853,7 +851,7 @@ function FinishedScreen({ onRestart, onExit }: { onRestart: () => void; onExit: 
           onPress={onRestart}
           fullWidth
           size="lg"
-          className="font-extrabold text-lg bg-[#58cc02] text-white shadow-[0_4px_0_#389200] hover:bg-[#4ab001] active:scale-95 transition-all"
+          className="font-extrabold text-lg bg-[#E2654A] text-white hover:bg-[#C9553D] active:scale-[0.98] transition-all"
         >
           Practicar de Nuevo
         </Button>
@@ -862,7 +860,7 @@ function FinishedScreen({ onRestart, onExit }: { onRestart: () => void; onExit: 
           fullWidth
           size="lg"
           variant="bordered"
-          className="font-bold text-white border-white/10 bg-white/5 hover:bg-white/10"
+          className="font-bold text-[#6B6960] border-[#E8E5E0] bg-[#FAFAF8] hover:bg-[#F0EDE8]"
         >
           Volver a Lecciones
         </Button>
@@ -936,16 +934,16 @@ export default function LessonPage() {
       : undefined;
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#0a0a0f] flex flex-col h-[100dvh] overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-[#FAFAF8] flex flex-col h-[100dvh] overflow-hidden">
       {/* Header */}
       {!isFinished && (
-        <header className="shrink-0 flex items-center gap-3 px-4 py-3 border-b border-white/5 bg-black/20">
+        <header className="shrink-0 flex items-center gap-3 px-4 py-3 border-b border-[#E8E5E0] bg-white">
           <Button
             isIconOnly
             variant="light"
             onPress={() => router.back()}
             aria-label="Salir de la lección"
-            className="text-gray-400 hover:text-white shrink-0"
+            className="text-[#6B6960] hover:text-[#1A1A18] shrink-0"
           >
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
               <path d="M1 1l16 16M17 1L1 17" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
@@ -976,7 +974,7 @@ export default function LessonPage() {
                   <Chip
                     size="sm"
                     variant="flat"
-                    classNames={{ base: "bg-white/5 border-white/10", content: "text-gray-500 font-bold text-xs uppercase tracking-widest" }}
+                    classNames={{ base: "bg-[#FAFAF8] border border-[#E8E5E0]", content: "text-[#9C9890] font-bold text-xs uppercase tracking-widest" }}
                   >
                     {currentStep + 1} / {TOTAL_STEPS}
                   </Chip>
@@ -1024,7 +1022,7 @@ export default function LessonPage() {
 
       {/* Footer */}
       {!isFinished && !isSelfContained && (
-        <footer className="shrink-0 border-t border-white/5 bg-black/20 px-4 pt-3 pb-6">
+        <footer className="shrink-0 border-t border-[#E8E5E0] bg-white px-4 pt-3 pb-6">
           <AnimatePresence mode="wait">
             <FeedbackBanner key={lessonState} state={lessonState} theoryExplanation={theoryExplanation} />
           </AnimatePresence>

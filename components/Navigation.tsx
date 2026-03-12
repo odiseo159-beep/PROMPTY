@@ -19,6 +19,7 @@ const links = [
   { label: "Lecciones",     href: "/lessons"     },
   { label: "Sandbox",       href: "/sandbox"     },
   { label: "Clasificación", href: "/leaderboard" },
+  { label: "Perfil",        href: "/profile"     },
 ];
 
 export function Navigation() {
@@ -80,8 +81,8 @@ export function Navigation() {
         })}
       </NavbarContent>
 
-      {/* CTA */}
-      <NavbarContent justify="end">
+      {/* CTA + Avatar */}
+      <NavbarContent justify="end" className="gap-2">
         <NavbarItem>
           <Button
             as={Link}
@@ -91,6 +92,19 @@ export function Navigation() {
           >
             Empezar →
           </Button>
+        </NavbarItem>
+        <NavbarItem>
+          <Link
+            href="/profile"
+            className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-150 border-2 ${
+              pathname === "/profile"
+                ? "bg-[#E2654A] text-white border-[#E2654A]"
+                : "bg-[#FDF0ED] text-[#E2654A] border-[#E2654A]/30 hover:border-[#E2654A]"
+            }`}
+            aria-label="Ver perfil"
+          >
+            DF
+          </Link>
         </NavbarItem>
       </NavbarContent>
 
